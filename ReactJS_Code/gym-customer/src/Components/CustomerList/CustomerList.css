@@ -1,0 +1,119 @@
+.customer-list-container {
+  font-family: sans-serif;
+  width: 90vw; /* Full width of the screen */
+  height: 70vh; /* 70% of the screen height */
+  background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
+  padding: 20px; /* Add some padding */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  color: black;
+  border-radius: 8px;
+}
+
+.customer-list-header{
+  color: #04AA6D;
+}
+
+.customer-table {
+  width: 100%; /* Full width of the container */
+  border-collapse: collapse; /* Collapse borders between cells */
+}
+
+.customer-table th{
+  background-color: #04AA6D;
+  padding: 8px;
+  color: white;
+  text-align: left;
+}
+
+.customer-table td {
+  padding: 8px; /* Add padding to cells */
+}
+
+.customer-item-link {
+  color: #007bff; /* Blue color for the link */
+  text-decoration: none;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.customer-item-link:hover {
+  color: rgb(48, 144, 48);
+}
+
+.customer-item-button {
+  color: #ffffff; /* White text color */
+  border: none; /* No border */
+  padding: 5px 10px; /* Padding for button */
+  text-decoration: none; /* Remove underline */
+  margin: 0 5px; /* Margin between buttons */
+  border-radius: 4px; /* Rounded corners */
+  display: inline-flex; /* Inline flex for icon and text alignment */
+  align-items: center; /* Align items center */
+  font-size: 14px; /* Font size */
+  cursor: pointer; /* Pointer cursor */
+}
+.customer-item-button .fa-icon {
+  margin-right: 5px; /* Space between icon and text */
+}
+
+
+
+.view-button {
+  background-color: #379c6e; 
+}
+
+.view-button:hover {
+  background-color: #2f855b; 
+}
+
+.edit-button {
+  background-color: #3a8eb6; 
+}
+
+.edit-button:hover {
+  background-color: #337ca1; 
+}
+
+.delete-button {
+  background-color: #e44c40; 
+}
+
+.delete-button:hover {
+  background-color: #cc4438; 
+}
+
+
+
+.create-customer-button{
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+
+  border: 2px solid #04AA6D;
+  background-color: #04AA6D;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.create-customer-button:hover{
+  border: 2px solid #04AA6D;
+  background-color: #9ccaba;
+}
+
+.create-customer-link{
+  color: #ffffff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+.create-customer-link:hover{
+  color: #04AA6D;
+  text-decoration: none;
+  
+}
+
+.icon {
+  margin-right: 8px;
+  font-size: 16px; /* Adjust size as needed */
+}

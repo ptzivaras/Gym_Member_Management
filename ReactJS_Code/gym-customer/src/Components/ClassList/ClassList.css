@@ -1,0 +1,40 @@
+/* ClassList.css */
+
+.class-list-container {
+    font-family: sans-serif;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: black;
+    height: 70vh;
+    width: 90vw;
+    padding: 20px;
+    overflow: auto; /* Add overflow:auto to enable scrolling if content exceeds container height */
+  }
+  
+  .class-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .class-table th{
+    background-color: #04AA6D;
+    padding: 8px;
+    color: green; 
+  }
+
+  .class-table td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .class-table th {
+    background-color: #f2f2f2;
+  }
+  

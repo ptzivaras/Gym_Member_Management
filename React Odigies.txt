@@ -1,0 +1,15 @@
+sto cancel button ama valeis stoixeia na se rwtaei an thes na giriseis
+sto create button: ama einai adeio na min ginei na sou pei leipoun(na kokkinisei to pedio kai na grapsei field required)
+  - sto create na gieni notification oti bike o customer
+  - sto adres na min einai aparaitito
+
+pagination pages na xwrane posa stoixeia vklepw kai na iparxoun pages
+search field
+
+
+view customer
+sto title: oxi backgorund, megaltiero width,
+to return back se kathe page na einai  aristera apo to customer details "velaki i velaki kai back"
+
+sto update
+na exw tin othoni to create kai na exw ta fields

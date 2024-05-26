@@ -1,0 +1,12 @@
+/* AboutPage.css */
+
+.container {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: fit-content;
+    margin: auto;
+    margin-top: 20px;
+  }
+  
