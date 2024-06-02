@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Use useNavigate for navigation
+import { useNavigate } from 'react-router-dom';
 import CustomerService from '../../Services/CustomerService';
 import './CustomerList.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,10 +7,11 @@ import { faEye, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 const CustomerList = () => {
   const [customers, setCustomers] = useState([]);
-  const navigate = useNavigate(); // Initialize the navigate function
+  const [currentPage, setCurrentPage] = useState(1);
+  const [customersPerPage] = useState(12); // Items per page
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch customer data from the server
     CustomerService.getCustomers()
       .then(response => {
         setCustomers(response.data);
@@ -18,27 +19,36 @@ const CustomerList = () => {
       .catch(error => {
         console.error('Error fetching customers:', error);
       });
-  }, []); // Empty dependency array ensures the effect runs once when the component mounts
+  }, []);
+
+  // Get current customers for the page
+  const indexOfLastCustomer = currentPage * customersPerPage;
+  const indexOfFirstCustomer = indexOfLastCustomer - customersPerPage;
+  const currentCustomers = customers.slice(indexOfFirstCustomer, indexOfLastCustomer);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const totalPages = Math.ceil(customers.length / customersPerPage);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPages; i++) {
+    pageNumbers.push(i);
+  }
 
   const handleCreateCustomer = () => {
-    navigate('/create-customer'); // Navigate to the create customer page
+    navigate('/create-customer');
   };
 
   return (
     <div className='customer-list-container'>
-
       <div className='header-container'>
-        <button 
-          className='create-customer-button' 
-          onClick={handleCreateCustomer} 
-        >
+        <button className='create-customer-button' onClick={handleCreateCustomer}>
           <span className='icon'>+</span> 
           Create
         </button>
-        {/* <h3 className='customer-list-header'>Customers List</h3> */}
-
       </div>
-
       <table className='customer-table'>
         <thead>
           <tr>
@@ -49,7 +59,7 @@ const CustomerList = () => {
           </tr>
         </thead>
         <tbody>
-          {customers.map(customer => (
+          {currentCustomers.map(customer => (
             <tr key={customer.customerId}>
               <td>{customer.firstName} {customer.lastName}</td>
               <td>{customer.email}</td>
@@ -78,6 +88,17 @@ const CustomerList = () => {
           ))}
         </tbody>
       </table>
+      <div className='pagination'>
+        {pageNumbers.map(number => (
+          <button
+            key={number}
+            onClick={() => handlePageChange(number)}
+            className={`pagination-button ${number === currentPage ? 'active' : ''}`}
+          >
+            {number}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
