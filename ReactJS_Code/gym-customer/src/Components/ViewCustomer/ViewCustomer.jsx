@@ -1,8 +1,8 @@
-// ViewCustomer.jsx
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import CustomerService from '../../Services/CustomerService';
 import './ViewCustomers2.css'; // Import CSS file
+import BackButton from '../BackButton/BackButton';
 
 const ViewCustomer = () => {
   const { customerId } = useParams();
@@ -10,7 +10,6 @@ const ViewCustomer = () => {
   const [editing, setEditing] = useState(false);
   const [editedCustomer, setEditedCustomer] = useState({});
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (isInitialLoad) {
@@ -26,31 +25,6 @@ const ViewCustomer = () => {
     }
   }, [customerId, isInitialLoad]);
 
-  const handleUpdate = () => {
-    // Implement update functionality here
-    CustomerService.updateCustomer(customerId, editedCustomer)
-      .then(response => {
-        console.log('Customer updated successfully:', response.data);
-        setEditing(false); // Turn off editing mode after successful update
-      })
-      .catch(error => {
-        console.error('Error updating customer:', error);
-      });
-  };
-
-  const handleDelete = () => {
-    // Implement delete functionality here
-    CustomerService.deleteCustomer(customerId)
-      .then(response => {
-        console.log('Customer deleted successfully:', response.data);
-        // Redirect to the home page or another appropriate page after deletion
-        navigate.push('/');
-      })
-      .catch(error => {
-        console.error('Error deleting customer:', error);
-      });
-  };
-
   const handleFieldChange = e => {
     // Update the corresponding field in the editedCustomer state
     setEditedCustomer({
@@ -60,16 +34,19 @@ const ViewCustomer = () => {
   };
 
   return (
-    <div className='customer-list-container2'>
-      <h2>Customer Details</h2>
-      <table className='customer-table2'>
+    <div className='customer-container'>
+      <div className='header'>
+        <BackButton />
+      </div>
+
+      <table className='customer-table'>
         <tbody>
           <tr>
-            <th className='customer-table-header2'>First Name:</th>
+            <th className='customer-table-header'>First Name:</th>
             <td>
               {editing ? (
                 <input
-                  className='customer-table-input2'
+                  className='customer-table-input'
                   type="text"
                   name="firstName"
                   value={editedCustomer.firstName}
@@ -79,13 +56,11 @@ const ViewCustomer = () => {
                 customer.firstName
               )}
             </td>
-          </tr>
-          <tr>
-            <th className='customer-table-header2'>Last Name:</th>
+            <th className='customer-table-header'>Last Name:</th>
             <td>
               {editing ? (
                 <input
-                  className='customer-table-input2'
+                  className='customer-table-input'
                   type="text"
                   name="lastName"
                   value={editedCustomer.lastName}
@@ -97,11 +72,11 @@ const ViewCustomer = () => {
             </td>
           </tr>
           <tr>
-            <th className='customer-table-header2'>E-mail:</th>
+            <th className='customer-table-header'>E-mail:</th>
             <td>
               {editing ? (
                 <input
-                  className='customer-table-input2'
+                  className='customer-table-input'
                   type="text"
                   name="email"
                   value={editedCustomer.email}
@@ -111,13 +86,11 @@ const ViewCustomer = () => {
                 customer.email
               )}
             </td>
-          </tr>
-          <tr>
-            <th className='customer-table-header2'>Phone Number:</th>
+            <th className='customer-table-header'>Phone Number:</th>
             <td>
               {editing ? (
                 <input
-                  className='customer-table-input2'
+                  className='customer-table-input'
                   type="text"
                   name="phone"
                   value={editedCustomer.phone}
@@ -129,11 +102,11 @@ const ViewCustomer = () => {
             </td>
           </tr>
           <tr>
-            <th className='customer-table-header2'>Address:</th>
-            <td>
+            <th className='customer-table-header'>Address:</th>
+            <td colSpan="3">
               {editing ? (
                 <input
-                  className='customer-table-input2'
+                  className='customer-table-input'
                   type="text"
                   name="address"
                   value={editedCustomer.address}
@@ -146,19 +119,6 @@ const ViewCustomer = () => {
           </tr>
         </tbody>
       </table>
-
-      {editing ? (
-        <div>
-          <button className='customer-table-button2' onClick={handleUpdate}>Save Changes</button>
-          <button className='customer-table-button2' onClick={() => setEditing(false)}>Cancel</button>
-        </div>
-      ) : (
-        <div>
-          <button className='customer-table-button2' onClick={() => setEditing(true)}>Update Customer</button>
-          <button className='customer-table-button2' onClick={handleDelete}>Delete Customer</button>
-          <Link to="/" className='customer-table-link2'>Return Back</Link>
-        </div>
-      )}
     </div>
   );
 };

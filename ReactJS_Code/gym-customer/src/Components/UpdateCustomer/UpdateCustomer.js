@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CustomerService from '../../Services/CustomerService';
 import './UpdateCustomer.css'; // Import CSS file
+import BackButton from '../BackButton/BackButton';
 
 const UpdateCustomer = () => {
   const { customerId } = useParams();
   const [customer, setCustomer] = useState({});
   const [editedCustomer, setEditedCustomer] = useState({});
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const navigate = useNavigate(); // Initialize the navigate function
 
   useEffect(() => {
     if (isInitialLoad) {
@@ -24,14 +26,22 @@ const UpdateCustomer = () => {
   }, [customerId, isInitialLoad]);
 
   const handleUpdate = () => {
-    // Implement update functionality here
-    CustomerService.updateCustomer(customerId, editedCustomer)
-      .then(response => {
-        console.log('Customer updated successfully:', response.data);
-      })
-      .catch(error => {
-        console.error('Error updating customer:', error);
-      });
+    // Show confirmation dialog
+    const userConfirmed = window.confirm('Are you sure you want to save the changes?');
+    
+    if (userConfirmed) {
+      // If the user confirms, proceed with the update
+      CustomerService.updateCustomer(customerId, editedCustomer)
+        .then(response => {
+          console.log('Customer updated successfully:', response.data);
+          // Navigate back to the previous page after successful update
+          navigate(-1);
+        })
+        .catch(error => {
+          console.error('Error updating customer:', error);
+        });
+    }
+    // If the user cancels, do nothing
   };
 
   const handleFieldChange = e => {
@@ -44,7 +54,9 @@ const UpdateCustomer = () => {
 
   return (
     <div className='customer-list-container2'>
-      <h2>Customer Details</h2>
+      <div className='header'>
+        <BackButton />
+      </div>
       <table className='customer-table2'>
         <tbody>
           <tr>
@@ -112,9 +124,7 @@ const UpdateCustomer = () => {
       </table>
 
       <div>
-        {/* Buttons for editing mode */}
         <button className='customer-table-button2' onClick={handleUpdate}>Save Changes</button>
-        <Link to="/" className='customer-table-link2'>Return Back</Link>
       </div>
     </div>
   );

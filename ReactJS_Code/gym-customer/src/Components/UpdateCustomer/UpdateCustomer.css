@@ -1,54 +1,61 @@
-/* ViewCustomers2.css */
-
 .customer-list-container2 {
-    font-family: sans-serif;
-    width: 90vw; /* Full width of the screen */
-    height: 70vh; /* 70% of the screen height */
-    background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
-    border: 1px solid #ccc; /* Light gray border */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow effect */
-    color: black;
-  
-    padding: 20px;
-  }
-  
-  .customer-table2 {
-    width: 100%;
-    
-  }
-  
-  .customer-table-header2 {
-    text-align: left;
-    padding: 8px;
-    background-color: #04AA6D;
-    color: white;
-    width: 0px;
-  }
-  
-  
-  .customer-table-input2 {
-    width: 100%;
-    padding: 5px;
-    box-sizing: border-box;
-  }
-  
-  .customer-table-button2 {
-    margin-right: 5px;
-    padding: 8px 12px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .customer-table-button2:hover {
-    background-color: #0056b3;
-  }
-  
-  .customer-table-link2 {
-    background-color: #28a745;
-    color: white;
-    text-decoration: none;
-  }
-  
+  font-family: sans-serif;
+  width: 50vw; /* Adjust the width to fit your content */
+  max-width: 600px; /* Optional max-width for better layout on larger screens */
+  height: auto; /* Adjust height to fit your content */
+  min-height: 50vh; /* Optional min-height for better layout on larger screens */
+  background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
+  border: 1px solid #ccc; /* Light gray border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  color: black;
+  padding: 20px;
+  margin: auto; /* Center horizontally */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center vertically */
+}
+
+.customer-table2 {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.customer-table-header2 {
+  text-align: left;
+  padding: 8px;
+  background-color: #04AA6D;
+  color: white;
+  width: 0px;
+}
+
+.customer-table-input2 {
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.customer-table-button2 {
+  margin-right: 5px;
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.customer-table-button2:hover {
+  background-color: #0056b3;
+}
+
+.customer-table-link2 {
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+}

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import CustomerService from '../../Services/CustomerService';
 import './CustomerCreate.css'; // Import CSS file
+import BackButton from '../BackButton/BackButton';
 
 const CustomerCreate = () => {
   const [customer, setCustomer] = useState({
@@ -11,8 +11,9 @@ const CustomerCreate = () => {
     email: '',
     phone: '',
     address: '',
-    // Add more fields as needed
   });
+
+  const navigate = useNavigate(); // Initialize the navigate function
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -24,21 +25,32 @@ const CustomerCreate = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    // Call the service to create a new customer
-    CustomerService.createCustomer(customer)
-      .then(response => {
-        console.log('Customer created successfully:', response.data);
-        // Optionally, redirect to another page after successful creation
-        // For example, history.push('/customer-list');
-      })
-      .catch(error => {
-        console.error('Error creating customer:', error);
-      });
+    const isConfirmed = window.confirm('Are you sure you want to create this customer with the provided data?');
+    if (isConfirmed) {
+      CustomerService.createCustomer(customer)
+        .then(response => {
+          console.log('Customer created successfully:', response.data);
+          navigate(-1); // Navigate back to the previous page
+        })
+        .catch(error => {
+          console.error('Error creating customer:', error);
+        });
+    }
+  };
+
+  const handleCancel = () => {
+    const isConfirmed = window.confirm('Are you sure you want to cancel the creation of this customer? All data will be lost.');
+    if (isConfirmed) {
+      navigate(-1); // Go back to the previous page
+    }
   };
 
   return (
     <div className='customer-create-container'>
-      <h2>Create New Customer</h2>
+      <div className='header'>
+        {/* <BackButton /> */}
+        <h2>Create Customer</h2>
+      </div>
       <form className='customer-create-form' onSubmit={handleSubmit}>
         <div className='form-group'>
           <label htmlFor='firstName'>First Name:</label>
@@ -93,12 +105,12 @@ const CustomerCreate = () => {
             onChange={handleChange}
           />
         </div>
-        {/* Add more form fields as needed */}
-        <button type='submit'>Create</button>
-        <Link to="/" className='customer-table-link2'>Cancel</Link>
-
-        {/* <button type=''>Cancel</button> */}
-
+        <div className='button-container'>
+          <button type='submit' className='submit-button'>Create</button>
+          <button type='button' className='cancel-button' onClick={handleCancel}>
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

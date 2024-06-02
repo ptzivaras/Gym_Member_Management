@@ -9,8 +9,14 @@
   border-radius: 8px;
 }
 
+.header-container {
+  display: flex;
+  align-items: center; /* This aligns items vertically */
+}
+
 .customer-list-header{
-  color: #04AA6D;
+  color: #04AA6D; font-size: 12; text-align: center;
+  margin-left: 15;
 }
 
 .customer-table {
@@ -85,20 +91,14 @@
 
 
 .create-customer-button{
-  padding-left: 12px;
-  padding-right: 12px;
-  padding-top: 0px;
-  padding-bottom: 0px;
-
-  border: 2px solid #04AA6D;
-  background-color: #04AA6D;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
+  background-color: #04AA6D; color: white; font-weight: bolder;
+  cursor: pointer; text-align: center; font-size: 14px;
+  border: none;
+  margin-left: 1px;  padding: 5px; margin-bottom: 5px;
 }
 .create-customer-button:hover{
-  border: 2px solid #04AA6D;
-  background-color: #9ccaba;
+  background-color: #2f855b; color: white; font-weight: bolder;
+  border: none;
 }
 
 .create-customer-link{
@@ -114,6 +114,7 @@
 }
 
 .icon {
-  margin-right: 8px;
-  font-size: 16px; /* Adjust size as needed */
+  margin-right: 2px;
+  text-align: center;
+  font-size: 18px; /* Adjust size as needed */
 }
