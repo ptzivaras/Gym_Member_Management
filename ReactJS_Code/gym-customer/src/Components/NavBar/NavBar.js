@@ -9,7 +9,7 @@ export default function Navigation() {
       <Link to="/classes" className='text-bold fs-5'>Classes</Link>
       <Link to="/trainers" className='text-bold fs-5'>Trainers</Link>
       <Link to="/price" className='text-bold fs-5'>Price</Link>
-      <Link to="/about" className='text-bold fs-5'>About</Link>
+      <Link to="/about" className='text-bold fs-5'>DashBoard</Link>
     </div>
   );
 }

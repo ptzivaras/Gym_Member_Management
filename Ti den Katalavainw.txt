@@ -1,0 +1,3 @@
+Pagination iparxei FrontEnd kai Backend
+-giati sto front kai oxi sto back?
+-giati sto backend kai oxi sto front end pes mou giati?

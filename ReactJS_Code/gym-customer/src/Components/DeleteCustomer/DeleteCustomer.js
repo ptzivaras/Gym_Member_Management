@@ -21,7 +21,7 @@ const DeleteCustomer = () => {
 
       <div>
         {/* Buttons for editing mode */}
-        <Link to="/" className='customer-table-link2'>Return Backz</Link>
+        {/* <Link to="/" className='customer-table-link2'>Return Backz</Link> */}
       </div>
     </div>
   );

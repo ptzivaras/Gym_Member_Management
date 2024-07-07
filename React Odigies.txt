@@ -13,3 +13,8 @@ to return back se kathe page na einai  aristera apo to customer details "velaki 
 
 sto update
 na exw tin othoni to create kai na exw ta fields
+
+
+Improve
+-Alert!! den einai oti kalitero! iparxei notification sti react i oxi? vres kapoio kalitero alert!
+-omoiomorfia sto project
