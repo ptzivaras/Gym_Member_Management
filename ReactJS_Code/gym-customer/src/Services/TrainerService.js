@@ -8,6 +8,9 @@ class TrainerService {
         return axios.get(TRAINER_API_BASE_URL);
     }
 
+    createTrainer(trainerData) {
+        return axios.post(TRAINER_API_BASE_URL, trainerData);
+      }
     
 }
 

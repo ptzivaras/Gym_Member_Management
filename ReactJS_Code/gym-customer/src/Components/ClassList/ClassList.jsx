@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import ClassService from '../../Services/ClassService';
 import './ClassList.css'; // Import CSS file
 
@@ -8,6 +9,8 @@ const ClassList = () => {
   const [editedSchedule, setEditedSchedule] = useState([]); // State for edited schedule
   const [showSaveConfirm, setShowSaveConfirm] = useState(false); // State for save confirmation
   const [showCancelConfirm, setShowCancelConfirm] = useState(false); // State for cancel confirmation
+
+  const navigate = useNavigate(); // Initialize the navigate function
 
   useEffect(() => {
     // Fetch class data from the server
@@ -106,6 +109,7 @@ const ClassList = () => {
       ) : (
         <button type="button" onClick={() => setEditMode(true)}>Update</button>
       )}
+      <button type="button" onClick={() => navigate('/classtype')}>Add Class Type</button>
       
       <table className="class-table">
         <thead>

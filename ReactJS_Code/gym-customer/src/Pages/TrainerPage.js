@@ -2,8 +2,14 @@ import React, { useState, useEffect } from 'react';
 import TrainerService from '../Services/TrainerService';
 import './TrainerPage.css';
 
+import { useNavigate } from 'react-router-dom';
+
+
+
 const TrainerPage = () => {
     const [trainers, setTrainers] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Fetch the data when the component mounts
@@ -12,10 +18,18 @@ const TrainerPage = () => {
           .catch(error => console.error('Error fetching trainers:', error));
       }, []);
 
+    const handleCreateTrainer = () => {
+      navigate('/create-trainer');
+    };
 
     return (
       <div className="trainer-list-container" >
-        <h1> Trainer Page </h1>
+        <button className='trainer-button' onClick={handleCreateTrainer}>
+          <span className='icon'>+</span> 
+          Create
+        </button>
+
+        
 
         <table className='trainer-table'> {/* Using table for grid layout */}
           <thead>

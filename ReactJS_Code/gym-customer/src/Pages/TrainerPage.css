@@ -1,17 +1,27 @@
 
 .trainer-list-container{
   font-family: sans-serif;
- 
+  margin-top: 40px;
   
 
-  width: 90vw; /* Full width of the screen */
   height: 70vh; /* 70% of the screen height */
   background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
   border: 1px solid #ccc; /* Light gray border */
-  border-radius: 8px; /* Rounded corners */
   padding: 20px; /* Add some padding */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow effect */
   color: black;
+}
+
+.trainer-button {
+  background-color: #379c6e; 
+  color: #ffffff;
+  margin-bottom: 5px;
+}
+.trainer-button:hover {
+  background-color: #2f855b; 
+  color: #ffffff;
+  margin-bottom: 5px;
+
 }
 
 .trainer-table {

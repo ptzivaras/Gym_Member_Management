@@ -2,16 +2,23 @@ package com.example.GymCustomers.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "Trainers")
 public class Trainers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "trainer_id")
     private Long trainerId;
-
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
     private String specialty;
+
+    @OneToMany(mappedBy = "mtrainerId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Classschedule> classSchedules;
 
     public Long getTrainerId() {
         return trainerId;

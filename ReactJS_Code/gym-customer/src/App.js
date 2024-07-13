@@ -13,7 +13,8 @@ import ViewCustomer from './Components/ViewCustomer/ViewCustomer';
 import UpdateCustomer from './Components/UpdateCustomer/UpdateCustomer';
 import DeleteCustomer from './Components/DeleteCustomer/DeleteCustomer';
 import CustomerCreate from './Components/CreateCustomer/CustomerCreate';
-
+import TrainerCreate from './Components/CreateTrainer/TrainerCreate';
+import CreateClassType from './Components/CreateClassType/CreateClassType';
 
 function App() {
   return (
@@ -33,7 +34,8 @@ function App() {
             <Route path="/edit-customer/:customerId" element={<UpdateCustomer />} /> {/* Add route for editing */}
             <Route path="/delete-customer/:customerId" element={<DeleteCustomer />} /> {/* Add route for deleting */}
             <Route path="/create-customer/" element={<CustomerCreate/>} />
-
+            <Route path="/create-trainer/" element={<TrainerCreate/>} />
+            <Route path="/classtype/" element={<CreateClassType/>} />
           </Routes>
         </main>
       </BrowserRouter>

@@ -1,0 +1,8 @@
+Enhance Post etc to return correct HTTP Status Code and Location
+
+Implement Exception Handling 404 resource not found
+implement generic exception handling for all resources
+Implement Validation for Rest Api
+
+Make MVC Design Pattern
+Understand your Hibernate
