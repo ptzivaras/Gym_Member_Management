@@ -23,11 +23,17 @@ function PricePage() {
   const columns = useMemo(
     () => [
       {
+        Header: '#',
+        accessor: (_, index) => index + 1,
+        Cell: ({ value }) => <span>{value}</span>,
+        id: 'rowIndex', // Added ID
+      },
+      {
         Header: 'Plan Type',
         accessor: 'planType',
       },
       {
-        Header: 'Price (euro)',
+        Header: 'Price (€)',
         accessor: 'price',
         Cell: ({ value, row }) => {
           if (editRowIndex === row.index) {
@@ -39,12 +45,13 @@ function PricePage() {
               />
             );
           }
-          return value;
-        }
+          return `€${value}`;
+        },
       },
       {
         Header: 'Duration (months)',
         accessor: 'duration',
+        Cell: ({ value }) => `${value} months`,
       },
       {
         Header: 'Actions',
@@ -68,6 +75,12 @@ function PricePage() {
           );
         },
       },
+      {
+        Header: '', // Empty column for spacing
+        accessor: 'empty',
+        Cell: () => <div className="empty-cell"></div>,
+        id: 'emptyColumn', // Added ID
+      }
     ],
     [editRowIndex, updatedPrice]
   );
@@ -88,14 +101,14 @@ function PricePage() {
   const handleSave = (row) => {
     const updatedRow = { ...row.original, price: updatedPrice };
     CustomerService.updateMembership(updatedRow.membershipId, updatedRow)
-      .then(response => {
+      .then((response) => {
         const newData = [...data];
         newData[row.index] = response.data;
         setData(newData);
         setEditRowIndex(null);
         alert('Data saved successfully!');
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('There was an error updating the data!', error);
       });
   };
@@ -107,29 +120,31 @@ function PricePage() {
 
   return (
     <div className="container">
-      <table {...getTableProps()} className="price-table">
-        <thead>
-          {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map(row => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map(cell => (
-                  <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+      <div className="table-wrapper">
+        <table {...getTableProps()} className="price-table">
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps()}>{column.render('Header')}</th>
                 ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => (
+                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
