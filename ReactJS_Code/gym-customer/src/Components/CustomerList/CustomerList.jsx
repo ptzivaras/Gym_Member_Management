@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CustomerService from '../../Services/CustomerService';
 import './CustomerList.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEye, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 const CustomerList = () => {
   const [customers, setCustomers] = useState([]);
@@ -64,8 +64,8 @@ const CustomerList = () => {
     <div className='customer-list-container'>
       <div className='header-container'>
         <button className='create-customer-button' onClick={handleCreateCustomer}>
-          <span className='icon'>+</span> 
-          Create
+          
+        <FontAwesomeIcon icon={faPlus} className='icon' />Customer
         </button>
       </div>
       <div className='content-wrapper'>

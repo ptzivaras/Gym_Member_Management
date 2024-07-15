@@ -1,83 +1,120 @@
-/* ClassList.css */
-
 .class-list-container {
-    font-family: sans-serif;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    color: black;
-    height: 70vh;
-    width: 90vw;
-    padding: 20px;
-    overflow: auto; /* Add overflow:auto to enable scrolling if content exceeds container height */
-  }
-  
-  .class-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .class-table th{
-    background-color: #04AA6D;
-    padding: 8px;
-    color: green; 
-  }
+  font-family: sans-serif;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: black;
+  height: 85vh;
+  width: 96vw;
+  padding: 20px;
+  overflow: auto;
+}
 
-  .class-table td {
-    border: 1px solid #dddddd;
-    padding: 8px;
-    text-align: left;
-  }
-  
-  .class-table th {
-    background-color: #f2f2f2;
-  }
-  
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.5);
-  }
-  
-  .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-  }
-  
-  .modal-button {
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    margin-left: 10px;
-    border-radius: 5px;
-  }
-  
-  .confirm-button {
-    background-color: #04AA6D;
-    color: white;
-  }
-  
-  .cancel-button {
-    background-color: #ccc;
-    color: black;
-  }
-  
+.class-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.class-table th, .class-table td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.class-table th {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.class-table .clickable-cell {
+  cursor: pointer;
+  background-color: #f0f8ff;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-button {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.confirm-button {
+  background-color: #007BFF; 
+  border-color: transparent;
+  color: white; 
+  border-radius: 6px; 
+}
+
+.cancel-button {
+  background-color: #ff0000; 
+  border-color: transparent;
+  color: white; 
+  border-radius: 6px;
+}
+
+.create-class-button, .confirm-button, .cancel-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
+  padding: 8px 12px; 
+  font-size: 16px; 
+  font-weight: bold; 
+}
+
+.create-class-button:hover, .confirm-button:hover, .cancel-button:hover {
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Enhance box shadow on hover */
+}
+
+.create-class-button {
+  background-color: #04AA6D; 
+  color: white; 
+  border: none;
+  border-radius: 6px;
+}
+
+.create-class-button:hover {
+  background-color: #2f855b; 
+}
+
+.button-container {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+}
+
+.icon {
+  margin-right: 8px; /* Space between icon and text */
+  font-size: 16px; /* Adjust icon size */
+}

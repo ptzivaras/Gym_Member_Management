@@ -1,0 +1,49 @@
+/* Container that covers full viewport with white background */
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: white; /* White background */
+    padding-top: 80px; 
+    box-sizing: border-box;
+  }
+  
+  /* Table that stretches to fit the full width */
+  .price-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Ensure columns take equal width */
+  }
+  
+  /* Ensure table cells and headers have appropriate styling */
+  .price-table th, .price-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .price-table th {
+    background-color: #f2f2f2;
+  }
+  
+  /* Styling for buttons inside the table */
+  .price-table button {
+    background: none;
+    border: none;
+    color: blue;
+    cursor: pointer;
+    margin-right: 8px;
+  }
+  
+  .price-table button:hover {
+    text-decoration: underline;
+  }
+  
+  /* Input width for editing cells */
+  .price-table input {
+    width: 100px;
+  }
+  

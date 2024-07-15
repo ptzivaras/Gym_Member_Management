@@ -1,12 +1,11 @@
 package com.example.GymCustomers.model;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Payments")
+@Table(name = "payments")
 public class Payments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +19,20 @@ public class Payments {
     @JoinColumn(name = "membership_id", nullable = false)
     private Memberships membership;
 
+    @Column(name = "payment_date")
     private LocalDate paymentDate;
+
+    public LocalDate getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    @Column(name = "expiration_date")
+    private LocalDate expirationDate;
+    @Column(name = "amount")
     private BigDecimal amount;
 
     public Long getPaymentId() {

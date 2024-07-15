@@ -1,8 +1,9 @@
 .customer-list-container {
   font-family: sans-serif;
 
-  width: 90vw; /* Full width of the screen */
-  height: 85vh; /* 70% of the screen height */
+  width: 97vw; /* Full width of the screen */
+  height: 86vh; /* 70% of the screen height */
+  border-radius: 8px;
   
   background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
   padding: 20px; /* Add some padding */
@@ -105,18 +106,29 @@
   font-weight: bolder;
   cursor: pointer; 
   text-align: center; 
-  font-size: 14px;
+  font-size: 16px;
   border: none;
   margin-left: 1px;  
-  padding: 5px; 
+  padding: 8px 8px; 
   margin-bottom: 5px;
+  border-radius: 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
+
 }
 
 .create-customer-button:hover {
   background-color: #2f855b; 
-  color: white; 
-  font-weight: bolder;
-  border: none;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Enhance box shadow on hover */
+}
+
+.icon {
+  margin-right: 8px; /* Space between icon and text */
+  font-size: 16px; /* Adjust icon size */
 }
 
 .create-customer-link {

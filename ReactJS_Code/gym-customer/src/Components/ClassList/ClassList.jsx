@@ -1,43 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import ClassService from '../../Services/ClassService';
-import './ClassList.css'; // Import CSS file
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import './ClassList.css';
 
 const ClassList = () => {
   const [schedule, setSchedule] = useState([]);
-  const [editMode, setEditMode] = useState(false); // State for edit mode
-  const [editedSchedule, setEditedSchedule] = useState([]); // State for edited schedule
-  const [showSaveConfirm, setShowSaveConfirm] = useState(false); // State for save confirmation
-  const [showCancelConfirm, setShowCancelConfirm] = useState(false); // State for cancel confirmation
+  const [editMode, setEditMode] = useState(false);
+  const [editedSchedule, setEditedSchedule] = useState([]);
+  const [showSaveConfirm, setShowSaveConfirm] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false); // State for edit modal
+  const [selectedCell, setSelectedCell] = useState(null); // State for the selected cell
+  const [selectedTrainer, setSelectedTrainer] = useState(''); // State for the selected trainer
+  const [selectedClassType, setSelectedClassType] = useState(''); // State for the selected class type
 
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch class data from the server
     ClassService.getClasses()
       .then(response => {
-        // Sort the schedule by start time
         const sortedSchedule = response.data.sort((a, b) => {
           return a.startTime.localeCompare(b.startTime);
         });
-        setSchedule(sortedSchedule); // Changed state variable name to 'schedule'
-        setEditedSchedule(sortedSchedule); // Initialize edited schedule with fetched data
+        setSchedule(sortedSchedule);
+        setEditedSchedule(sortedSchedule);
       })
       .catch(error => {
         console.error('Error fetching classes:', error);
       });
-  }, []); // Empty dependency array ensures the effect runs once when the component mounts
+  }, []);
 
-  // Function to format time to display in HH:MM format
   const formatTime = timeStr => {
     if (!timeStr) return '';
     const [hours, minutes] = timeStr.split(':');
     return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
   };
 
-  // Function to render table rows
   const renderTableRows = () => {
-    // Create an object to store class names for each time slot and day of the week
     const classesByTime = {};
     (editMode ? editedSchedule : schedule).forEach(classItem => {
       const key = `${classItem.startTime}-${classItem.endTime}`;
@@ -47,44 +48,47 @@ const ClassList = () => {
       classesByTime[key][classItem.dayOfWeek] = classItem.className;
     });
 
-    // Render table rows
     return Object.keys(classesByTime).map(timeSlot => (
       <tr key={timeSlot}>
         <td>{formatTime(timeSlot.split('-')[0])} - {formatTime(timeSlot.split('-')[1])}</td>
-        <td>{editMode ? <input type="text" value={classesByTime[timeSlot]['Monday'] || ''} onChange={(e) => handleInputChange(e, timeSlot, 'Monday')} /> : (classesByTime[timeSlot]['Monday'] || '-')}</td>
-        <td>{editMode ? <input type="text" value={classesByTime[timeSlot]['Tuesday'] || ''} onChange={(e) => handleInputChange(e, timeSlot, 'Tuesday')} /> : (classesByTime[timeSlot]['Tuesday'] || '-')}</td>
-        <td>{editMode ? <input type="text" value={classesByTime[timeSlot]['Wednesday'] || ''} onChange={(e) => handleInputChange(e, timeSlot, 'Wednesday')} /> : (classesByTime[timeSlot]['Wednesday'] || '-')}</td>
-        <td>{editMode ? <input type="text" value={classesByTime[timeSlot]['Thursday'] || ''} onChange={(e) => handleInputChange(e, timeSlot, 'Thursday')} /> : (classesByTime[timeSlot]['Thursday'] || '-')}</td>
-        <td>{editMode ? <input type="text" value={classesByTime[timeSlot]['Friday'] || ''} onChange={(e) => handleInputChange(e, timeSlot, 'Friday')} /> : (classesByTime[timeSlot]['Friday'] || '-')}</td>
-        <td>{editMode ? <input type="text" value={classesByTime[timeSlot]['Saturday'] || ''} onChange={(e) => handleInputChange(e, timeSlot, 'Saturday')} /> : (classesByTime[timeSlot]['Saturday'] || '-')}</td>
-        <td>{editMode ? <input type="text" value={classesByTime[timeSlot]['Sunday'] || ''} onChange={(e) => handleInputChange(e, timeSlot, 'Sunday')} /> : (classesByTime[timeSlot]['Sunday'] || '-')}</td>
+        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(day => (
+          <td
+            key={day}
+            className={editMode ? 'clickable-cell' : ''}
+            onClick={editMode ? () => handleCellClick(timeSlot, day) : null}
+          >
+            {classesByTime[timeSlot][day] || '-'}
+          </td>
+        ))}
       </tr>
     ));
   };
 
-  // Function to handle input changes
-  const handleInputChange = (e, timeSlot, dayOfWeek) => {
+  const handleCellClick = (timeSlot, day) => {
+    setSelectedCell({ timeSlot, day });
+    setShowEditModal(true);
+  };
+
+  const handleSaveSelection = () => {
     const newSchedule = editedSchedule.map(classItem => {
       const key = `${classItem.startTime}-${classItem.endTime}`;
-      if (key === timeSlot && classItem.dayOfWeek === dayOfWeek) {
-        return { ...classItem, className: e.target.value };
+      if (key === selectedCell.timeSlot && classItem.dayOfWeek === selectedCell.day) {
+        return { ...classItem, className: `${selectedClassType} (${selectedTrainer})` };
       }
       return classItem;
     });
     setEditedSchedule(newSchedule);
+    setShowEditModal(false);
   };
 
-  // Function to handle save button click
   const handleSave = () => {
     setShowSaveConfirm(true);
   };
 
-  // Function to handle cancel button click
   const handleCancel = () => {
     setShowCancelConfirm(true);
   };
 
-  // Function to confirm save
   const confirmSave = () => {
     setSchedule(editedSchedule);
     setEditMode(false);
@@ -92,7 +96,6 @@ const ClassList = () => {
     // Here you would typically call a service to save the data to the backend
   };
 
-  // Function to confirm cancel
   const confirmCancel = () => {
     setEditedSchedule(schedule);
     setEditMode(false);
@@ -100,17 +103,29 @@ const ClassList = () => {
   };
 
   return (
-    <div className="class-list-container"> 
-      {editMode ? (
-        <>
-          <button type="button" onClick={handleSave}>Save</button>
-          <button type="button" onClick={handleCancel}>Cancel</button>
-        </>
-      ) : (
-        <button type="button" onClick={() => setEditMode(true)}>Update</button>
-      )}
-      <button type="button" onClick={() => navigate('/classtype')}>Add Class Type</button>
-      
+    <div className="class-list-container">
+      <div className="button-container">
+        {editMode ? (
+          <>
+            <button className='confirm-button' type="button" onClick={handleSave}>
+              <FontAwesomeIcon icon={faSave} className='icon' /> Save
+            </button>
+            <button className='cancel-button' type="button" onClick={handleCancel}>
+              <FontAwesomeIcon icon={faTimes} className='icon' /> Cancel
+            </button>
+          </>
+        ) : (
+          <>
+            <button className='create-class-button' type="button" onClick={() => setEditMode(true)}>
+              <FontAwesomeIcon icon={faEdit} className='icon' /> Schedule
+            </button>
+            <button className='create-class-button' type="button" onClick={() => navigate('/classtype')}>
+              <FontAwesomeIcon icon={faPlus} className='icon' /> Class
+            </button>
+          </>
+        )}
+      </div>
+
       <table className="class-table">
         <thead>
           <tr>
@@ -148,6 +163,36 @@ const ClassList = () => {
             <div className="modal-actions">
               <button onClick={confirmCancel} className="modal-button confirm-button">Yes</button>
               <button onClick={() => setShowCancelConfirm(false)} className="modal-button cancel-button">No</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showEditModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Select Class Type and Trainer</h3>
+            <div className="modal-actions">
+              <label>
+                Class Type:
+                <select value={selectedClassType} onChange={(e) => setSelectedClassType(e.target.value)}>
+                  <option value="">Select a class type</option>
+                  <option value="Yoga">Yoga</option>
+                  <option value="Pilates">Pilates</option>
+                  <option value="Zumba">Zumba</option>
+                </select>
+              </label>
+              <label>
+                Trainer:
+                <select value={selectedTrainer} onChange={(e) => setSelectedTrainer(e.target.value)}>
+                  <option value="">Select a trainer</option>
+                  <option value="John Doe">John Doe</option>
+                  <option value="Jane Smith">Jane Smith</option>
+                  <option value="Alice Johnson">Alice Johnson</option>
+                </select>
+              </label>
+              <button onClick={handleSaveSelection} className="modal-button confirm-button">Save</button>
+              <button onClick={() => setShowEditModal(false)} className="modal-button cancel-button">Cancel</button>
             </div>
           </div>
         </div>

@@ -3,6 +3,9 @@ import TrainerService from '../Services/TrainerService';
 import './TrainerPage.css';
 
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
 
 
 
@@ -24,9 +27,8 @@ const TrainerPage = () => {
 
     return (
       <div className="trainer-list-container" >
-        <button className='trainer-button' onClick={handleCreateTrainer}>
-          <span className='icon'>+</span> 
-          Create
+        <button className='create-trainer-button' onClick={handleCreateTrainer}>
+          <FontAwesomeIcon icon={faPlus} className="icon"/> Trainer
         </button>
 
         

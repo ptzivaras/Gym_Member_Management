@@ -3,21 +3,33 @@ package com.example.GymCustomers.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
-@Table(name = "Memberships")
+@Table(name = "memberships")
 public class Memberships {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long membershipId;
-
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
-
-    private LocalDate startDate;
-    private LocalDate endDate;
+    @Column(name = "plan_type")
     private String planType;
+
+    @Column(name = "price")
+    private Integer price;
+    @Column(name = "duration")
+    private Integer duration;
+
+    //Getters and Setters
+    public Integer getDuration() {
+        return duration;
+    }
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    //@OneToMany(mappedBy = "membership")
+    //private Set<Payments> payments;
 
     public Long getMembershipId() {
         return membershipId;
@@ -27,35 +39,19 @@ public class Memberships {
         this.membershipId = membershipId;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
     public String getPlanType() {
         return planType;
     }
 
     public void setPlanType(String planType) {
         this.planType = planType;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
     }
 }
