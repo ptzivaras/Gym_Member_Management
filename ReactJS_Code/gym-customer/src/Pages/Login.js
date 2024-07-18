@@ -1,40 +1,72 @@
-// // Login.js
-// import React from 'react';
-// import './Login.css';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Login.css';
 
-// const Login = () => {
-//   return (
-//     <div className="box">
-//       <div className="container">
-//         <div className="top-header">
-//           <span>Have an account?</span>
-//           <header>Login</header>
-//         </div>
+const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-//         <div className="input-field">
-//           <input type="text" className="input" placeholder="Username" required />
-//           <i className="bx bx-user"></i>
-//         </div>
-//         <div className="input-field">
-//           <input type="password" className="input" placeholder="Password" required />
-//           <i className="bx bx-lock-alt"></i>
-//         </div>
-//         <div className="input-field">
-//           <input type="submit" className="submit" value="Login" />
-//         </div>
+  const handleLogin = () => {
+    if (username.trim() && password.trim()) {
+      sessionStorage.setItem('isLoggedIn', 'true');
+      navigate('/'); // Redirect to home page
+    } else {
+      setError('Wrong username or password');
+    }
+  };
 
-//         <div className="bottom">
-//           <div className="left">
-//             <input type="checkbox" id="check" />
-//             <label htmlFor="check"> Remember Me</label>
-//           </div>
-//           <div className="right">
-//             <label><a href="#">Forgot password?</a></label>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
+  return (
+      <div className='login-container'>
+      <div className="wrapper">
+          <header>Login</header>
+        <span>Have an account?</span>
 
-// export default Login;
+        {error && <div className="error-message">{error}</div>}
+
+        <div className="input-field">
+          <i className="bx bx-user"></i>
+          <input
+            type="text"
+            className="input"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="input-field">
+          <i className="bx bx-lock-alt"></i>
+          <input
+            type="password"
+            className="input"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className="bottom">
+          <div className="left">
+            <input type="checkbox" id="check" />
+            <label htmlFor="check"> Remember Me</label>
+          </div>
+          <div className="right">
+            <label><a href="#">Forgot password?</a></label>
+          </div>
+        </div>
+        
+        <div className="input-field">
+          <button className="submit" onClick={handleLogin}>
+            Login
+          </button>
+        </div>
+      </div>
+      </div>
+  );
+};
+
+export default Login;

@@ -3,34 +3,131 @@ import { useTable } from 'react-table';
 import CustomerService from '../Services/CustomerService';
 import './PricePage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faSave, faTimes, faArrowUp, faArrowDown, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 function PricePage() {
   const [data, setData] = useState([]);
   const [editRowIndex, setEditRowIndex] = useState(null);
   const [updatedPrice, setUpdatedPrice] = useState(null);
+  const [filter, setFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     CustomerService.getMemberships()
       .then(response => {
-        setData(response.data);
+        const dataWithPopularityAndStatus = response.data.map(item => {
+          const popularityScore = Math.floor(Math.random() * 101);
+          const statusOptions = ['increasing', 'same', 'decreasing'];
+          const status = statusOptions[Math.floor(Math.random() * statusOptions.length)];
+          return {
+            ...item,
+            popularityScore,
+            status
+          };
+        });
+        setData(dataWithPopularityAndStatus);
       })
       .catch(error => {
         console.error('There was an error fetching the data!', error);
       });
   }, []);
 
+  const handleEdit = (row) => {
+    setEditRowIndex(row.index);
+    setUpdatedPrice(row.values.price);
+  };
+
+  const handleSave = (row) => {
+    const updatedRow = { ...row.original, price: updatedPrice };
+    CustomerService.updateMembership(updatedRow.membershipId, updatedRow)
+      .then((response) => {
+        const newData = [...data];
+        newData[row.index] = response.data;
+        setData(newData);
+        setEditRowIndex(null);
+        alert('Data saved successfully!');
+      })
+      .catch((error) => {
+        console.error('There was an error updating the data!', error);
+      });
+  };
+
+  const handleCancel = () => {
+    setEditRowIndex(null);
+    setUpdatedPrice(null);
+  };
+
+  const filteredData = useMemo(() => {
+    if (filter === 'all') return data;
+    const months = filter === '1month' ? 1 : filter === '3months' ? 3 : filter === '6months' ? 6 : 12;
+    return data.filter(item => item.duration === months);
+  }, [filter, data]);
+
+  const paginatedData = useMemo(() => {
+    const start = currentPage * itemsPerPage;
+    const end = start + itemsPerPage;
+    return filteredData.slice(start, end);
+  }, [currentPage, filteredData]);
+
+  const totalMemberships = filteredData.length;
+  const startRange = currentPage * itemsPerPage + 1;
+  const endRange = Math.min(startRange + itemsPerPage - 1, totalMemberships);
+
+  const getPopularityLevel = (score) => {
+    if (score > 66) return { level: 'High', color: 'green' };
+    if (score > 33) return { level: 'Medium', color: 'yellow' };
+    return { level: 'Low', color: 'red' };
+  };
+
+  const getStatusIcon = (status) => {
+    if (status === 'increasing') return <FontAwesomeIcon icon={faArrowUp} style={{ color: 'green' }} />;
+    if (status === 'decreasing') return <FontAwesomeIcon icon={faArrowDown} style={{ color: 'red' }} />;
+    return <FontAwesomeIcon icon={faMinus} style={{ color: 'gray' }} />;
+  };
+
   const columns = useMemo(
     () => [
       {
         Header: '#',
-        accessor: (_, index) => index + 1,
-        Cell: ({ value }) => <span>{value}</span>,
-        id: 'rowIndex', // Added ID
+        accessor: (row, i) => i + 1,
+        id: 'row',
       },
       {
         Header: 'Plan Type',
         accessor: 'planType',
+      },
+      {
+        Header: 'Popularity',
+        accessor: 'popularityScore',
+        Cell: ({ value }) => {
+          const { level, color } = getPopularityLevel(value);
+          return (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <span
+                style={{
+                  width: '10px',
+                  height: '10px',
+                  borderRadius: '50%',
+                  backgroundColor: color,
+                  marginRight: '5px',
+                }}
+              ></span>
+              <span>{level}</span>
+            </div>
+          );
+        },
+      },
+      {
+        Header: 'Status',
+        accessor: 'status',
+        Cell: ({ value }) => {
+          return (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              {getStatusIcon(value)}
+            </div>
+          );
+        },
       },
       {
         Header: 'Price (€)',
@@ -45,7 +142,7 @@ function PricePage() {
               />
             );
           }
-          return `€${value}`;
+          return `€ ${value}`;
         },
       },
       {
@@ -75,12 +172,6 @@ function PricePage() {
           );
         },
       },
-      {
-        Header: '', // Empty column for spacing
-        accessor: 'empty',
-        Cell: () => <div className="empty-cell"></div>,
-        id: 'emptyColumn', // Added ID
-      }
     ],
     [editRowIndex, updatedPrice]
   );
@@ -91,35 +182,29 @@ function PricePage() {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, data });
+  } = useTable({ columns, data: paginatedData });
 
-  const handleEdit = (row) => {
-    setEditRowIndex(row.index);
-    setUpdatedPrice(row.values.price);
+  const handlePrevious = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
-  const handleSave = (row) => {
-    const updatedRow = { ...row.original, price: updatedPrice };
-    CustomerService.updateMembership(updatedRow.membershipId, updatedRow)
-      .then((response) => {
-        const newData = [...data];
-        newData[row.index] = response.data;
-        setData(newData);
-        setEditRowIndex(null);
-        alert('Data saved successfully!');
-      })
-      .catch((error) => {
-        console.error('There was an error updating the data!', error);
-      });
-  };
-
-  const handleCancel = () => {
-    setEditRowIndex(null);
-    setUpdatedPrice(null);
+  const handleNext = () => {
+    if ((currentPage + 1) * itemsPerPage < totalMemberships) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   return (
     <div className="container">
+      <div className="tabs">
+        <div className={`tab ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>All</div>
+        <div className={`tab ${filter === '1month' ? 'active' : ''}`} onClick={() => setFilter('1month')}>1 Month</div>
+        <div className={`tab ${filter === '3months' ? 'active' : ''}`} onClick={() => setFilter('3months')}>3 Months</div>
+        <div className={`tab ${filter === '6months' ? 'active' : ''}`} onClick={() => setFilter('6months')}>6 Months</div>
+        <div className={`tab ${filter === '12months' ? 'active' : ''}`} onClick={() => setFilter('12months')}>12 Months</div>
+      </div>
       <div className="table-wrapper">
         <table {...getTableProps()} className="price-table">
           <thead>
@@ -144,6 +229,19 @@ function PricePage() {
             })}
           </tbody>
         </table>
+        <div className="pagination">
+          <span>
+            {startRange}-{endRange} of {totalMemberships} memberships
+          </span>
+          <div className="pagination-controls">
+            <button onClick={handlePrevious} disabled={currentPage === 0}>
+              &lt;
+            </button>
+            <button onClick={handleNext} disabled={(currentPage + 1) * itemsPerPage >= totalMemberships}>
+              &gt;
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

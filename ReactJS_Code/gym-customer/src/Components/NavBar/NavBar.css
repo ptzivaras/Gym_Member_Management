@@ -1,6 +1,6 @@
 .navbar {
     display: flex;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: #5b5679;
     border-bottom: 2px solid transparent;
     position: fixed;
     top: 0;
@@ -13,9 +13,27 @@
     text-align: center;
   }
   
-  .navbar a {
-    color: rgb(0, 0, 0);
-    text-decoration: none;
-    margin: 0 25px;
-    font-size: 20px;
-  }
+.navbar a {
+  position: relative; /* Added to position the pseudo-element relative to the link */
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  margin: 0 25px;
+  font-size: 18px;
+}
+
+.navbar a::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #fff;
+  transition: .3s;
+}
+
+.navbar .nav-link:hover::before,
+.navbar .nav-link.active::before {
+  width: 100%;
+}
