@@ -6,7 +6,7 @@ import './CreateClassType.css'; // Import CSS file
 
 const ClassTypeCreate = () => {
   const [classType, setClassType] = useState({
-    type_name: ''
+    typeName: ''
   });
   const [classTypes, setClassTypes] = useState([]);
   const [error, setError] = useState(null);
@@ -44,7 +44,8 @@ const ClassTypeCreate = () => {
       ClassTypeService.createClassType(classType)
         .then(response => {
           console.log('Class type created successfully:', response.data);
-          navigate(-1); // Navigate back to the previous page
+          fetchClassTypes(); // Refresh the list after creating a new class type
+          setClassType({ typeName: '' }); // Clear the form
         })
         .catch(error => {
           console.error('Error creating class type:', error);
@@ -65,13 +66,15 @@ const ClassTypeCreate = () => {
     () => [
       {
         Header: 'Class Type Name',
-        accessor: 'type_name',
+        accessor: 'typeName', // Updated accessor to match the field in state
       },
     ],
     []
   );
 
-  const data = React.useMemo(() => classTypes, [classTypes]);
+  const data = React.useMemo(() => classTypes.map(classType => ({
+    typeName: classType.typeName // Ensure the data matches the accessor
+  })), [classTypes]);
 
   const {
     getTableProps,
@@ -89,12 +92,12 @@ const ClassTypeCreate = () => {
       {error && <div className='error-message'>{error}</div>}
       <form className='class-type-create-form' onSubmit={handleSubmit}>
         <div className='form-group'>
-          <label htmlFor='type_name'>Class Type Name:</label>
+          <label htmlFor='typeName'>Class Type Name:</label>
           <input
             type='text'
-            id='type_name'
-            name='type_name'
-            value={classType.type_name}
+            id='typeName'
+            name='typeName'
+            value={classType.typeName}
             onChange={handleChange}
             required
           />

@@ -26,12 +26,13 @@ public class Classschedule {
 
     @ManyToOne
     @JoinColumn(name = "viewtype", referencedColumnName = "type_id")  // Correct mapping
-    private ClassType viewtype;
+    private ClassType viewtype; //TODO: edw varaei an valw long pou einai int to id, thelei mapping me to pinaka
 
-    @Column(name = "mtrainer_id")
-    private Long mtrainerId;
+    @ManyToOne
+    @JoinColumn(name = "mtrainer_id", referencedColumnName = "trainer_id")
+    private Trainers mtrainerId; //TODO: edw varaei an valw long pou einai int to id, thelei mapping me to pinaka
 
-    // Getters and Setters
+
     public Long getClassId() {
         return classId;
     }
@@ -80,11 +81,11 @@ public class Classschedule {
         this.viewtype = viewtype;
     }
 
-    public Long getMtrainerId() {
+    public Trainers getMtrainerId() {
         return mtrainerId;
     }
 
-    public void setMtrainerId(Long mtrainerId) {
+    public void setMtrainerId(Trainers mtrainerId) {
         this.mtrainerId = mtrainerId;
     }
 }

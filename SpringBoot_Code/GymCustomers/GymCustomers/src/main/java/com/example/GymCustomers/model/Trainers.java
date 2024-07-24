@@ -15,6 +15,7 @@ public class Trainers {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
+    @Column(name="specialty")
     private String specialty;
 
     @OneToMany(mappedBy = "mtrainerId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

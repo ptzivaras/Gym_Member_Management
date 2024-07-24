@@ -43,4 +43,3 @@ public class ClassType {
         this.classSchedules = classSchedules;
     }
 }
-
