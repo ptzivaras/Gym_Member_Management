@@ -1,78 +1,94 @@
-
-.trainer-list-container{
+.trainer-container {
   font-family: sans-serif;
-  margin-top: 40px;
-  
-
-  height: 70vh; /* 70% of the screen height */
-  background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
-  border: 1px solid #ccc; /* Light gray border */
-  padding: 20px; /* Add some padding */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  width: 50vw;
+  height: auto;
   color: black;
+  padding: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.trainer-button {
-  background-color: #379c6e; 
-  color: #ffffff;
-  margin-bottom: 5px;
-}
-.trainer-button:hover {
-  background-color: #2f855b; 
-  color: #ffffff;
-  margin-bottom: 5px;
-
+.trainer-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.trainer-table {
-  width: 100%; /* Full width of the container */
-  border-collapse: collapse; /* Collapse borders between cells */
-}
-
-.trainer-table th{
-  background-color: #04AA6D;
-    padding: 8px;
-    color: white; 
-}
-  
-tr:nth-child(even){background-color: #f2f2f2}
-
-
-.trainer-table td{
-  border: 1px solid #dddddd;
-  padding: 8px;
-  text-align: left;
-}
-
-.create-trainer-button {
-  background-color: #04AA6D; 
-  color: white; 
-  font-weight: bolder;
-  cursor: pointer; 
-  text-align: center; 
+.trainer-header .create-trainer-button {
+  background-color: #9693fb;
+  color: white;
+  cursor: pointer;
   font-size: 16px;
   border: none;
-  margin-left: 1px;  
-  padding: 8px 8px; 
-  margin-bottom: 5px;
+  padding: 6px 12px;
   border-radius: 6px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
-  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
-
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.create-trainer-button:hover {
-  background-color: #2f855b; 
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Enhance box shadow on hover */
+.trainer-header .create-trainer-button:hover {
+  background-color: #6c63ff;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 .icon {
-  margin-right: 8px; /* Space between icon and text */
-  font-size: 16px; /* Adjust icon size */
+  margin-right: 8px;
+  font-size: 16px;
 }
-  
 
+.trainer-table-scroll {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.trainer-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
+}
+
+.trainer-table th, .trainer-table td {
+  border: 1px solid #ddd;
+  padding: 14px;
+  text-align: left;
+  background-color: white;
+  color: #40385a;
+  border: transparent;
+}
+
+.trainer-table th {
+  background-color: #f9f8fd;
+  color: #5b5679;
+  font-weight: 600;
+}
+
+.trainer-table td {
+  border-bottom: 1px solid #ddd;
+}
+
+.trainer-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.trainer-table tr:last-child td {
+  border-bottom: none;
+}
+
+.delete-button {
+  background-color: transparent;
+  border: none;
+  color: red;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  color: darkred;
+}

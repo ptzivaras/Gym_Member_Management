@@ -23,4 +23,10 @@ public class TrainersController {
     public Trainers createTrainers(@RequestBody Trainers trainer) {
         return trainerRepository.save(trainer);
     }
+
+    @DeleteMapping("/trainers/{id}")
+    public void deleteTrainer(@PathVariable Long id) {
+        trainerRepository.deleteById(id);
+    }
+
 }

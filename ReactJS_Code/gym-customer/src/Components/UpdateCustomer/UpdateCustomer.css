@@ -1,61 +1,100 @@
-.customer-list-container2 {
-  font-family: sans-serif;
-  width: 50vw; /* Adjust the width to fit your content */
-  max-width: 600px; /* Optional max-width for better layout on larger screens */
-  height: auto; /* Adjust height to fit your content */
-  min-height: 50vh; /* Optional min-height for better layout on larger screens */
-  background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
-  border: 1px solid #ccc; /* Light gray border */
-  border-radius: 8px; /* Rounded corners */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow effect */
+.update-customer-container {
+  font-family: 'Roboto', sans-serif;
+  width: 50vw;
+  height: auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   color: black;
   padding: 20px;
-  margin: auto; /* Center horizontally */
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Center vertically */
+  transform: translate(-50%, -50%);
 }
 
-.customer-table2 {
-  width: 100%;
-}
-
-.header {
+.update-customer-header {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.customer-table-header2 {
-  text-align: left;
-  padding: 8px;
-  background-color: #04AA6D;
-  color: white;
-  width: 0px;
+.update-customer-vertical-line {
+  border-left: 2px solid #ccc;
+  height: 30px;
+  margin: 0 10px;
 }
 
-.customer-table-input2 {
+.update-customer-header h2 {
+  font-size: 1.2em;
+  color: #40385a;
+}
+
+.update-customer-table {
   width: 100%;
-  padding: 5px;
-  box-sizing: border-box;
+  border-collapse: collapse;
 }
 
-.customer-table-button2 {
-  margin-right: 5px;
-  padding: 8px 12px;
-  background-color: #007bff;
+.update-customer-table-header {
+  text-align: left;
+  padding: 10px;
+  background-color: #f9f8fd;
+  border: 1px solid #ddd;
+  font-weight: bold;
+  color: #5b5679;
+}
+
+.update-customer-table-data,
+.update-customer-table-input,
+.update-customer-table-select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: white;
+  color: #40385a;
+}
+
+.update-customer-table td {
+  padding: 0; /* Remove default padding */
+  border: 1px solid #ddd;
+}
+
+.update-customer-table-input,
+.update-customer-table-select {
+  border: none;
+  outline: none;
+  padding: 10px;
+  background-color: transparent;
+  width: calc(100% - 20px); /* Ensure consistent width */
+  box-sizing: border-box;
+  font-size: 1em;
+  color: #40385a;
+}
+
+.update-customer-table-input:focus,
+.update-customer-table-select:focus {
+  outline: none;
+}
+
+.update-customer-table-button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: #9693fb;
   color: white;
   border: none;
   cursor: pointer;
+  border-radius: 5px;
 }
 
-.customer-table-button2:hover {
-  background-color: #0056b3;
+.update-customer-table-button:hover {
+  background-color: #6c63ff;
 }
 
-.customer-table-link2 {
-  background-color: #28a745;
-  color: white;
-  text-decoration: none;
+.update-customer-button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
 }

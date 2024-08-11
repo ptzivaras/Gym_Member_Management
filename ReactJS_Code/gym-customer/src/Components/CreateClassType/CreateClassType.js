@@ -41,7 +41,7 @@ const ClassTypeCreate = () => {
     e.preventDefault();
     const isConfirmed = window.confirm('Are you sure you want to create this class type with the provided data?');
     if (isConfirmed) {
-      ClassTypeService.createClassType(classType)
+      ClassTypeService.createClassType({ typeName: classType.typeName }) // Ensure only typeName is sent
         .then(response => {
           console.log('Class type created successfully:', response.data);
           fetchClassTypes(); // Refresh the list after creating a new class type

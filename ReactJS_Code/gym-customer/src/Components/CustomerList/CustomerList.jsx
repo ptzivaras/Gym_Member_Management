@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useTable, usePagination } from 'react-table';
 import { useNavigate } from 'react-router-dom';
 import CustomerService from '../../Services/CustomerService';
-import './CustomerList.css';
+import Modal from '../ModalPopUp/Modal'; // Import the Modal component
+import './CustomerList.css'; // This is your own CSS file
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEye, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 const CustomerList = () => {
   const [customers, setCustomers] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [customersPerPage] = useState(12); // Items per page
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [customerToDelete, setCustomerToDelete] = useState(null);
+  const [pageSize, setPageSize] = useState(14);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,25 +24,75 @@ const CustomerList = () => {
       });
   }, []);
 
-  // Get current customers for the page
-  const indexOfLastCustomer = currentPage * customersPerPage;
-  const indexOfFirstCustomer = indexOfLastCustomer - customersPerPage;
-  const currentCustomers = customers.slice(indexOfFirstCustomer, indexOfLastCustomer);
+  const data = useMemo(() => customers, [customers]);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  const columns = useMemo(() => [
+    {
+      Header: 'Full Name',
+      accessor: row => `${row.firstName} ${row.lastName}`,
+      id: 'fullName',
+    },
+    {
+      Header: 'Email',
+      accessor: 'email',
+    },
+    {
+      Header: 'Status',
+      accessor: 'status',
+    },
+    {
+      Header: 'Action',
+      Cell: ({ row }) => (
+        <div>
+          <button
+            onClick={() => navigate(`/view-customer/${row.original.customerId}`)}
+            className="customer-item-button view-button"
+          >
+            <FontAwesomeIcon icon={faEye} className="icon" /> View
+          </button>
+          <button
+            onClick={() => navigate(`/edit-customer/${row.original.customerId}`)}
+            className="customer-item-button edit-button"
+          >
+            <FontAwesomeIcon icon={faEdit} className="icon" /> Edit
+          </button>
+          <button
+            onClick={() => handleDeleteClick(row.original)}
+            className="customer-item-button delete-button"
+          >
+            <FontAwesomeIcon icon={faTrashAlt} className="icon" /> Delete
+          </button>
+        </div>
+      ),
+    },
+  ], [navigate]);
 
-  const totalPages = Math.ceil(customers.length / customersPerPage);
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    prepareRow,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    gotoPage,
+    previousPage,
+    nextPage,
+    setPageSize: setPageSizeTable,
+    state: { pageIndex },
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: 0, pageSize },
+    },
+    usePagination,
+  );
 
-  const pageNumbers = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
-  }
-
-  const handleCreateCustomer = () => {
-    navigate('/create-customer');
-  };
+  useEffect(() => {
+    setPageSizeTable(pageSize);
+  }, [pageSize, setPageSizeTable]);
 
   const handleDeleteClick = (customer) => {
     setCustomerToDelete(customer);
@@ -60,77 +111,81 @@ const CustomerList = () => {
       });
   };
 
+  const closeModal = () => {
+    setShowDeleteModal(false);
+    setCustomerToDelete(null);
+  };
+
   return (
-    <div className='customer-list-container'>
-      <div className='header-container'>
-        <button className='create-customer-button' onClick={handleCreateCustomer}>
-          
-        <FontAwesomeIcon icon={faPlus} className='icon' />Customer
-        </button>
-      </div>
-      <div className='content-wrapper'>
-        <table className='customer-table'>
+    <div className='container'>
+      <div className='table-wrapper'>
+        <div className='header-container'>
+          <button className='create-customer-button' onClick={() => navigate('/create-customer')}>
+            <FontAwesomeIcon icon={faPlus} className='icon' /> Customer
+          </button>
+        </div>
+        <table {...getTableProps()} className='price-table'>
           <thead>
-            <tr>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentCustomers.map(customer => (
-              <tr key={customer.customerId}>
-                <td>{customer.firstName} {customer.lastName}</td>
-                <td>{customer.email}</td>
-                <td>{customer.status}</td>
-                <td>
-                  <button 
-                    onClick={() => navigate(`/view-customer/${customer.customerId}`)} 
-                    className="customer-item-button view-button"
-                  >
-                    <FontAwesomeIcon icon={faEye} className="icon"/> View
-                  </button>
-                  <button 
-                    onClick={() => navigate(`/edit-customer/${customer.customerId}`)} 
-                    className="customer-item-button edit-button"
-                  >
-                    <FontAwesomeIcon icon={faEdit} className="icon"/> Edit
-                  </button>
-                  <button 
-                    onClick={() => handleDeleteClick(customer)} 
-                    className="customer-item-button delete-button"
-                  >
-                    <FontAwesomeIcon icon={faTrashAlt} className="icon"/> Delete
-                  </button>
-                </td>
+            {headerGroups.map(headerGroup => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                ))}
               </tr>
             ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map(row => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map(cell => (
+                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
-        <div className='pagination'>
-          {pageNumbers.map(number => (
-            <button
-              key={number}
-              onClick={() => handlePageChange(number)}
-              className={`pagination-button ${number === currentPage ? 'active' : ''}`}
-            >
-              {number}
-            </button>
-          ))}
+        <div className="pagination">
+          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+            {'<<'}
+          </button>
+          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+            {'<'}
+          </button>
+          <span>
+            Page:&nbsp;
+            <strong>
+              {pageIndex + 1} of {pageOptions.length}
+            </strong>
+          </span>
+          <button onClick={() => nextPage()} disabled={!canNextPage}>
+            {'>'}
+          </button>
+          <button onClick={() => gotoPage(pageOptions.length - 1)} disabled={!canNextPage}>
+            {'>>'}
+          </button>
+          <select
+            value={pageSize}
+            onChange={e => setPageSize(Number(e.target.value))}
+          >
+            {[12, 24, 36, 48].map(size => (
+              <option key={size} value={size}>
+                Show {size}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
       {showDeleteModal && (
-        <div className='modal'>
-          <div className='modal-content'>
-            <h3>Are you sure you want to delete {customerToDelete.firstName} {customerToDelete.lastName}?</h3>
-            <div className='modal-actions'>
-              <button onClick={confirmDelete} className='modal-button confirm-button'>Delete</button>
-              <button onClick={() => setShowDeleteModal(false)} className='modal-button cancel-button'>Cancel</button>
-            </div>
-          </div>
-        </div>
+        <Modal
+          isOpen={showDeleteModal}
+          onClose={closeModal}
+          onConfirm={confirmDelete}
+          message={`Are you sure you want to delete ${customerToDelete.firstName} ${customerToDelete.lastName}?`}
+        />
       )}
     </div>
   );

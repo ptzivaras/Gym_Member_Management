@@ -11,6 +11,10 @@ class TrainerService {
     createTrainer(trainerData) {
         return axios.post(TRAINER_API_BASE_URL, trainerData);
       }
+
+    deleteTrainer(trainerId) {
+        return axios.delete(`${TRAINER_API_BASE_URL}/${trainerId}`);
+    }
     
 }
 

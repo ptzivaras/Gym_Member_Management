@@ -1,34 +1,56 @@
 .class-list-container {
-  font-family: sans-serif;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: black;
-  height: 85vh;
-  width: 96vw;
-  padding: 20px;
-  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  box-sizing: border-box;
+  flex-direction: column;
+}
+
+.table-wrapper {
+  width: 100%;
+  max-width: 92%;
+  background-color: white;
+  border-radius: 12px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 14px;
 }
 
 .class-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
 }
 
 .class-table th, .class-table td {
-  border: 1px solid #dddddd;
-  padding: 8px;
+  border: 1px solid #ddd;
+  padding: 14px;
   text-align: left;
+  background-color: white;
+  color: #40385a;
+  border: transparent;
 }
 
 .class-table th {
-  background-color: #04AA6D;
-  color: white;
+  background-color: #f9f8fd;
+  color: #5b5679;
+  font-weight: 600;
+}
+
+.class-table td {
+  border-bottom: 1px solid #ddd;
+}
+
+.class-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.class-table tr:hover {
+  background-color: #ddd;
 }
 
 .class-table .clickable-cell {
@@ -112,6 +134,7 @@
 .button-container {
   display: flex;
   gap: 10px; /* Space between buttons */
+  margin-bottom: 20px; /* Margin below buttons */
 }
 
 .icon {

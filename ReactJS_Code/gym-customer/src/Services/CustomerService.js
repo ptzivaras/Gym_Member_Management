@@ -33,6 +33,9 @@ class CustomerService {
     getMemberships(){
         return axios.get(MEMBERSHIP_API_BASE_URL);
     }
+    chooseMemberships(){
+        return axios.post(MEMBERSHIP_API_BASE_URL);
+    }
 
     updateMembership(membershipId, updatedMembershipData) {
         const url = `${MEMBERSHIP_API_BASE_URL}/${membershipId}`;

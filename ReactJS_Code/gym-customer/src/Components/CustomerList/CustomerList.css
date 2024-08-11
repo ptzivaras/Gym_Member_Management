@@ -1,176 +1,132 @@
-.customer-list-container {
-  font-family: sans-serif;
-
-  width: 97vw; /* Full width of the screen */
-  height: 86vh; /* 70% of the screen height */
-  border-radius: 8px;
-  
-  background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
-  padding: 20px; /* Add some padding */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow effect */
-  color: black;
+/* Container to center the table and leave space at the bottom */
+.container {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Fill the entire height of the screen */
+  box-sizing: border-box;
   flex-direction: column;
 }
 
+/* Header container for the create button */
 .header-container {
+  width: 100%;
   display: flex;
-  align-items: center; /* This aligns items vertically */
+  justify-content: flex-start;
+  padding: 10px;
 }
 
-.customer-list-header {
-  color: #04AA6D; 
-  font-size: 12; 
-  text-align: center;
-  margin-left: 15;
-}
-
-.content-wrapper {
-  flex: 1; /* Grow to fill the available space */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.customer-table {
-  width: 100%; /* Full width of the container */
-  border-collapse: collapse; /* Collapse borders between cells */
-}
-
-.customer-table th {
-  background-color: #04AA6D;
-  padding: 8px;
+/* Button to create a new customer */
+.create-customer-button {
+  background-color: #9693fb;
   color: white;
-  text-align: left;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
 }
 
-.customer-table td {
-  padding: 8px; /* Add padding to cells */
-}
-
-.customer-item-link {
-  color: #007bff; /* Blue color for the link */
-  text-decoration: none;
-  margin-left: 5px;
+.create-customer-button .icon {
   margin-right: 5px;
 }
 
-.customer-item-link:hover {
-  color: rgb(48, 144, 48);
-}
-
-.customer-item-button {
-  color: #ffffff; /* White text color */
-  border: none; /* No border */
-  padding: 5px 10px; /* Padding for button */
-  text-decoration: none; /* Remove underline */
-  margin: 0 5px; /* Margin between buttons */
-  border-radius: 4px; /* Rounded corners */
-  display: inline-flex; /* Inline flex for icon and text alignment */
-  align-items: center; /* Align items center */
-  font-size: 14px; /* Font size */
-  cursor: pointer; /* Pointer cursor */
-}
-
-.customer-item-button .fa-icon {
-  margin-right: 5px; /* Space between icon and text */
-}
-
-.view-button {
-  background-color: #379c6e; 
-}
-
-.view-button:hover {
-  background-color: #2f855b; 
-}
-
-.edit-button {
-  background-color: #3a8eb6; 
-}
-
-.edit-button:hover {
-  background-color: #337ca1; 
-}
-
-.delete-button {
-  background-color: #e44c40; 
-}
-
-.delete-button:hover {
-  background-color: #cc4438; 
-}
-
-.create-customer-button {
-  background-color: #04AA6D; 
-  color: white; 
-  font-weight: bolder;
-  cursor: pointer; 
-  text-align: center; 
-  font-size: 16px;
-  border: none;
-  margin-left: 1px;  
-  padding: 8px 8px; 
-  margin-bottom: 5px;
-  border-radius: 6px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
-  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
-
-}
-
 .create-customer-button:hover {
-  background-color: #2f855b; 
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Enhance box shadow on hover */
+  background-color: #6c63ff;
 }
 
-.icon {
-  margin-right: 8px; /* Space between icon and text */
-  font-size: 16px; /* Adjust icon size */
+/* Wrapper to control the width of the table */
+.table-wrapper {
+  width: 100%; /* Maintain width with space on the sides */
+  max-width: 92%; /* Optional: set a max width */
+  background-color: white; /* White background only for the table wrapper */ 
+  border-radius: 12px;
+  margin-left: auto; /* Center the table wrapper */
+  margin-right: auto; /* Center the table wrapper */
+  height: auto; /* Ensure the table wrapper does not stretch vertically */
+  padding-bottom: 14px; /* Add some padding to the bottom */
 }
 
-.create-customer-link {
-  color: #ffffff;
-  text-decoration: none;
+/* Table that stretches to fit the full width of its wrapper */
+.price-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Ensure columns take equal width */
+  border-radius: 12px; /* Round corners */
+  overflow: hidden; /* Ensure round corners are visible */
+  font-family: 'Roboto', sans-serif; /* Font family */
+}
+
+/* Ensure table cells and headers have appropriate styling */
+.price-table th, .price-table td {
+  border: 1px solid #ddd; 
+  padding: 14px;
+  text-align: left;
+  background-color: white; /* table cell color */
+  color: #40385a;  
+  border: transparent;
+}
+
+.price-table th {
+  background-color: #f9f8fd; /* header Color */
+  color: #5b5679; 
+  font-weight: 600;
+}
+
+.price-table td {
+  border-bottom: 1px solid #ddd; /* Line between rows */
+}
+
+.price-table tr:last-child td {
+  border-bottom: none; /* Remove line from last row */
+}
+
+/* Styling for buttons inside the table */
+.price-table button {
+  background: none;
+  border: none;
+  color: #40385a;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.price-table button:hover {
+  text-decoration: underline;
+  color: #9693fb;
+}
+
+/* Input width for editing cells */
+.price-table input {
+  width: 100px;
+  font-family: 'Roboto', sans-serif; /* Font family */
+}
+
+/* Pagination styles */
+.pagination {
+  margin-top: 20px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
 }
 
-.create-customer-link:hover {
-  color: #04AA6D;
-  text-decoration: none;
+.pagination span {
+  color: #40385a;
+  margin: 0 10px; /* Adjusted margin to reduce space */
 }
 
-.icon {
-  margin-right: 2px;
-  text-align: center;
-  font-size: 18px; /* Adjust size as needed */
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.pagination-button {
-  background-color: #f1f1f1;
-  border: 1px solid #ccc;
-  padding: 8px 16px;
-  margin: 0 2px;
+.pagination button {
+  color: #40385a; /* Arrow color */
+  border: none;
+  padding: 0; /* Remove padding */
   cursor: pointer;
+  font-size: 24px; /* Increase icon size */
 }
 
-.pagination-button:hover {
-  background-color: #ddd;
-}
-
-.pagination-button.active {
-  background-color: #04AA6D;
-  color: white;
-  border-color: #04AA6D;
+.pagination button:disabled {
+  color: gray;
+  cursor: not-allowed;
 }
 
 /* Modal styles */
@@ -215,4 +171,30 @@
 .cancel-button {
   background-color: #ccc;
   color: black;
+}
+
+/* Customer item button styles */
+.customer-item-button {
+  background: none;
+  border: none;
+  color: #40385a;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.customer-item-button .icon {
+  margin-right: 5px;
+}
+
+.customer-item-button.view-button:hover {
+  color: #56CCF2;
+}
+
+.customer-item-button.edit-button:hover {
+  color: #F2C94C;
+}
+
+.customer-item-button.delete-button:hover {
+  color: #EB5757;
 }

@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TrainerService from '../../Services/TrainerService';
-
+import Modal from '../ModalPopUp/Modal'; // Import the Modal component
 import './TrainerCreate.css'; // Import CSS file
 import BackButton from '../BackButton/BackButton';
-
 
 const TrainerCreate = () => {
   const [trainer, setTrainer] = useState({
     firstName: '',
     lastName: '',
     specialty: '',
-   
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalAction, setModalAction] = useState(null);
 
   const navigate = useNavigate(); // Initialize the navigate function
 
@@ -26,8 +28,8 @@ const TrainerCreate = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    const isConfirmed = window.confirm('Are you sure you want to create this trainer with the provided data?');
-    if (isConfirmed) {
+    setModalMessage('Are you sure you want to create this trainer with the provided data?');
+    setModalAction(() => () => {
       TrainerService.createTrainer(trainer)
         .then(response => {
           console.log('Trainer created successfully:', response.data);
@@ -36,23 +38,32 @@ const TrainerCreate = () => {
         .catch(error => {
           console.error('Error creating trainer:', error);
         });
-    }
+    });
+    setIsModalOpen(true);
   };
 
   const handleCancel = () => {
-    const isConfirmed = window.confirm('Are you sure you want to cancel the creation of this trainer? All data will be lost.');
-    if (isConfirmed) {
+    setModalMessage('Are you sure you want to cancel the creation of this trainer? All data will be lost.');
+    setModalAction(() => () => {
       navigate(-1); // Go back to the previous page
-    }
+    });
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalMessage('');
+    setModalAction(null);
   };
 
   return (
-    <div className='customer-create-container'>
+    <div className='trainer-create-container'>
       <div className='header'>
-        {/* <BackButton /> */}
+        <BackButton />
+        <div className='vertical-line'></div>
         <h2>Create Trainer</h2>
       </div>
-      <form className='customer-create-form' onSubmit={handleSubmit}>
+      <form className='trainer-create-form' onSubmit={handleSubmit}>
         <div className='form-group'>
           <label htmlFor='firstName'>First Name:</label>
           <input
@@ -76,9 +87,9 @@ const TrainerCreate = () => {
           />
         </div>
         <div className='form-group'>
-          <label htmlFor='specialty'>Specialty:</label>
+          <label htmlFor='specialty'>Experienced In:</label>
           <input
-            type='specialty'
+            type='text'
             id='specialty'
             name='specialty'
             value={trainer.specialty}
@@ -86,8 +97,6 @@ const TrainerCreate = () => {
             required
           />
         </div>
-        
-        
         <div className='button-container'>
           <button type='submit' className='submit-button'>Create</button>
           <button type='button' className='cancel-button' onClick={handleCancel}>
@@ -95,6 +104,16 @@ const TrainerCreate = () => {
           </button>
         </div>
       </form>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onConfirm={() => {
+          modalAction();
+          closeModal();
+        }}
+        message={modalMessage}
+      />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import CustomerService from '../../Services/CustomerService';
+import Modal from '../ModalPopUp/Modal'; // Import the Modal component
 import './UpdateCustomer.css'; // Import CSS file
 import BackButton from '../BackButton/BackButton';
 
@@ -8,11 +9,16 @@ const UpdateCustomer = () => {
   const { customerId } = useParams();
   const [customer, setCustomer] = useState({});
   const [editedCustomer, setEditedCustomer] = useState({});
+  const [memberships, setMemberships] = useState([]);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const navigate = useNavigate(); // Initialize the navigate function
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalAction, setModalAction] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isInitialLoad) {
+      // Fetch customer details
       CustomerService.getCustomerById(customerId)
         .then(response => {
           setCustomer(response.data);
@@ -22,48 +28,68 @@ const UpdateCustomer = () => {
         .catch(error => {
           console.error('Error fetching customer details:', error);
         });
+      
+      // Fetch memberships for the dropdown
+      CustomerService.getMemberships()
+        .then(response => {
+          console.log('Memberships:', response.data); // Log memberships to inspect the data
+          setMemberships(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching memberships:', error);
+        });
     }
   }, [customerId, isInitialLoad]);
 
   const handleUpdate = () => {
-    // Show confirmation dialog
-    const userConfirmed = window.confirm('Are you sure you want to save the changes?');
-    
-    if (userConfirmed) {
-      // If the user confirms, proceed with the update
+    setModalMessage('Are you sure you want to save the changes?');
+    setModalAction(() => () => {
       CustomerService.updateCustomer(customerId, editedCustomer)
         .then(response => {
           console.log('Customer updated successfully:', response.data);
-          // Navigate back to the previous page after successful update
           navigate(-1);
         })
         .catch(error => {
           console.error('Error updating customer:', error);
         });
-    }
-    // If the user cancels, do nothing
+    });
+    setIsModalOpen(true);
   };
 
   const handleFieldChange = e => {
-    // Update the corresponding field in the editedCustomer state
     setEditedCustomer({
       ...editedCustomer,
       [e.target.name]: e.target.value,
     });
   };
 
+  const handleMembershipChange = e => {
+    setEditedCustomer({
+      ...editedCustomer,
+      membership: e.target.value,
+    });
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalMessage('');
+    setModalAction(null);
+  };
+
   return (
-    <div className='customer-list-container2'>
-      <div className='header'>
+    <div className='update-customer-container'>
+      <div className='update-customer-header'>
         <BackButton />
+        <div className='update-customer-vertical-line'></div>
+        <h2>Update Customer</h2>
       </div>
-      <table className='customer-table2'>
+      <table className='update-customer-table'>
         <tbody>
           <tr>
-            <th className='customer-table-header2'>First Name:</th>
+            <th className='update-customer-table-header'>First Name:</th>
             <td>
               <input
-                className='customer-table-input2'
+                className='update-customer-table-input'
                 type="text"
                 name="firstName"
                 value={editedCustomer.firstName || ''}
@@ -72,10 +98,10 @@ const UpdateCustomer = () => {
             </td>
           </tr>
           <tr>
-            <th className='customer-table-header2'>Last Name:</th>
+            <th className='update-customer-table-header'>Last Name:</th>
             <td>
               <input
-                className='customer-table-input2'
+                className='update-customer-table-input'
                 type="text"
                 name="lastName"
                 value={editedCustomer.lastName || ''}
@@ -84,10 +110,10 @@ const UpdateCustomer = () => {
             </td>
           </tr>
           <tr>
-            <th className='customer-table-header2'>E-Mail:</th>
+            <th className='update-customer-table-header'>E-Mail:</th>
             <td>
               <input
-                className='customer-table-input2'
+                className='update-customer-table-input'
                 type="text"
                 name="email"
                 value={editedCustomer.email || ''}
@@ -96,10 +122,10 @@ const UpdateCustomer = () => {
             </td>
           </tr>
           <tr>
-            <th className='customer-table-header2'>Phone:</th>
+            <th className='update-customer-table-header'>Phone:</th>
             <td>
               <input
-                className='customer-table-input2'
+                className='update-customer-table-input'
                 type="text"
                 name="phone"
                 value={editedCustomer.phone || ''}
@@ -108,10 +134,10 @@ const UpdateCustomer = () => {
             </td>
           </tr>
           <tr>
-            <th className='customer-table-header2'>Address:</th>
+            <th className='update-customer-table-header'>Address:</th>
             <td>
               <input
-                className='customer-table-input2'
+                className='update-customer-table-input'
                 type="text"
                 name="address"
                 value={editedCustomer.address || ''}
@@ -119,13 +145,44 @@ const UpdateCustomer = () => {
               />
             </td>
           </tr>
-          {/* Add similar rows for other fields like Last Name, Email, etc. */}
+          <tr>
+            <th className='update-customer-table-header'>Membership:</th>
+            <td>
+              <select
+                className='update-customer-table-select'
+                name="membership"
+                value={editedCustomer.membership || ''}
+                onChange={handleMembershipChange}
+              >
+                <option value="">None</option>
+                {memberships.length > 0 ? (
+                  memberships.map(membership => (
+                    <option key={membership.id} value={membership.id}>
+                      {membership.name}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">Loading memberships...</option>
+                )}
+              </select>
+            </td>
+          </tr>
         </tbody>
       </table>
 
-      <div>
-        <button className='customer-table-button2' onClick={handleUpdate}>Save Changes</button>
+      <div className='update-customer-button-container'>
+        <button className='update-customer-table-button' onClick={handleUpdate}>Save Changes</button>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onConfirm={() => {
+          modalAction();
+          closeModal();
+        }}
+        message={modalMessage}
+      />
     </div>
   );
 };

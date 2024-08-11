@@ -1,4 +1,4 @@
-.customer-container {
+.view-customer-container {
   font-family: sans-serif;
   width: 50vw;
   height: auto;
@@ -14,40 +14,49 @@
   transform: translate(-50%, -50%);
 }
 
-.header {
+.view-customer-header {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.header h2 {
-  margin-left: 1em;
-  font-size: 1.2em;
+.view-customer-vertical-line {
+  border-left: 2px solid #ccc;
+  height: 30px;
+  margin: 0 10px;
 }
 
-.customer-table {
+.view-customer-header h2 {
+  font-size: 1.2em;
+  color: #40385a; /* Match the header color */
+}
+
+.view-customer-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.customer-table-header {
+.view-customer-table-header {
   text-align: left;
   padding: 10px;
-  background-color: #f2f2f2;
+  background-color: #f9f8fd; /* Light grey background for headers */
   border: 1px solid #ddd;
   font-weight: bold;
-  width: 25%;
+  color: #5b5679; /* Darker text color */
 }
 
-.customer-table td {
+.view-customer-table-data {
   padding: 10px;
   border: 1px solid #ddd;
-  width: 25%;
+  background-color: white; /* White background for data cells */
+  color: #40385a; /* Consistent text color */
 }
 
-.customer-table-input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+.view-customer-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.view-customer-table tr:nth-child(even) {
+  background-color: #f2f2f2; /* Alternate row color */
 }

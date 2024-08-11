@@ -1,57 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import TrainerService from '../Services/TrainerService';
-import './TrainerPage.css';
-
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-
-
-
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import './TrainerPage.css';
 
 const TrainerPage = () => {
     const [trainers, setTrainers] = useState([]);
-
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Fetch the data when the component mounts
         TrainerService.getTrainers()
           .then(response => setTrainers(response.data))
           .catch(error => console.error('Error fetching trainers:', error));
-      }, []);
+    }, []);
 
     const handleCreateTrainer = () => {
-      navigate('/create-trainer');
+        navigate('/create-trainer');
     };
 
+    const handleDeleteTrainer = (trainerId) => {
+        if(window.confirm("Are you sure you want to delete this trainer?")) {
+            TrainerService.deleteTrainer(trainerId)
+                .then(() => {
+                    setTrainers(trainers.filter(trainer => trainer.trainerId !== trainerId));
+                })
+                .catch(error => console.error('Error deleting trainer:', error));
+        }
+    };
+
+    const generateRandomHours = () => Math.floor(Math.random() * 40) + 1;
+
     return (
-      <div className="trainer-list-container" >
-        <button className='create-trainer-button' onClick={handleCreateTrainer}>
-          <FontAwesomeIcon icon={faPlus} className="icon"/> Trainer
-        </button>
+        <div className="trainer-container">
+            <div className="trainer-header">
+                <button className="create-trainer-button" onClick={handleCreateTrainer}>
+                    <FontAwesomeIcon icon={faPlus} className="icon" />Trainer
+                </button>
+            </div>
+            <div className="trainer-table-scroll">
+                <table className="trainer-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Experienced In</th>
+                            <th>Weekly Hours</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    {trainers.map((trainer, index) => (
+        <tr key={trainer.trainerId}>
+            <td>{index + 1}</td>
+            <td>{trainer.firstName} {trainer.lastName}</td>
+            <td>{trainer.specialty}</td>
+            <td>{generateRandomHours()}</td>
+            <td>
+                <button 
+                    className="delete-button" 
+                    onClick={() => handleDeleteTrainer(trainer.trainerId)}>
+                    <FontAwesomeIcon icon={faTrash} />
+                </button>
+            </td>
+        </tr>
+    ))}
+</tbody>
 
-        
-
-        <table className='trainer-table'> {/* Using table for grid layout */}
-          <thead>
-            <tr>
-              <th>Name</th> {/* Table header for Name */}
-              <th>Class</th> {/* Table header for Class */}
-            </tr>
-          </thead>
-          <tbody>
-            {trainers.map(trainer => (
-              <tr key={trainer.trainerId}>
-                <td>{trainer.firstName} {trainer.lastName}</td> {/* Table cell for Name */}
-                <td>{trainer.specialty}</td> {/* Table cell for Class */}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-      </div>
+                </table>
+            </div>
+        </div>
     );
-  };
-  
-  export default TrainerPage;
+};
+
+export default TrainerPage;
