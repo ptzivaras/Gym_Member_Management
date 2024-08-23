@@ -1,7 +1,9 @@
 package com.example.GymCustomers.model;
-
 import jakarta.persistence.*;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @Table(name = "classtype")
@@ -15,7 +17,8 @@ public class ClassType {
     @Column(name = "type_name")
     private String typeName;
 
-    @OneToMany(mappedBy = "viewtype", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "viewtype", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    //@JsonManagedReference
     private Set<Classschedule> classSchedules;
 
     // Getters and Setters

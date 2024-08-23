@@ -18,7 +18,7 @@ public class Trainers {
     @Column(name="specialty")
     private String specialty;
 
-    @OneToMany(mappedBy = "mtrainerId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "mtrainerId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Classschedule> classSchedules;
 
     public Long getTrainerId() {

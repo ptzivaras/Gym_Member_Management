@@ -5,9 +5,7 @@ import { useTable } from 'react-table';
 import './CreateClassType.css'; // Import CSS file
 
 const ClassTypeCreate = () => {
-  const [classType, setClassType] = useState({
-    typeName: ''
-  });
+  const [classType, setClassType] = useState({ typeName: '' });
   const [classTypes, setClassTypes] = useState([]);
   const [error, setError] = useState(null);
 
@@ -41,7 +39,7 @@ const ClassTypeCreate = () => {
     e.preventDefault();
     const isConfirmed = window.confirm('Are you sure you want to create this class type with the provided data?');
     if (isConfirmed) {
-      ClassTypeService.createClassType({ typeName: classType.typeName }) // Ensure only typeName is sent
+      ClassTypeService.createClassType({ typeName: classType.typeName })
         .then(response => {
           console.log('Class type created successfully:', response.data);
           fetchClassTypes(); // Refresh the list after creating a new class type
@@ -62,20 +60,26 @@ const ClassTypeCreate = () => {
     }
   };
 
+  // Columns configuration for react-table
   const columns = React.useMemo(
     () => [
       {
         Header: 'Class Type Name',
-        accessor: 'typeName', // Updated accessor to match the field in state
+        accessor: 'typeName', // This should match the key in your data
       },
     ],
     []
   );
 
-  const data = React.useMemo(() => classTypes.map(classType => ({
-    typeName: classType.typeName // Ensure the data matches the accessor
-  })), [classTypes]);
+  // Data transformation for react-table
+  const data = React.useMemo(
+    () => classTypes.map(classType => ({
+      typeName: classType.typeName, // Ensure the data matches the accessor
+    })),
+    [classTypes]
+  );
 
+  // Initialize react-table
   const {
     getTableProps,
     getTableBodyProps,

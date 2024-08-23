@@ -1,7 +1,13 @@
-package com.example.GymCustomers.model;
+// giati girnaei olo to set se megalo project tha girnaei 1000! pinakes ekei sto lazy isws eager na thelei na to dw!!
+//Java.time gia dates moderno, min valw java util date opws sti doyleia einai palio kai tha varesei kamia fora
 
+package com.example.GymCustomers.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalTime;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 @Entity
 @Table(name = "classschedule")
@@ -24,8 +30,10 @@ public class Classschedule {
     @Column(name = "end_time")
     private LocalTime endTime;
 
-    @ManyToOne
+    @ManyToOne//(fetch = FetchType.EAGER)
     @JoinColumn(name = "viewtype", referencedColumnName = "type_id")  // Correct mapping
+    @JsonIgnore
+    //@JsonBackReference
     private ClassType viewtype; //TODO: edw varaei an valw long pou einai int to id, thelei mapping me to pinaka
 
     @ManyToOne

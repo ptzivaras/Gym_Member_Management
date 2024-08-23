@@ -15,6 +15,7 @@ const ClassList = () => {
   const [selectedCell, setSelectedCell] = useState(null); // State for the selected cell
   const [selectedTrainer, setSelectedTrainer] = useState(''); // State for the selected trainer
   const [selectedClassType, setSelectedClassType] = useState(''); // State for the selected class type
+  const [classTypes, setClassTypes] = useState([]);
 
   const navigate = useNavigate();
 
@@ -32,6 +33,16 @@ const ClassList = () => {
       });
   }, []);
 
+  useEffect(() => {
+    ClassService.getClassType()
+      .then(response => {       
+          setClassTypes(response.data); 
+      })
+      .catch(error => {
+        console.error('Error fetching classes:', error);
+      });
+  }, []);
+  
   const formatTime = timeStr => {
     if (!timeStr) return '';
     const [hours, minutes] = timeStr.split(':');
