@@ -278,6 +278,7 @@ const ClassList = () => {
     ClassService.getClasses()
       .then(response => {
         const sortedSchedule = response.data.sort((a, b) => a.startTime.localeCompare(b.startTime));
+        console.log('Fetched Class Shedule:', response.data);
         setSchedule(sortedSchedule);
         setEditedSchedule(sortedSchedule);
       })

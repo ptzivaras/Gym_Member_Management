@@ -1,5 +1,7 @@
 package com.example.GymCustomers.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -19,6 +21,7 @@ public class Trainers {
     private String specialty;
 
     @OneToMany(mappedBy = "mtrainerId", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonBackReference
     private Set<Classschedule> classSchedules;
 
     public Long getTrainerId() {

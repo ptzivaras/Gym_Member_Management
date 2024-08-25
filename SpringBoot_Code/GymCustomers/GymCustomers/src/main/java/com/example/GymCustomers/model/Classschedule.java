@@ -3,6 +3,7 @@
 
 package com.example.GymCustomers.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalTime;
 
@@ -30,14 +31,18 @@ public class Classschedule {
     @Column(name = "end_time")
     private LocalTime endTime;
 
+    //Infinite Recursion Problem
+    //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "typeId")
+    //@JsonBackReference
+    //@JsonManagedReference /and in clastypes @JsonBackReference
     @ManyToOne//(fetch = FetchType.EAGER)
     @JoinColumn(name = "viewtype", referencedColumnName = "type_id")  // Correct mapping
-    @JsonIgnore
-    //@JsonBackReference
+    @JsonManagedReference
     private ClassType viewtype; //TODO: edw varaei an valw long pou einai int to id, thelei mapping me to pinaka
 
     @ManyToOne
     @JoinColumn(name = "mtrainer_id", referencedColumnName = "trainer_id")
+    @JsonManagedReference
     private Trainers mtrainerId; //TODO: edw varaei an valw long pou einai int to id, thelei mapping me to pinaka
 
 
