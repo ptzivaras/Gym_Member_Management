@@ -12,6 +12,10 @@ class ClassService {
     getClassType(){
         return axios.get(CLASSTYPE_API_BASE_URL);
     }
+
+    saveSchedule(scheduleData) {
+        return axios.post(`${CLASS_API_BASE_URL}/save`, scheduleData);
+    }
 }
 
 
