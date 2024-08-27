@@ -34,53 +34,9 @@ public class ClasssheduleController {
         return classScheduleRepository.findAll();
     }
 
-/*
-    @PostMapping("/classschedules")
-    public ResponseEntity<Classschedule> createClassSchedule(@RequestBody ScheduleRequest scheduleRequest) {
-        Optional<ClassType> classTypeOptional = classTypeRepository.findById(scheduleRequest.getClassTypeId());
-        Optional<Trainers> trainerOptional = trainersRepository.findById(scheduleRequest.getTrainerId());
 
-        if (!classTypeOptional.isPresent() || !trainerOptional.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Classschedule classSchedule = new Classschedule();
-        classSchedule.setClassName(scheduleRequest.getClassName());
-        classSchedule.setDayOfWeek(scheduleRequest.getDayOfWeek());
-        classSchedule.setStartTime(scheduleRequest.getStartTime());
-        classSchedule.setEndTime(scheduleRequest.getEndTime());
-        classSchedule.setViewtype(classTypeOptional.get());
-        classSchedule.setMtrainerId(trainerOptional.get());
-
-        Classschedule savedSchedule = classScheduleRepository.save(classSchedule);
-        return ResponseEntity.ok(savedSchedule);
-    }*/
-/*
-    @PostMapping("/classschedules/save")
-    public ResponseEntity<Classschedule> createClassSchedule(@RequestBody ScheduleChange scheduleChange) {
-        System.out.println("Received ScheduleChange: " + scheduleChange);
-        System.out.println("ClassTypeId: " + scheduleChange.getClassTypeId());
-        System.out.println("TrainerId: " + scheduleChange.getTrainerId());
-
-        Optional<ClassType> classTypeOptional = classTypeRepository.findById(scheduleChange.getClassTypeId());
-        Optional<Trainers> trainerOptional = trainersRepository.findById(scheduleChange.getTrainerId());
-
-        if (!classTypeOptional.isPresent() || !trainerOptional.isPresent()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Classschedule classSchedule = new Classschedule();
-        classSchedule.setClassName(scheduleChange.getClassName());
-        classSchedule.setDayOfWeek(scheduleChange.getDayOfWeek());
-        classSchedule.setStartTime(scheduleChange.getStartTime());
-        classSchedule.setEndTime(scheduleChange.getEndTime());
-        classSchedule.setViewtype(classTypeOptional.get());
-        classSchedule.setMtrainerId(trainerOptional.get());
-
-        Classschedule savedSchedule = classScheduleRepository.save(classSchedule);
-        return ResponseEntity.ok(savedSchedule);
-    }*/
-
+    /*
+    Todo: Delete this comments but modify it for Patch/Put before
     @PostMapping("/classschedules/save")
     public ResponseEntity<Classschedule> createClassSchedule(@RequestBody Classschedule classSchedule) {
         if (classSchedule.getViewtype() == null || classSchedule.getMtrainerId() == null) {
@@ -108,5 +64,37 @@ public class ClasssheduleController {
         Classschedule savedSchedule = classScheduleRepository.save(classSchedule);
         return ResponseEntity.ok(savedSchedule);
     }
+    */
+
+    //Todo: Patch is correct but its ok put is fine
+    @PutMapping("/classschedules/{id}")
+    public ResponseEntity<Classschedule> updateClassSchedule(@PathVariable Long id, @RequestBody Classschedule updatedSchedule) {
+        Optional<Classschedule> existingScheduleOptional = classScheduleRepository.findById(id);
+
+        if (!existingScheduleOptional.isPresent()) {
+            return ResponseEntity.notFound().build(); // If the entry doesn't exist, return 404
+        }
+
+        Classschedule existingSchedule = existingScheduleOptional.get();
+
+        // Update the fields as needed
+        existingSchedule.setClassName(updatedSchedule.getClassName());
+        existingSchedule.setDayOfWeek(updatedSchedule.getDayOfWeek());
+        existingSchedule.setStartTime(updatedSchedule.getStartTime());
+        existingSchedule.setEndTime(updatedSchedule.getEndTime());
+
+        // Update related entities like viewtype and mtrainerId
+        if (updatedSchedule.getViewtype() != null) {
+            existingSchedule.setViewtype(classTypeRepository.findById(updatedSchedule.getViewtype().getTypeId()).orElse(null));
+        }
+        if (updatedSchedule.getMtrainerId() != null) {
+            existingSchedule.setMtrainerId(trainersRepository.findById(updatedSchedule.getMtrainerId().getTrainerId()).orElse(null));
+        }
+
+        Classschedule savedSchedule = classScheduleRepository.save(existingSchedule);
+        return ResponseEntity.ok(savedSchedule);
+    }
+
+
 
 }

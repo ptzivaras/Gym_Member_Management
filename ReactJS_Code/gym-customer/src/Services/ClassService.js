@@ -13,9 +13,14 @@ class ClassService {
         return axios.get(CLASSTYPE_API_BASE_URL);
     }
 
-    saveSchedule(scheduleData) {
-        return axios.post(`${CLASS_API_BASE_URL}/save`, scheduleData);
-    }
+    // saveSchedule(scheduleData) {
+    //     return axios.post(`${CLASS_API_BASE_URL}/save`, scheduleData);
+    // }
+    
+    updateSchedule(id, scheduleData) {
+        return axios.put(`${CLASS_API_BASE_URL}/${id}`, scheduleData);
+      }
+      
 }
 
 

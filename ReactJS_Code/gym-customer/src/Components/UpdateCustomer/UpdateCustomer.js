@@ -14,6 +14,9 @@ const UpdateCustomer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [modalAction, setModalAction] = useState(null);
+  const [isUnder18, setIsUnder18] = useState(false);
+  const [hasKids, setHasKids] = useState(false);
+  const [paymentError, setPaymentError] = useState(''); // New state for payment error
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,11 +31,10 @@ const UpdateCustomer = () => {
         .catch(error => {
           console.error('Error fetching customer details:', error);
         });
-      
+
       // Fetch memberships for the dropdown
       CustomerService.getMemberships()
         .then(response => {
-          console.log('Memberships:', response.data); // Log memberships to inspect the data
           setMemberships(response.data);
         })
         .catch(error => {
@@ -44,10 +46,25 @@ const UpdateCustomer = () => {
   const handleUpdate = () => {
     setModalMessage('Are you sure you want to save the changes?');
     setModalAction(() => () => {
+      setPaymentError(''); // Clear previous error message before starting the update process
+      // First update the customer details
       CustomerService.updateCustomer(customerId, editedCustomer)
         .then(response => {
           console.log('Customer updated successfully:', response.data);
-          navigate(-1);
+
+          if (editedCustomer.membership) {
+            CustomerService.processPayment(customerId, editedCustomer.membership)
+              .then(paymentResponse => {
+                console.log('Payment processed successfully:', paymentResponse.data);
+                navigate(-1); // Go back to the previous page
+              })
+              .catch(error => {
+                console.error('Error processing payment:', error);
+                setPaymentError('Error: Could not process payment. Please try again.'); // Set error message to be displayed on the screen
+              });
+          } else {
+            navigate(-1); // Go back to the previous page if no payment is needed
+          }
         })
         .catch(error => {
           console.error('Error updating customer:', error);
@@ -145,8 +162,26 @@ const UpdateCustomer = () => {
               />
             </td>
           </tr>
+
           <tr>
-            <th className='update-customer-table-header'>Membership:</th>
+            <th className='update-customer-table-header'>Current Membership:</th>
+            <td>
+              <div className='readonly-field'>
+                WorkOutBasic - Discount Value: 20€
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th className='update-customer-table-header'>Payment Info:</th>
+            <td>
+              <div className='readonly-field'>
+                Payment: 300€ - Payment Date: 12/08/24 - Expiration Date: 12/11/24
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <th className='update-customer-table-header'>New Membership:</th>
             <td>
               <select
                 className='update-customer-table-select'
@@ -157,8 +192,8 @@ const UpdateCustomer = () => {
                 <option value="">None</option>
                 {memberships.length > 0 ? (
                   memberships.map(membership => (
-                    <option key={membership.id} value={membership.id}>
-                      {membership.name}
+                    <option key={membership.membershipId} value={membership.membershipId}>
+                      {membership.planType} , {membership.duration} {membership.duration > 1 ? 'months' : 'month'} , {membership.price} €
                     </option>
                   ))
                 ) : (
@@ -167,10 +202,35 @@ const UpdateCustomer = () => {
               </select>
             </td>
           </tr>
+
+          {/* Added checkboxes for "Under 18" and "Has Kids" */}
+          <tr>
+            <th className='update-customer-table-header'>Under 18:</th>
+            <td>
+              <input
+                type="checkbox"
+                checked={isUnder18}
+                onChange={() => setIsUnder18(!isUnder18)}
+              />
+            </td>
+          </tr>
+          <tr>
+            <th className='update-customer-table-header'>Has Kids:</th>
+            <td>
+              <input
+                type="checkbox"
+                checked={hasKids}
+                onChange={() => setHasKids(!hasKids)}
+              />
+            </td>
+          </tr>
+
         </tbody>
       </table>
 
       <div className='update-customer-button-container'>
+        {/* Display the payment error message in red if there is one */}
+        {paymentError && <p className="payment-error-message">{paymentError}</p>}
         <button className='update-customer-table-button' onClick={handleUpdate}>Save Changes</button>
       </div>
 

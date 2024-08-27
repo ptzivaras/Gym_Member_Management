@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const CUSTOMER_API_BASE_URL = "http://localhost:8080/api/v1/customers";
 const MEMBERSHIP_API_BASE_URL="http://localhost:8080/api/v1/memberships";
-const PAYMENT_API_BASE_URL="http://localhost:8080/api/v1/payments";
+const PAYMENT_API_BASE_URL= "http://localhost:8080/api/v1/payments";
 
 
 class CustomerService {
@@ -44,6 +44,14 @@ class CustomerService {
 
     getPayments(){
         return axios.get(PAYMENT_API_BASE_URL);
+    }
+
+    processPayment(customerId, membershipId) {
+        const paymentData = {
+            customer: { customerId: customerId },
+            membership: { membershipId: membershipId }
+        };
+        return axios.post(PAYMENT_API_BASE_URL, paymentData);
     }
 }
 
