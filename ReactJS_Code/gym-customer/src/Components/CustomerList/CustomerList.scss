@@ -27,14 +27,14 @@
   font-family: 'Roboto', sans-serif;
   display: flex;
   align-items: center;
-}
 
-.create-customer-button .icon {
-  margin-right: 5px;
-}
+  .icon {
+    margin-right: 5px;
+  }
 
-.create-customer-button:hover {
-  background-color: #6c63ff;
+  &:hover {
+    background-color: #6c63ff;
+  }
 }
 
 /* Wrapper to control the width of the table */
@@ -57,50 +57,47 @@
   border-radius: 12px; /* Round corners */
   overflow: hidden; /* Ensure round corners are visible */
   font-family: 'Roboto', sans-serif; /* Font family */
-}
 
-/* Ensure table cells and headers have appropriate styling */
-.price-table th, .price-table td {
-  border: 1px solid #ddd; 
-  padding: 14px;
-  text-align: left;
-  background-color: white; /* table cell color */
-  color: #40385a;  
-  border: transparent;
-}
+  th, td {
+    border: 1px solid #ddd; 
+    padding: 14px;
+    text-align: left;
+    background-color: white; /* table cell color */
+    color: #40385a;  
+    border: transparent;
+  }
 
-.price-table th {
-  background-color: #f9f8fd; /* header Color */
-  color: #5b5679; 
-  font-weight: 600;
-}
+  th {
+    background-color: #f9f8fd; /* header Color */
+    color: #5b5679; 
+    font-weight: 600;
+  }
 
-.price-table td {
-  border-bottom: 1px solid #ddd; /* Line between rows */
-}
+  td {
+    border-bottom: 1px solid #ddd; /* Line between rows */
+  }
 
-.price-table tr:last-child td {
-  border-bottom: none; /* Remove line from last row */
-}
+  tr:last-child td {
+    border-bottom: none; /* Remove line from last row */
+  }
 
-/* Styling for buttons inside the table */
-.price-table button {
-  background: none;
-  border: none;
-  color: #40385a;
-  cursor: pointer;
-  margin-right: 8px;
-}
+  button {
+    background: none;
+    border: none;
+    color: #40385a;
+    cursor: pointer;
+    margin-right: 8px;
 
-.price-table button:hover {
-  text-decoration: underline;
-  color: #9693fb;
-}
+    &:hover {
+      text-decoration: underline;
+      color: #9693fb;
+    }
+  }
 
-/* Input width for editing cells */
-.price-table input {
-  width: 100px;
-  font-family: 'Roboto', sans-serif; /* Font family */
+  input {
+    width: 100px;
+    font-family: 'Roboto', sans-serif; /* Font family */
+  }
 }
 
 /* Pagination styles */
@@ -109,24 +106,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
 
-.pagination span {
-  color: #40385a;
-  margin: 0 10px; /* Adjusted margin to reduce space */
-}
+  span {
+    color: #40385a;
+    margin: 0 10px; /* Adjusted margin to reduce space */
+  }
 
-.pagination button {
-  color: #40385a; /* Arrow color */
-  border: none;
-  padding: 0; /* Remove padding */
-  cursor: pointer;
-  font-size: 24px; /* Increase icon size */
-}
+  button {
+    color: #40385a; /* Arrow color */
+    border: none;
+    padding: 0; /* Remove padding */
+    cursor: pointer;
+    font-size: 24px; /* Increase icon size */
 
-.pagination button:disabled {
-  color: gray;
-  cursor: not-allowed;
+    &:disabled {
+      color: gray;
+      cursor: not-allowed;
+    }
+  }
 }
 
 /* Modal styles */
@@ -140,37 +137,37 @@
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.5);
-}
 
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-}
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
 
-.modal-button {
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  margin-left: 10px;
-  border-radius: 5px;
-}
+  .modal-button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    border-radius: 5px;
 
-.confirm-button {
-  background-color: #e44c40;
-  color: white;
-}
+    &.confirm-button {
+      background-color: #e44c40;
+      color: white;
+    }
 
-.cancel-button {
-  background-color: #ccc;
-  color: black;
+    &.cancel-button {
+      background-color: #ccc;
+      color: black;
+    }
+  }
 }
 
 /* Customer item button styles */
@@ -181,20 +178,20 @@
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-}
 
-.customer-item-button .icon {
-  margin-right: 5px;
-}
+  .icon {
+    margin-right: 5px;
+  }
 
-.customer-item-button.view-button:hover {
-  color: #56CCF2;
-}
+  &.view-button:hover {
+    color: #56ccf2;
+  }
 
-.customer-item-button.edit-button:hover {
-  color: #F2C94C;
-}
+  &.edit-button:hover {
+    color: #f2c94c;
+  }
 
-.customer-item-button.delete-button:hover {
-  color: #EB5757;
+  &.delete-button:hover {
+    color: #eb5757;
+  }
 }

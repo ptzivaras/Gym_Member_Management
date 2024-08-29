@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTable } from 'react-table';
 import CustomerService from '../Services/CustomerService';
-import './PricePage.css';
+import './PricePage.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faSave, faTimes, faArrowUp, faArrowDown, faMinus } from '@fortawesome/free-solid-svg-icons';
 
@@ -197,16 +197,16 @@ function PricePage() {
   };
 
   return (
-    <div className="container">
-      <div className="tabs">
-        <div className={`tab ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>All</div>
-        <div className={`tab ${filter === '1month' ? 'active' : ''}`} onClick={() => setFilter('1month')}>1 Month</div>
-        <div className={`tab ${filter === '3months' ? 'active' : ''}`} onClick={() => setFilter('3months')}>3 Months</div>
-        <div className={`tab ${filter === '6months' ? 'active' : ''}`} onClick={() => setFilter('6months')}>6 Months</div>
-        <div className={`tab ${filter === '12months' ? 'active' : ''}`} onClick={() => setFilter('12months')}>12 Months</div>
+    <div className="price-page-container">
+      <div className="price-page-tabs">
+        <div className={`price-page-tab ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>All</div>
+        <div className={`price-page-tab ${filter === '1month' ? 'active' : ''}`} onClick={() => setFilter('1month')}>1 Month</div>
+        <div className={`price-page-tab ${filter === '3months' ? 'active' : ''}`} onClick={() => setFilter('3months')}>3 Months</div>
+        <div className={`price-page-tab ${filter === '6months' ? 'active' : ''}`} onClick={() => setFilter('6months')}>6 Months</div>
+        <div className={`price-page-tab ${filter === '12months' ? 'active' : ''}`} onClick={() => setFilter('12months')}>12 Months</div>
       </div>
-      <div className="table-wrapper">
-        <table {...getTableProps()} className="price-table">
+      <div className="price-page-table-wrapper">
+        <table {...getTableProps()} className="price-page-table">
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -229,7 +229,7 @@ function PricePage() {
             })}
           </tbody>
         </table>
-        <div className="pagination">
+        <div className="price-page-pagination">
           <span>
             {startRange}-{endRange} of {totalMemberships} memberships
           </span>

@@ -3,7 +3,7 @@ import TrainerService from '../Services/TrainerService';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import './TrainerPage.css';
+import './TrainerPage.scss';
 
 const TrainerPage = () => {
     const [trainers, setTrainers] = useState([]);

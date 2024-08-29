@@ -3,7 +3,7 @@ import {
   PieChart, Pie, Cell, LineChart, Line, BarChart, Bar, XAxis, YAxis,
   Tooltip, CartesianGrid
 } from 'recharts';
-import './AboutPage.css';
+import './AboutPage.scss';
 
 const mockData = {
   barChartData: [

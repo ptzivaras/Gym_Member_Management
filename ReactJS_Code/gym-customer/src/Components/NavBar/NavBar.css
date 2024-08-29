@@ -1,6 +1,6 @@
 .navbar {
     display: flex;
-    background-color: #5b5679;
+    background-color: white;
     border-bottom: 2px solid transparent;
     position: fixed;
     top: 0;
@@ -15,7 +15,7 @@
   
 .navbar a {
   position: relative; /* Added to position the pseudo-element relative to the link */
-  color: #fff;
+  color: #9592FF;
   font-weight: 500;
   text-decoration: none;
   margin: 0 25px;
@@ -29,7 +29,7 @@
   left: 0;
   width: 0;
   height: 2px;
-  background: #fff;
+  background: #9592FF;
   transition: .3s;
 }
 
