@@ -3,7 +3,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* Fill the entire height of the screen */
   box-sizing: border-box;
   flex-direction: column;
 }
@@ -15,7 +14,7 @@
 
   margin-left: auto;
   margin-right: auto;
-  
+
   display: flex;
   justify-content: flex-start;
   padding: 10px;
@@ -44,40 +43,43 @@
 
 /* Wrapper to control the width of the table */
 .table-wrapper {
-  width: 100%; /* Maintain width with space on the sides */
-  max-width: 92%; /* Optional: set a max width */
+  width: 90%; height: auto;
   background-color: white; /* White background only for the table wrapper */ 
   border-radius: 12px;
   margin-left: auto; /* Center the table wrapper */
   margin-right: auto; /* Center the table wrapper */
+ background: white; /* edw einai to aspro*/
   height: auto; /* Ensure the table wrapper does not stretch vertically */
   padding-bottom: 14px; /* Add some padding to the bottom */
 }
 
 /* Table that stretches to fit the full width of its wrapper */
 .customer-table {
-  width: 100%;
+  width: 100%; 
   border-collapse: collapse;
   table-layout: fixed; /* Ensure columns take equal width */
-  border-radius: 12px; /* Round corners */
+  border-top-left-radius: 12px; border-top-right-radius: 12px;
   overflow: hidden; /* Ensure round corners are visible */
-  font-family: 'Roboto', sans-serif; /* Font family */
+  font-family: 'Roboto', sans-serif;
 }
 
 /* Ensure table cells and headers have appropriate styling */
 .customer-table th, .customer-table td {
   border: 1px solid #ddd; 
-  padding: 14px;
+  padding: 7px;
   text-align: left;
   background-color: white; /* table cell color */
   color: #40385a;  
   border: transparent;
+  padding-left: 16px;
 }
 
 .customer-table th {
   background-color: #f9f8fd; /* header Color */
   color: #5b5679; 
   font-weight: 600;
+  padding-top: 16px; padding-bottom: 16px;
+  padding-left: 16px;
 }
 
 .customer-table td {
@@ -85,7 +87,7 @@
 }
 
 .customer-table tr:last-child td {
-  border-bottom: none; /* Remove line from last row */
+  border-bottom: 1px solid #ddd; /*  line from last row */
 }
 
 /* Styling for buttons inside the table */
@@ -110,10 +112,11 @@
 
 /* Pagination styles */
 .pagination {
-  margin-top: 20px;
+  margin-top: 26px; margin-right: 24px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+  gap: 8px; /* Compact spacing between elements */
 }
 
 .pagination span {
@@ -126,7 +129,8 @@
   border: none;
   padding: 0; /* Remove padding */
   cursor: pointer;
-  font-size: 24px; /* Increase icon size */
+  font-size: 18px; /* Increase icon size */
+  margin: 0 2px;
 }
 
 .pagination button:disabled {

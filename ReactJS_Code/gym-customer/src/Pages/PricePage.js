@@ -231,7 +231,7 @@ function PricePage() {
         </table>
         <div className="price-page-pagination">
           <span>
-            {startRange}-{endRange} of {totalMemberships} memberships
+            {startRange}-{endRange} of {totalMemberships}
           </span>
           <div className="pagination-controls">
             <button onClick={handlePrevious} disabled={currentPage === 0}>

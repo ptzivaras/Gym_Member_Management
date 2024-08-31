@@ -11,13 +11,18 @@ const CustomerList = () => {
   const [customers, setCustomers] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [customerToDelete, setCustomerToDelete] = useState(null);
-  const [pageSize, setPageSize] = useState(14);
+  const [pageSize, setPageSize] = useState(12); // Set initial page size to 12
   const navigate = useNavigate();
 
   useEffect(() => {
     CustomerService.getCustomers()
       .then(response => {
-        setCustomers(response.data);
+        const mockData = response.data.map((customer, index) => ({
+          ...customer,
+          id: index + 1, // Adding mock ID starting from 1
+          status: Math.random() > 0.5 ? 'Active' : 'Inactive', // Random Active/Inactive status
+        }));
+        setCustomers(mockData);
       })
       .catch(error => {
         console.error('Error fetching customers:', error);
@@ -27,6 +32,10 @@ const CustomerList = () => {
   const data = useMemo(() => customers, [customers]);
 
   const columns = useMemo(() => [
+    {
+      Header: '#',
+      accessor: 'id',
+    },
     {
       Header: 'Full Name',
       accessor: row => `${row.firstName} ${row.lastName}`,
@@ -39,6 +48,20 @@ const CustomerList = () => {
     {
       Header: 'Status',
       accessor: 'status',
+      Cell: ({ value }) => (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <span
+            style={{
+              width: '10px',
+              height: '10px',
+              borderRadius: '50%',
+              backgroundColor: value === 'Active' ? 'green' : 'red',
+              marginRight: '8px',
+            }}
+          ></span>
+          <span>{value}</span>
+        </div>
+      ),
     },
     {
       Header: 'Action',
@@ -80,16 +103,17 @@ const CustomerList = () => {
     previousPage,
     nextPage,
     setPageSize: setPageSizeTable,
-    state: { pageIndex },
+    state: { pageIndex, pageSize: tablePageSize },
   } = useTable(
     {
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize },
+      initialState: { pageIndex: 0, pageSize }, // Initialize with correct pageSize
     },
     usePagination,
   );
 
+  // Sync the external pageSize state with the table's internal state
   useEffect(() => {
     setPageSizeTable(pageSize);
   }, [pageSize, setPageSizeTable]);
@@ -119,9 +143,9 @@ const CustomerList = () => {
   return (
     <div className='container'>
       <div className='header-container'>
-          <button className='create-customer-button' onClick={() => navigate('/create-customer')}>
-            <FontAwesomeIcon icon={faPlus} className='icon' /> Customer
-          </button>
+        <button className='create-customer-button' onClick={() => navigate('/create-customer')}>
+          <FontAwesomeIcon icon={faPlus} className='icon' /> Customer
+        </button>
       </div>
       <div className='table-wrapper'>
         <table {...getTableProps()} className='customer-table'>
@@ -147,38 +171,36 @@ const CustomerList = () => {
             })}
           </tbody>
         </table>
+
         <div className="pagination">
-          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-            {'<<'}
-          </button>
-          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-            {'<'}
-          </button>
-          <span>
-            Page:&nbsp;
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>
-          </span>
-          <button onClick={() => nextPage()} disabled={!canNextPage}>
-            {'>'}
-          </button>
-          <button onClick={() => gotoPage(pageOptions.length - 1)} disabled={!canNextPage}>
-            {'>>'}
-          </button>
+          <span style={{ marginLeft: '10px' }}>Rows per page:</span>
           <select
             value={pageSize}
             onChange={e => setPageSize(Number(e.target.value))}
+            style={{
+              border: 'none',
+              outline: 'none',
+              background: 'transparent',
+            }}
           >
             {[12, 24, 36, 48].map(size => (
               <option key={size} value={size}>
-                Show {size}
+                {size}
               </option>
             ))}
           </select>
+          <span style={{ marginLeft: '10px' }}>
+            {pageIndex * tablePageSize + 1}-{Math.min((pageIndex + 1) * tablePageSize, data.length)} of {data.length}
+          </span>
+          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+            {'<'}
+          </button>
+          <button onClick={() => nextPage()} disabled={!canNextPage}>
+            {'>'}
+          </button>
         </div>
       </div>
-
+      
       {showDeleteModal && (
         <Modal
           isOpen={showDeleteModal}

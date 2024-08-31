@@ -31,51 +31,47 @@
   color: #40385a;
 }
 
-.update-customer-table {
-  width: 100%;
-  border-collapse: collapse;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
 }
 
-.update-customer-table-header {
-  text-align: left;
-  padding: 10px;
-  background-color: #f9f8fd;
-  border: 1px solid #ddd;
+.form-group label {
+  display: flex; /* Use flexbox to align items */
+  align-items: center; /* Center the asterisk vertically with the label */
   font-weight: bold;
-  color: #5b5679;
-}
-
-.update-customer-table-data,
-.update-customer-table-input,
-.update-customer-table-select {
-  padding: 10px;
-  border: 1px solid #ddd;
-  width: 100%;
-  box-sizing: border-box;
-  background-color: white;
+  margin-bottom: 5px;
   color: #40385a;
 }
 
-.update-customer-table td {
-  padding: 0; /* Remove default padding */
-  border: 1px solid #ddd;
+.required {
+  color: red;
+  font-weight: bold;
+  margin-left: 5px; /* Adjust margin to bring the asterisk closer to the label */
 }
 
-.update-customer-table-input,
-.update-customer-table-select {
-  border: none;
-  outline: none;
+.form-input {
   padding: 10px;
-  background-color: transparent;
-  width: calc(100% - 20px); /* Ensure consistent width */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
   box-sizing: border-box;
   font-size: 1em;
   color: #40385a;
+  transition: border-color 0.3s ease;
 }
 
-.update-customer-table-input:focus,
-.update-customer-table-select:focus {
+.form-input:focus {
   outline: none;
+  border-color: #6c63ff;
+}
+
+.validation-error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: -10px;
+  margin-bottom: 10px;
 }
 
 .update-customer-table-button {
@@ -97,14 +93,6 @@
   justify-content: center;
   gap: 10px;
   margin-top: 20px;
-}
-
-.readonly-field {
-  padding: 8px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  font-weight: bold;
-  border-radius: 4px;
 }
 
 .payment-error-message {

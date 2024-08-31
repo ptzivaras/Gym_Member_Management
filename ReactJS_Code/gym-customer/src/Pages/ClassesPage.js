@@ -1,17 +1,17 @@
-//import ClassList from '../Components/ClassList/ClassList';
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ClassService from '../Services/ClassService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
-import './ClassesPage.scss'; // Importing SCSS file
+import Modal from '../Components/ModalPopUp/Modal'; // Import your Modal component
+import './ClassesPage.css'; 
 
 const ClassList = () => {
   const [schedule, setSchedule] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [editedSchedule, setEditedSchedule] = useState([]);
   const [editedCell, setEditedCell] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,10 +42,39 @@ const ClassList = () => {
     }
   };
 
+  const updateEditedSchedule = (timeSlot, day, key, value) => {
+    setEditedSchedule(prev => {
+      const newSchedule = [...prev];
+      const index = newSchedule.findIndex(item => `${item.startTime}-${item.endTime}` === timeSlot && item.dayOfWeek === day);
+      if (index !== -1) {
+        newSchedule[index] = {
+          ...newSchedule[index],
+          [key]: value
+        };
+      }
+      return newSchedule;
+    });
+  };
+
   const handleSave = () => {
+    setIsModalOpen(true); // Open modal to confirm save action
+  };
+
+  const handleConfirmSave = () => {
+    setIsModalOpen(false);
     setSchedule(editedSchedule);
     setEditMode(false);
     setEditedCell({});
+    // Here you should make a PUT request to update the database
+    editedSchedule.forEach(classItem => {
+      ClassService.updateClass(classItem.id, classItem) // Assuming `id` is a property of classItem
+        .then(response => {
+          console.log('Class updated successfully', response);
+        })
+        .catch(error => {
+          console.error('Error updating class:', error);
+        });
+    });
   };
 
   const handleCancel = () => {
@@ -73,28 +102,28 @@ const ClassList = () => {
         {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
           <td
             key={day}
-            className={editMode ? 'clickable-cell' : ''}
+            className={editMode ? 'schedule-clickable-cell' : ''}
             onClick={() => handleCellClick(timeSlot, day)}
           >
             {editMode && editedCell.timeSlot === timeSlot && editedCell.day === day ? (
               <>
                 <input
-                  className="small-input"
+                  className="schedule-small-input"
                   type="text"
                   defaultValue={classesByTime[timeSlot][day]?.className || ''}
-                  onChange={(e) => setEditedCell((prev) => ({ ...prev, className: e.target.value }))}
+                  onChange={(e) => updateEditedSchedule(timeSlot, day, 'className', e.target.value)}
                 />
                 <input
-                  className="small-input"
+                  className="schedule-small-input"
                   type="text"
                   defaultValue={classesByTime[timeSlot][day]?.trainerName || ''}
-                  onChange={(e) => setEditedCell((prev) => ({ ...prev, trainerName: e.target.value }))}
+                  onChange={(e) => updateEditedSchedule(timeSlot, day, 'trainerName', e.target.value)}
                 />
               </>
             ) : (
               <>
-                <div className="class-name">{classesByTime[timeSlot][day]?.className || '-'}</div>
-                <div className="trainer-name">{classesByTime[timeSlot][day]?.trainerName || ''}</div>
+                <div className="schedule-class-name">{classesByTime[timeSlot][day]?.className || '-'}</div>
+                <div className="schedule-trainer-name">{classesByTime[timeSlot][day]?.trainerName || ''}</div>
               </>
             )}
           </td>
@@ -104,24 +133,24 @@ const ClassList = () => {
   };
 
   return (
-    <div className="class-list-container">
-      <div className="button-container">
+    <div className="schedule-list-container">
+      <div className="schedule-button-container">
         {editMode ? (
           <>
-            <button className="save-button" onClick={handleSave}>
+            <button className="schedule-save-button" onClick={handleSave}>
               <FontAwesomeIcon icon={faSave} /> Save
             </button>
-            <button className="cancel-button" onClick={handleCancel}>
+            <button className="schedule-cancel-button" onClick={handleCancel}>
               <FontAwesomeIcon icon={faTimes} /> Cancel
             </button>
           </>
         ) : (
-          <button className="edit-button" onClick={handleEdit}>
+          <button className="schedule-edit-button" onClick={handleEdit}>
             <FontAwesomeIcon icon={faEdit} /> Edit
           </button>
         )}
       </div>
-      <table className="class-table">
+      <table className="schedule-class-table">
         <thead>
           <tr>
             <th>Time</th>
@@ -138,6 +167,12 @@ const ClassList = () => {
           {renderTableRows()}
         </tbody>
       </table>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmSave}
+        message="Are you sure you want to save the changes?"
+      />
     </div>
   );
 };
