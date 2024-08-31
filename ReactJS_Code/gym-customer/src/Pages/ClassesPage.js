@@ -11,6 +11,7 @@ const ClassList = () => {
   const [editMode, setEditMode] = useState(false);
   const [editedSchedule, setEditedSchedule] = useState([]);
   const [editedCell, setEditedCell] = useState({});
+  const [editedRowId, setEditedRowId] = useState(null); // State to track the specific row being edited
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
   const navigate = useNavigate();
 
@@ -37,9 +38,10 @@ const ClassList = () => {
     setEditMode(true);
   };
 
-  const handleCellClick = (timeSlot, day) => {
+  const handleCellClick = (timeSlot, day, rowId) => {
     if (editMode) {
       setEditedCell({ timeSlot, day });
+      setEditedRowId(rowId); // Track the row ID being edited
     }
   };
 
@@ -70,23 +72,28 @@ const ClassList = () => {
     setEditMode(false);
     setEditedCell({});
     
-    // Make PUT requests for each modified class schedule
-    editedSchedule.forEach(classItem => {
-      ClassService.updateSchedule(classItem.id, classItem) // Ensure classItem has the correct ID
+    // Find the edited row by ID and update only that one
+    const editedRow = editedSchedule.find(row => row.classId === editedRowId);
+    
+    if (editedRow) {
+      ClassService.updateSchedule(editedRow.classId, editedRow) // Update only the edited row
         .then(response => {
           console.log('Class updated successfully', response);
-          console.log('PayLoad Sent: ', {classItem})
         })
         .catch(error => {
           console.error('Error updating class:', error);
         });
-    });
+    }
+    
+    // Reset editedRowId after saving
+    setEditedRowId(null);
   };
 
   const handleCancel = () => {
     setEditedSchedule(schedule);
     setEditMode(false);
     setEditedCell({});
+    setEditedRowId(null); // Reset the edited row ID
   };
 
   const renderTableRows = () => {
@@ -99,6 +106,7 @@ const ClassList = () => {
       classesByTime[key][classItem.dayOfWeek] = {
         className: classItem.className,
         trainerName: classItem.trainerName,
+        rowId: classItem.classId // Pass the row ID here
       };
     });
 
@@ -109,7 +117,7 @@ const ClassList = () => {
           <td
             key={day}
             className={editMode ? 'schedule-clickable-cell' : ''}
-            onClick={() => handleCellClick(timeSlot, day)}
+            onClick={() => handleCellClick(timeSlot, day, classesByTime[timeSlot][day]?.rowId)} // Pass rowId here
           >
             {editMode && editedCell.timeSlot === timeSlot && editedCell.day === day ? (
               <>
