@@ -86,36 +86,48 @@
   justify-content: flex-start; /* Align buttons to the left */
 }
 
-/* Preserve button styles */
-.schedule-edit-button,
-.schedule-save-button,
-.schedule-cancel-button {
-  background-color: #04aa6d; /* Default background for edit button */
+/*button styles */
+.schedule-edit-button{
+  background-color: #9693fb;
   color: white;
-  padding: 6px 10px;
   border: none;
-  border-radius: 6px;
-  font-size: 14px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
   display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
 }
 
 .schedule-edit-button:hover {
-  background-color: #2f855b; /* Darker green on hover */
+  background-color: #6c63ff;
 }
 
-.schedule-save-button {
-  background-color: #007bff; /* Blue background for save button */
+.schedule-save-button{
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
+}
+.schedule-cancel-button {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
 }
 
 .schedule-save-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
-}
-
-.schedule-cancel-button {
-  background-color: #ff0000; /* Red background for cancel button */
+  background-color: #6c63ff; /* Darker blue on hover */
 }
 
 .schedule-cancel-button:hover {

@@ -39,6 +39,8 @@ public class ClasssheduleController {
         return classScheduleRepository.findAll();
     }
 
+    //For Normalized table
+    /*
     @PutMapping("/classschedules/{id}")
     public ResponseEntity<Classschedule> updateClassSchedule(
             @PathVariable Long id,
@@ -72,6 +74,6 @@ public class ClasssheduleController {
         Classschedule savedSchedule = classScheduleRepository.save(existingSchedule);
         return ResponseEntity.ok(savedSchedule);
     }
-
+*/
 
 }

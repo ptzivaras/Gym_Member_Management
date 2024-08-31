@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ClassService from '../Services/ClassService';
+import ClassService from '../Services/ClassService'; // Import your service
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 import Modal from '../Components/ModalPopUp/Modal'; // Import your Modal component
@@ -15,6 +15,7 @@ const ClassList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Fetch classes from the backend
     ClassService.getClasses()
       .then((response) => {
         const sortedSchedule = response.data.sort((a, b) => a.startTime.localeCompare(b.startTime));
@@ -42,6 +43,7 @@ const ClassList = () => {
     }
   };
 
+  // Function to update the editedSchedule state
   const updateEditedSchedule = (timeSlot, day, key, value) => {
     setEditedSchedule(prev => {
       const newSchedule = [...prev];
@@ -56,20 +58,24 @@ const ClassList = () => {
     });
   };
 
+  // Open the confirmation modal when save is clicked
   const handleSave = () => {
-    setIsModalOpen(true); // Open modal to confirm save action
+    setIsModalOpen(true);
   };
 
+  // Confirm and save changes to the backend
   const handleConfirmSave = () => {
     setIsModalOpen(false);
     setSchedule(editedSchedule);
     setEditMode(false);
     setEditedCell({});
-    // Here you should make a PUT request to update the database
+    
+    // Make PUT requests for each modified class schedule
     editedSchedule.forEach(classItem => {
-      ClassService.updateClass(classItem.id, classItem) // Assuming `id` is a property of classItem
+      ClassService.updateSchedule(classItem.id, classItem) // Ensure classItem has the correct ID
         .then(response => {
           console.log('Class updated successfully', response);
+          console.log('PayLoad Sent: ', {classItem})
         })
         .catch(error => {
           console.error('Error updating class:', error);
