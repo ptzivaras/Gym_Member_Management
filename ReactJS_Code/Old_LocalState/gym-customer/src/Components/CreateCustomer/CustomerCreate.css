@@ -1,0 +1,97 @@
+.customer-create-container {
+  font-family: sans-serif;
+  width: 30vw;
+  height: auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: black;
+  padding: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.header {
+  color: #40385a;
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.customer-create-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  width: 100%;
+  position: relative; /* Make the form-group container relative for positioning */
+}
+
+input[type='text'],
+input[type='email'] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  font-family: 'Roboto', sans-serif; /* Font family */
+  box-sizing: border-box; /* Ensures padding is included in width */
+}
+
+input[type='text']::placeholder,
+input[type='email']::placeholder {
+  color: #9b9b9b; /* Light grey color for placeholders */
+}
+
+input.required::placeholder {
+  content: '✶ ' attr(placeholder); /* Add red asterisk to the placeholder text */
+  color: #9b9b9b; /* Light grey color for placeholders */
+}
+
+input.error {
+  border-color: red;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.create-submit-button {
+  padding: 10px 20px;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #9693fb; /* Purple color */
+  font-weight: bold;
+  border: none;
+}
+
+.create-submit-button:hover {
+  background-color: #6c63ff; /* Darker purple on hover */
+}
+
+.create-cancel-button {
+  padding: 10px 20px;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f44336; /* Red color */
+  font-weight: bold;
+  border: none;
+}
+
+.create-cancel-button:hover {
+  background-color: #d32f2f; /* Darker red on hover */
+}
+
+.error-message {
+  color: red;
+  margin-top: 5px;
+  font-size: 12px;
+}

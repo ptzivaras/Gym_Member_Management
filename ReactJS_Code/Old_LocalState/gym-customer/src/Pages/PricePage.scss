@@ -1,0 +1,149 @@
+.price-page-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Fill the entire height of the screen */
+  box-sizing: border-box;
+  flex-direction: column;
+}
+
+.price-page-table-wrapper {
+  width: 100%; /* Maintain width with space on the sides */
+  max-width: 92%; /* Optional: set a max width */
+  background-color: white; /* White background only for the table wrapper */
+  border-radius: 12px;
+  margin-left: auto; /* Center the table wrapper */
+  margin-right: auto; /* Center the table wrapper */
+  height: auto; /* Ensure the table wrapper does not stretch vertically */
+  padding-bottom: 14px; /* Add some padding to the bottom */
+}
+
+.price-page-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Ensure columns take equal width */
+  border-radius: 12px; /* Round corners */
+  overflow: hidden; /* Ensure round corners are visible */
+  font-family: 'Roboto', sans-serif; /* Font family */
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 14px;
+    text-align: left;
+    background-color: white; /* table cell color */
+    color: #40385a;
+    border: transparent;
+  }
+
+  th {
+    background-color: #f9f8fd; /* header Color */
+    color: #5b5679;
+    font-weight: 600;
+  }
+
+  td {
+    border-bottom: 1px solid #ddd; /* Line between rows */
+  }
+
+  tr:last-child td {
+    border-bottom: none; /* Remove line from last row */
+  }
+
+  button {
+    background: none;
+    border: none;
+    color: #40385a;
+    cursor: pointer;
+    margin-right: 8px;
+
+    &:hover {
+      text-decoration: underline;
+      color: #9693fb;
+    }
+  }
+
+  input {
+    width: 100px;
+    font-family: 'Roboto', sans-serif; /* Font family */
+  }
+
+  .price-page-empty-cell {
+    border: none;
+  }
+}
+
+.price-page-tabs {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd; /* Line under the tabs */
+  font-size: 12px;
+  color: rgb(118, 118, 118);
+  padding-left: 16px; /* Adjust padding to align tabs to the left */
+
+  .price-page-tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    font-family: 'Roboto', sans-serif;
+
+    &:hover {
+      border-bottom: 2px solid #9693fb;
+      transition: .3s;
+    }
+
+    &.active {
+      border-bottom: 2px solid #9693fb;
+      color: #9693fb;
+    }
+  }
+}
+
+.price-page-popularity {
+  display: flex;
+  align-items: center;
+
+  .price-page-popularity-circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+
+    &.popularity-high {
+      background-color: green;
+    }
+
+    &.popularity-medium {
+      background-color: rgb(75, 75, 22);
+    }
+
+    &.popularity-low {
+      background-color: rgb(79, 27, 27);
+    }
+  }
+}
+
+.price-page-pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  span {
+    color: #40385a;
+    margin: 0 10px; /* Adjusted margin to reduce space */
+  }
+
+  button {
+    color: #40385a; /* Arrow color */
+    border: none;
+    padding: 0; /* Remove padding */
+    cursor: pointer;
+    font-size: 24px; /* Increase icon size */
+
+    &:disabled {
+      color: gray;
+      cursor: not-allowed;
+    }
+  }
+}

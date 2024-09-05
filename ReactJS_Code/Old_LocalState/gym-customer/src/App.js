@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './Pages/Login';
 import NavBar from './Components/NavBar/NavBar';
 import CustomerPage from './Pages/CustomerPage';
-import DashboardPage from './Pages/DashboardPage';
+import AboutPage from './Pages/AboutPage';
 import TrainerPage from './Pages/TrainerPage';
 import ClassesPage from './Pages/ClassesPage';
 import PricePage from './Pages/PricePage';
@@ -40,7 +40,7 @@ const ProtectedRoutes = () => {
       <NavBar />
       <Routes>
         <Route path="/" element={<CustomerPage />} />
-        <Route path="/about" element={<DashboardPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/trainers" element={<TrainerPage />} />
         <Route path="/classes" element={<ClassesPage />} />
         <Route path="/price" element={<PricePage />} />

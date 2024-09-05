@@ -1,27 +1,33 @@
-// CustomerList.js
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTable, usePagination } from 'react-table';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchCustomers, deleteCustomer } from '../ReduxFiles/CustomerSlice';
-import Modal from '../Components/ModalPopUp/Modal';
-import './CustomerPage.css';
+import CustomerService from '../Services/CustomerService';
+import Modal from '../Components/ModalPopUp/Modal'; // Import the Modal component
+import './CustomerPage.css'; // This is your own CSS file
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEye, faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 const CustomerList = () => {
+  const [customers, setCustomers] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [customerToDelete, setCustomerToDelete] = useState(null);
-  const [pageSize, setPageSize] = useState(12);
+  const [pageSize, setPageSize] = useState(12); // Set initial page size to 12
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const customers = useSelector((state) => state.customers.list);
-  const loading = useSelector((state) => state.customers.loading);
 
   useEffect(() => {
-    dispatch(fetchCustomers());
-  }, [dispatch]);
+    CustomerService.getCustomers()
+      .then(response => {
+        const mockData = response.data.map((customer, index) => ({
+          ...customer,
+          id: index + 1, // Adding mock ID starting from 1
+          status: Math.random() > 0.5 ? 'Active' : 'Inactive', // Random Active/Inactive status
+        }));
+        setCustomers(mockData);
+      })
+      .catch(error => {
+        console.error('Error fetching customers:', error);
+      });
+  }, []);
 
   const data = useMemo(() => customers, [customers]);
 
@@ -102,11 +108,12 @@ const CustomerList = () => {
     {
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize },
+      initialState: { pageIndex: 0, pageSize }, // Initialize with correct pageSize
     },
     usePagination,
   );
 
+  // Sync the external pageSize state with the table's internal state
   useEffect(() => {
     setPageSizeTable(pageSize);
   }, [pageSize, setPageSizeTable]);
@@ -117,18 +124,21 @@ const CustomerList = () => {
   };
 
   const confirmDelete = () => {
-    dispatch(deleteCustomer(customerToDelete.customerId));
-    setShowDeleteModal(false);
+    CustomerService.deleteCustomer(customerToDelete.customerId)
+      .then(() => {
+        setCustomers(customers.filter(customer => customer.customerId !== customerToDelete.customerId));
+        setShowDeleteModal(false);
+      })
+      .catch(error => {
+        console.error('Error deleting customer:', error);
+        setShowDeleteModal(false);
+      });
   };
 
   const closeModal = () => {
     setShowDeleteModal(false);
     setCustomerToDelete(null);
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className='container'>
@@ -190,7 +200,7 @@ const CustomerList = () => {
           </button>
         </div>
       </div>
-
+      
       {showDeleteModal && (
         <Modal
           isOpen={showDeleteModal}

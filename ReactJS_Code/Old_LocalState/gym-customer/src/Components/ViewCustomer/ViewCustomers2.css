@@ -1,0 +1,59 @@
+.view-customer-container {
+  font-family: 'Roboto', sans-serif;
+  width: 50vw;
+  height: auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: black;
+  padding: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.view-customer-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.view-customer-vertical-line {
+  border-left: 2px solid #ccc;
+  height: 30px;
+  margin: 0 10px;
+}
+
+.view-customer-header h2 {
+  font-size: 1.2em;
+  color: #40385a;
+}
+
+.view-customer-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.view-customer-table-header {
+  text-align: left;
+  padding: 10px;
+  background-color: #f9f8fd;
+  border: 1px solid #ddd;
+  font-weight: bold;
+  color: #5b5679;
+}
+
+.view-customer-table-data {
+  padding: 10px;
+  border: 1px solid #ddd;
+  width: 100%;
+  box-sizing: border-box;
+  color: #40385a;
+}
+
+.no-membership {
+  color: red;
+  font-weight: bold;
+}

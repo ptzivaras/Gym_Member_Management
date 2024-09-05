@@ -1,0 +1,148 @@
+/* Center the schedule table with padding around all sides */
+.schedule-list-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex-direction: column;
+  padding: 20px; /* Add padding around all sides for space */
+}
+
+/* Center the table and control its width */
+.schedule-table-wrapper {
+  width: 90%; /* Match the width of the customer table wrapper */
+  max-width: 92%; /* Ensure max width does not stretch too far */
+  background-color: white;
+  border-radius: 12px;
+  margin-left: auto; /* Center the table wrapper */
+  margin-right: auto; /* Center the table wrapper */
+  padding-bottom: 14px;
+  box-sizing: border-box; /* Include padding in width calculations */
+}
+
+/* Ensure the table stretches to fit the width of the wrapper */
+.schedule-class-table {
+  width: 100%; /* Full width to fill the table wrapper */
+  border-collapse: collapse;
+  table-layout: fixed; /* Consistent column width */
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Styling for table headers and cells */
+.schedule-class-table th,
+.schedule-class-table td {
+  border: 1px solid #ddd;
+  padding: 14px;
+  text-align: left;
+  background-color: white; /* Consistent background for cells */
+  color: #40385a;
+  border: transparent; /* Remove unnecessary borders */
+  padding-left: 16px;
+}
+
+.schedule-class-table th {
+  background-color: #f9f8fd; /* Header background color */
+  color: #5b5679;
+  font-weight: 600;
+  padding-top: 16px; 
+  padding-bottom: 16px;
+}
+
+.schedule-class-table td {
+  border-bottom: 1px solid #ddd; /* Line between rows */
+}
+
+/* Ensure the last row's border appears similar */
+.schedule-class-table tr:last-child td {
+  border-bottom: 1px solid #ddd;
+}
+
+/* Row hover effect and even row styling */
+.schedule-class-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.schedule-class-table tr:hover {
+  background-color: #ddd;
+}
+
+/* Style for clickable cells in edit mode */
+.schedule-clickable-cell {
+  cursor: pointer;
+  background-color: #f0f8ff; /* Light blue for editable cells */
+}
+
+/* Adjust button container to align with the table's width */
+.schedule-button-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  width: 90%; /* Match the width of the table wrapper */
+  max-width: 92%; /* Keep consistent with the table wrapper */
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: flex-start; /* Align buttons to the left */
+}
+
+/*button styles */
+.schedule-edit-button{
+  background-color: #9693fb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
+}
+
+.schedule-edit-button:hover {
+  background-color: #6c63ff;
+}
+
+.schedule-save-button{
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
+}
+.schedule-cancel-button {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
+}
+
+.schedule-save-button:hover {
+  background-color: #6c63ff; /* Darker blue on hover */
+}
+
+.schedule-cancel-button:hover {
+  background-color: #cc0000; /* Darker red on hover */
+}
+
+/* Input styling for editing cells */
+.schedule-small-input {
+  width: 100px; /* Set input width */
+  font-family: 'Roboto', sans-serif; /* Consistent font */
+  padding: 4px; 
+  margin-bottom: 4px;
+}
+
+.schedule-class-name, 
+.schedule-trainer-name {
+  padding: 4px 0;
+}

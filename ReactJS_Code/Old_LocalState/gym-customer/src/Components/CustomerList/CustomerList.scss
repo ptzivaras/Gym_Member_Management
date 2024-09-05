@@ -1,0 +1,197 @@
+/* Container to center the table and leave space at the bottom */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Fill the entire height of the screen */
+  box-sizing: border-box;
+  flex-direction: column;
+}
+
+/* Header container for the create button */
+.header-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px;
+}
+
+/* Button to create a new customer */
+.create-customer-button {
+  background-color: #9693fb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
+
+  .icon {
+    margin-right: 5px;
+  }
+
+  &:hover {
+    background-color: #6c63ff;
+  }
+}
+
+/* Wrapper to control the width of the table */
+.table-wrapper {
+  width: 100%; /* Maintain width with space on the sides */
+  max-width: 92%; /* Optional: set a max width */
+  background-color: white; /* White background only for the table wrapper */ 
+  border-radius: 12px;
+  margin-left: auto; /* Center the table wrapper */
+  margin-right: auto; /* Center the table wrapper */
+  height: auto; /* Ensure the table wrapper does not stretch vertically */
+  padding-bottom: 14px; /* Add some padding to the bottom */
+}
+
+/* Table that stretches to fit the full width of its wrapper */
+.price-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Ensure columns take equal width */
+  border-radius: 12px; /* Round corners */
+  overflow: hidden; /* Ensure round corners are visible */
+  font-family: 'Roboto', sans-serif; /* Font family */
+
+  th, td {
+    border: 1px solid #ddd; 
+    padding: 14px;
+    text-align: left;
+    background-color: white; /* table cell color */
+    color: #40385a;  
+    border: transparent;
+  }
+
+  th {
+    background-color: #f9f8fd; /* header Color */
+    color: #5b5679; 
+    font-weight: 600;
+  }
+
+  td {
+    border-bottom: 1px solid #ddd; /* Line between rows */
+  }
+
+  tr:last-child td {
+    border-bottom: none; /* Remove line from last row */
+  }
+
+  button {
+    background: none;
+    border: none;
+    color: #40385a;
+    cursor: pointer;
+    margin-right: 8px;
+
+    &:hover {
+      text-decoration: underline;
+      color: #9693fb;
+    }
+  }
+
+  input {
+    width: 100px;
+    font-family: 'Roboto', sans-serif; /* Font family */
+  }
+}
+
+/* Pagination styles */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  span {
+    color: #40385a;
+    margin: 0 10px; /* Adjusted margin to reduce space */
+  }
+
+  button {
+    color: #40385a; /* Arrow color */
+    border: none;
+    padding: 0; /* Remove padding */
+    cursor: pointer;
+    font-size: 24px; /* Increase icon size */
+
+    &:disabled {
+      color: gray;
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  .modal-button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    border-radius: 5px;
+
+    &.confirm-button {
+      background-color: #e44c40;
+      color: white;
+    }
+
+    &.cancel-button {
+      background-color: #ccc;
+      color: black;
+    }
+  }
+}
+
+/* Customer item button styles */
+.customer-item-button {
+  background: none;
+  border: none;
+  color: #40385a;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+
+  .icon {
+    margin-right: 5px;
+  }
+
+  &.view-button:hover {
+    color: #56ccf2;
+  }
+
+  &.edit-button:hover {
+    color: #f2c94c;
+  }
+
+  &.delete-button:hover {
+    color: #eb5757;
+  }
+}
