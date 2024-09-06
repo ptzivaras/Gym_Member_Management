@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useTable } from 'react-table';
 import CustomerService from '../Services/CustomerService';
 import './PricePage.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faSave, faTimes, faArrowUp, faArrowDown, faMinus } from '@fortawesome/free-solid-svg-icons';
+import Modal from '../Components/ModalPopUp/Modal'; // Import your Modal component
 
 function PricePage() {
   const [data, setData] = useState([]);
@@ -11,7 +12,10 @@ function PricePage() {
   const [updatedPrice, setUpdatedPrice] = useState(null);
   const [filter, setFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rowToSave, setRowToSave] = useState(null);
   const itemsPerPage = 10;
+  const inputRefs = useRef({}); // Create a ref object to hold references to all inputs
 
   useEffect(() => {
     CustomerService.getMemberships()
@@ -36,18 +40,28 @@ function PricePage() {
   const handleEdit = (row) => {
     setEditRowIndex(row.index);
     setUpdatedPrice(row.values.price);
+    // Ensure the input ref exists for the row being edited
+    if (inputRefs.current[row.index]) {
+      inputRefs.current[row.index].focus(); // Focus the input field when entering edit mode
+    }
   };
 
   const handleSave = (row) => {
-    const updatedRow = { ...row.original, price: updatedPrice };
+    setRowToSave(row);
+    setIsModalOpen(true);
+  };
+
+  const confirmSave = () => {
+    const updatedRow = { ...rowToSave.original, price: updatedPrice };
     CustomerService.updateMembership(updatedRow.membershipId, updatedRow)
       .then((response) => {
-        const newData = [...data];
-        newData[row.index] = response.data;
+        const newData = data.map((item) =>
+          item.membershipId === updatedRow.membershipId ? response.data : item
+        );
         setData(newData);
         setEditRowIndex(null);
-        setUpdatedPrice(null); // Reset state after saving
-        alert('Data saved successfully!');
+        setUpdatedPrice(null);
+        setIsModalOpen(false);
       })
       .catch((error) => {
         console.error('There was an error updating the data!', error);
@@ -56,7 +70,11 @@ function PricePage() {
 
   const handleCancel = () => {
     setEditRowIndex(null);
-    setUpdatedPrice(null); //TODO: edw check an to ftiaksa
+    setUpdatedPrice(null);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   const filteredData = useMemo(() => {
@@ -65,11 +83,15 @@ function PricePage() {
     return data.filter(item => item.duration === months);
   }, [filter, data]);
 
+  const sortedData = useMemo(() => {
+    return [...filteredData].sort((a, b) => a.planType.localeCompare(b.planType));
+  }, [filteredData]);
+
   const paginatedData = useMemo(() => {
     const start = currentPage * itemsPerPage;
     const end = start + itemsPerPage;
-    return filteredData.slice(start, end);
-  }, [currentPage, filteredData]);
+    return sortedData.slice(start, end);
+  }, [currentPage, sortedData]);
 
   const totalMemberships = filteredData.length;
   const startRange = currentPage * itemsPerPage + 1;
@@ -138,15 +160,18 @@ function PricePage() {
             return (
               <input
                 type="number"
-                value={updatedPrice !== null ? updatedPrice : value} // Use value instead of defaultValue
-                onChange={(e) => setUpdatedPrice(Number(e.target.value))} // Ensure the input is synced with state
+                defaultValue={updatedPrice !== null ? updatedPrice : value}
+                onChange={(e) => setUpdatedPrice(Number(e.target.value))}
+                ref={(el) => (inputRefs.current[row.index] = el)} // Store the input ref for managing focus
+                onBlur={() => {
+                  // You can handle actions on blur if needed, like saving
+                }}
               />
             );
           }
           return `€ ${value}`;
         },
-      }
-      ,
+      },
       {
         Header: 'Duration (months)',
         accessor: 'duration',
@@ -245,6 +270,14 @@ function PricePage() {
           </div>
         </div>
       </div>
+
+      {/* Modal for confirming save */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onConfirm={confirmSave}
+        message="Are you sure you want to save the changes?"
+      />
     </div>
   );
 }

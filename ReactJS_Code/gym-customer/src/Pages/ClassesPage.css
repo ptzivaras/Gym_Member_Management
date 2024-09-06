@@ -1,5 +1,5 @@
 /* Center the schedule table with padding around all sides */
-.schedule-list-container {
+.schedule-list-container { 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,7 +34,6 @@
 .schedule-class-table th,
 .schedule-class-table td {
   border: 1px solid #ddd;
-  padding: 14px;
   text-align: left;
   background-color: white; /* Consistent background for cells */
   color: #40385a;
@@ -75,12 +74,11 @@
 }
 
 /* Adjust button container to align with the table's width */
-.schedule-button-container {
+.schedule-button-container { 
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
-  width: 90%; /* Match the width of the table wrapper */
-  max-width: 92%; /* Keep consistent with the table wrapper */
+  width: 100%; /* Match the width of the table wrapper */
   margin-left: auto;
   margin-right: auto;
   justify-content: flex-start; /* Align buttons to the left */
@@ -136,7 +134,7 @@
 
 /* Input styling for editing cells */
 .schedule-small-input {
-  width: 100px; /* Set input width */
+  height: 20px;
   font-family: 'Roboto', sans-serif; /* Consistent font */
   padding: 4px; 
   margin-bottom: 4px;

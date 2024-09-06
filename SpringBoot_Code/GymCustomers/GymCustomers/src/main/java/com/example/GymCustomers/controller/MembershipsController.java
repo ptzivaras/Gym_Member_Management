@@ -17,6 +17,7 @@ public class MembershipsController {
     @GetMapping("/memberships")
     public List<Memberships> getAllMemberships() {
         return membershipRepository.findAll();
+        //return membershipRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
     }
 
     @PutMapping("/memberships/{id}")
@@ -25,8 +26,8 @@ public class MembershipsController {
                 .map(membership -> {
                     // Update the fields of the membership
                     membership.setPrice(updatedMembership.getPrice());
-                    membership.setPlanType(updatedMembership.getPlanType());
-                    membership.setDuration(updatedMembership.getDuration());
+                    //membership.setPlanType(updatedMembership.getPlanType());
+                    //membership.setDuration(updatedMembership.getDuration());
                     // Add other fields to update as needed
 
                     // Save the updated membership
