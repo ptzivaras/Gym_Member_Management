@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTable, usePagination } from 'react-table';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCustomers, deleteCustomer } from '../ReduxFiles/CustomerSlice';
+import { fetchCustomers, deleteCustomer } from '../ReduxFiles/slices/CustomerSlice';
 import Modal from '../Components/ModalPopUp/Modal';
 import './CustomerPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
