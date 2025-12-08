@@ -93,7 +93,7 @@ Managing a gym involves juggling multiple responsibilities: tracking member info
 
 ```
 Gym_Member_Management/
-├── ReactJS_Code/
+├── Clients/
 │   └── gym-customer/
 │       ├── src/
 │       │   ├── Components/      # Reusable UI components
@@ -101,7 +101,7 @@ Gym_Member_Management/
 │       │   ├── ReduxFiles/      # State management (store, slices)
 │       │   └── Services/        # API service layer
 │       └── package.json
-└── SpringBoot_Code/
+└── Server/
     └── GymCustomers/
         ├── src/main/java/       # Java source code
         │   ├── controller/      # REST endpoints
@@ -123,7 +123,7 @@ Gym_Member_Management/
 
 ### Backend Setup
 ```bash
-cd SpringBoot_Code/GymCustomers
+cd Server/GymCustomers
 # Configure database in src/main/resources/application.properties
 # Then build and run:
 ./mvnw clean install
@@ -136,7 +136,7 @@ cd SpringBoot_Code/GymCustomers
 
 ### Frontend Setup
 ```bash
-cd ReactJS_Code/gym-customer
+cd Clients/gym-customer
 npm install
 npm start
 ```
