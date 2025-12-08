@@ -3,6 +3,8 @@ package com.example.GymCustomers.service;
 import com.example.GymCustomers.dto.CustomerCreateDTO;
 import com.example.GymCustomers.dto.CustomerResponseDTO;
 import com.example.GymCustomers.dto.CustomerUpdateDTO;
+import com.example.GymCustomers.dto.PagedResponseDTO;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,13 @@ public interface CustomerService {
      * @return List of all customers as DTOs
      */
     List<CustomerResponseDTO> getAllCustomers();
+    
+    /**
+     * Get paginated customers
+     * @param pageable Pagination parameters
+     * @return Paginated response with customers
+     */
+    PagedResponseDTO<CustomerResponseDTO> getAllCustomersPaginated(Pageable pageable);
     
     /**
      * Create a new customer
