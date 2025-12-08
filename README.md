@@ -105,9 +105,12 @@ Gym_Member_Management/
     └── GymCustomers/
         ├── src/main/java/       # Java source code
         │   ├── controller/      # REST endpoints
+        │   ├── dto/             # Data Transfer Objects & Error responses
+        │   ├── exception/       # Custom exceptions & GlobalExceptionHandler
         │   ├── model/           # JPA entities
         │   ├── repository/      # Data access layer
         │   └── service/         # Business logic layer
+        │       └── impl/        # Service implementations
         ├── src/main/resources/  # Application properties
         ├── pom.xml              # Maven configuration
         └── mvnw.cmd             # Maven wrapper
@@ -117,7 +120,7 @@ Gym_Member_Management/
 
 ### Prerequisites
 - **Node.js v22 LTS** (recommended) or v20 LTS minimum
-- **Java 17 LTS** (JDK 17 or higher)
+- **Java 21 LTS** (Latest Long-Term Support version)
 - **PostgreSQL v13+**
 - **Maven 3.8+**
 
