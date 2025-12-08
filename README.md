@@ -44,7 +44,7 @@ Managing a gym involves juggling multiple responsibilities: tracking member info
 ## Technical Stack
 
 ### Frontend
-- **React 18.2** - Component-based UI architecture
+- **React 18.3** - Component-based UI architecture
 - **Redux Toolkit** - Centralized state management with async thunks
 - **React Router v6** - Client-side routing with protected routes
 - **React Table v7** - Advanced table features (sorting, pagination, filtering)
@@ -54,8 +54,8 @@ Managing a gym involves juggling multiple responsibilities: tracking member info
 - **FontAwesome & React Icons** - Consistent iconography
 
 ### Backend
-- **Spring Boot 3.2** - RESTful API framework
-- **Java 17** - Programming language
+- **Spring Boot 3.3.6** - RESTful API framework
+- **Java 17 LTS** - Programming language with long-term support
 - **Spring Data JPA** - ORM for database operations
 - **PostgreSQL** - Relational database
 - **Maven** - Dependency management and build tool
@@ -103,27 +103,35 @@ Gym_Member_Management/
 │       └── package.json
 └── SpringBoot_Code/
     └── GymCustomers/
-        └── src/main/java/
-            ├── controller/      # REST endpoints
-            ├── model/           # JPA entities
-            ├── repository/      # Data access layer
-            └── service/         # Business logic layer
+        ├── src/main/java/       # Java source code
+        │   ├── controller/      # REST endpoints
+        │   ├── model/           # JPA entities
+        │   ├── repository/      # Data access layer
+        │   └── service/         # Business logic layer
+        ├── src/main/resources/  # Application properties
+        ├── pom.xml              # Maven configuration
+        └── mvnw.cmd             # Maven wrapper
 ```
 
 ## Installation & Setup
 
 ### Prerequisites
-- Node.js (v16+)
-- Java 17
-- PostgreSQL (v13+)
-- Maven
+- **Node.js v22 LTS** (recommended) or v20 LTS minimum
+- **Java 17 LTS** (JDK 17 or higher)
+- **PostgreSQL v13+**
+- **Maven 3.8+**
 
 ### Backend Setup
 ```bash
-cd SpringBoot_Code/GymCustomers/GymCustomers
-# Configure database in application.properties
-mvn clean install
-mvn spring-boot:run
+cd SpringBoot_Code/GymCustomers
+# Configure database in src/main/resources/application.properties
+# Then build and run:
+./mvnw clean install
+./mvnw spring-boot:run
+
+# On Windows, use:
+# .\mvnw.cmd clean install
+# .\mvnw.cmd spring-boot:run
 ```
 
 ### Frontend Setup
