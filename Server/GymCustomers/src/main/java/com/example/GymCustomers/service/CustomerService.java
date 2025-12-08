@@ -1,6 +1,8 @@
 package com.example.GymCustomers.service;
 
-import com.example.GymCustomers.model.Customer;
+import com.example.GymCustomers.dto.CustomerCreateDTO;
+import com.example.GymCustomers.dto.CustomerResponseDTO;
+import com.example.GymCustomers.dto.CustomerUpdateDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,31 +11,31 @@ public interface CustomerService {
     
     /**
      * Get all customers
-     * @return List of all customers
+     * @return List of all customers as DTOs
      */
-    List<Customer> getAllCustomers();
+    List<CustomerResponseDTO> getAllCustomers();
     
     /**
      * Create a new customer
-     * @param customer Customer to create
-     * @return Created customer
+     * @param dto Customer create DTO
+     * @return Created customer as DTO
      */
-    Customer createCustomer(Customer customer);
+    CustomerResponseDTO createCustomer(CustomerCreateDTO dto);
     
     /**
      * Get customer by ID
      * @param customerId Customer ID
-     * @return Optional containing customer if found
+     * @return Optional containing customer DTO if found
      */
-    Optional<Customer> getCustomerById(Long customerId);
+    Optional<CustomerResponseDTO> getCustomerById(Long customerId);
     
     /**
      * Update existing customer
      * @param customerId Customer ID
-     * @param updatedCustomerData Updated customer data
-     * @return Optional containing updated customer if found
+     * @param dto Updated customer data
+     * @return Optional containing updated customer DTO if found
      */
-    Optional<Customer> updateCustomer(Long customerId, Customer updatedCustomerData);
+    Optional<CustomerResponseDTO> updateCustomer(Long customerId, CustomerUpdateDTO dto);
     
     /**
      * Delete customer by ID

@@ -1,17 +1,18 @@
 package com.example.GymCustomers.service;
 
-import com.example.GymCustomers.model.Trainers;
+import com.example.GymCustomers.dto.TrainerCreateDTO;
+import com.example.GymCustomers.dto.TrainerResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface TrainerService {
     
-    List<Trainers> getAllTrainers();
+    List<TrainerResponseDTO> getAllTrainers();
     
-    Trainers createTrainer(Trainers trainer);
+    TrainerResponseDTO createTrainer(TrainerCreateDTO dto);
     
-    Optional<Trainers> getTrainerById(Long id);
+    Optional<TrainerResponseDTO> getTrainerById(Long id);
     
     boolean deleteTrainer(Long id);
 }

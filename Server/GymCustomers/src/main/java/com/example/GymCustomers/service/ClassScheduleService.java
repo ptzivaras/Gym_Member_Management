@@ -1,10 +1,13 @@
 package com.example.GymCustomers.service;
 
-import com.example.GymCustomers.model.Classschedule;
+import com.example.GymCustomers.dto.ClassScheduleCreateDTO;
+import com.example.GymCustomers.dto.ClassScheduleResponseDTO;
 
 import java.util.List;
 
 public interface ClassScheduleService {
     
-    List<Classschedule> getAllClassSchedules();
+    List<ClassScheduleResponseDTO> getAllClassSchedules();
+    
+    ClassScheduleResponseDTO createClassSchedule(ClassScheduleCreateDTO dto);
 }

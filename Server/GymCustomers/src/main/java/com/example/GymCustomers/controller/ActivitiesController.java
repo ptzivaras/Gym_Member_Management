@@ -1,12 +1,13 @@
 package com.example.GymCustomers.controller;
 
-import com.example.GymCustomers.model.Activities;
+import com.example.GymCustomers.dto.ActivityCreateDTO;
+import com.example.GymCustomers.dto.ActivityResponseDTO;
 import com.example.GymCustomers.service.ActivityService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,7 +24,14 @@ public class ActivitiesController {
     }
 
     @GetMapping("/activities")
-    public List<Activities> getAllActivities() {
-        return activityService.getAllActivities();
+    public ResponseEntity<List<ActivityResponseDTO>> getAllActivities() {
+        List<ActivityResponseDTO> activities = activityService.getAllActivities();
+        return ResponseEntity.ok(activities);
+    }
+
+    @PostMapping("/activities")
+    public ResponseEntity<ActivityResponseDTO> createActivity(@Valid @RequestBody ActivityCreateDTO dto) {
+        ActivityResponseDTO created = activityService.createActivity(dto);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 }

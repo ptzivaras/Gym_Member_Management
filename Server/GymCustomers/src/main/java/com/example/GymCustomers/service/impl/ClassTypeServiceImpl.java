@@ -1,5 +1,8 @@
 package com.example.GymCustomers.service.impl;
 
+import com.example.GymCustomers.dto.ClassTypeCreateDTO;
+import com.example.GymCustomers.dto.ClassTypeResponseDTO;
+import com.example.GymCustomers.mapper.ClassTypeMapper;
 import com.example.GymCustomers.model.ClassType;
 import com.example.GymCustomers.repository.ClassTypeRepository;
 import com.example.GymCustomers.service.ClassTypeService;
@@ -9,43 +12,51 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class ClassTypeServiceImpl implements ClassTypeService {
 
     private final ClassTypeRepository classTypeRepository;
+    private final ClassTypeMapper classTypeMapper;
 
     @Autowired
-    public ClassTypeServiceImpl(ClassTypeRepository classTypeRepository) {
+    public ClassTypeServiceImpl(ClassTypeRepository classTypeRepository, ClassTypeMapper classTypeMapper) {
         this.classTypeRepository = classTypeRepository;
+        this.classTypeMapper = classTypeMapper;
     }
 
     @Override
-    public List<ClassType> getAllClassTypes() {
-        return classTypeRepository.findAll();
+    public List<ClassTypeResponseDTO> getAllClassTypes() {
+        return classTypeRepository.findAll().stream()
+                .map(classTypeMapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public ClassType createClassType(ClassType classType) {
-        return classTypeRepository.save(classType);
+    public ClassTypeResponseDTO createClassType(ClassTypeCreateDTO dto) {
+        ClassType classType = classTypeMapper.toEntity(dto);
+        ClassType savedClassType = classTypeRepository.save(classType);
+        return classTypeMapper.toResponseDTO(savedClassType);
     }
 
     @Override
-    public Optional<ClassType> getClassTypeById(Long id) {
-        return classTypeRepository.findById(id);
+    public Optional<ClassTypeResponseDTO> getClassTypeById(Long id) {
+        return classTypeRepository.findById(id)
+                .map(classTypeMapper::toResponseDTO);
     }
 
     @Override
-    public Optional<ClassType> updateClassType(Long id, ClassType classTypeDetails) {
+    public Optional<ClassTypeResponseDTO> updateClassType(Long id, ClassTypeCreateDTO dto) {
         Optional<ClassType> classTypeOptional = classTypeRepository.findById(id);
         
         if (classTypeOptional.isPresent()) {
             ClassType classType = classTypeOptional.get();
-            classType.setTypeName(classTypeDetails.getTypeName());
+            classType.setTypeName(dto.getTypeName());
             
             ClassType updatedClassType = classTypeRepository.save(classType);
-            return Optional.of(updatedClassType);
+            return Optional.of(classTypeMapper.toResponseDTO(updatedClassType));
         }
         
         return Optional.empty();

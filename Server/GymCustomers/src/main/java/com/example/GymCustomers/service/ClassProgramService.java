@@ -1,15 +1,18 @@
 package com.example.GymCustomers.service;
 
-import com.example.GymCustomers.model.ClassProgram;
+import com.example.GymCustomers.dto.ClassProgramCreateDTO;
+import com.example.GymCustomers.dto.ClassProgramResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ClassProgramService {
     
-    List<ClassProgram> getAllClassPrograms();
+    List<ClassProgramResponseDTO> getAllClassPrograms();
     
-    Optional<ClassProgram> getClassProgramById(Long id);
+    ClassProgramResponseDTO createClassProgram(ClassProgramCreateDTO dto);
     
-    Optional<ClassProgram> updateClassProgram(Long id, ClassProgram updatedProgram);
+    Optional<ClassProgramResponseDTO> getClassProgramById(Long id);
+    
+    Optional<ClassProgramResponseDTO> updateClassProgram(Long id, ClassProgramCreateDTO dto);
 }

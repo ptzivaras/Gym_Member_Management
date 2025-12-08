@@ -1,12 +1,13 @@
 package com.example.GymCustomers.controller;
 
-import com.example.GymCustomers.model.Attendance;
+import com.example.GymCustomers.dto.AttendanceCreateDTO;
+import com.example.GymCustomers.dto.AttendanceResponseDTO;
 import com.example.GymCustomers.service.AttendanceService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,7 +24,14 @@ public class AttendanceController {
     }
 
     @GetMapping("/attendances")
-    public List<Attendance> getAllAttendances() {
-        return attendanceService.getAllAttendances();
+    public ResponseEntity<List<AttendanceResponseDTO>> getAllAttendances() {
+        List<AttendanceResponseDTO> attendances = attendanceService.getAllAttendances();
+        return ResponseEntity.ok(attendances);
+    }
+
+    @PostMapping("/attendances")
+    public ResponseEntity<AttendanceResponseDTO> createAttendance(@Valid @RequestBody AttendanceCreateDTO dto) {
+        AttendanceResponseDTO created = attendanceService.createAttendance(dto);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 }

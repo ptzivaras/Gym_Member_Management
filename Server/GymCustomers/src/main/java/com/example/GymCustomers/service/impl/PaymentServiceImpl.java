@@ -1,5 +1,9 @@
 package com.example.GymCustomers.service.impl;
 
+import com.example.GymCustomers.dto.PaymentCreateDTO;
+import com.example.GymCustomers.dto.PaymentResponseDTO;
+import com.example.GymCustomers.exception.ResourceNotFoundException;
+import com.example.GymCustomers.mapper.PaymentMapper;
 import com.example.GymCustomers.model.Customer;
 import com.example.GymCustomers.model.Memberships;
 import com.example.GymCustomers.model.Payments;
@@ -11,10 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -23,53 +25,36 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentsRepository paymentsRepository;
     private final CustomerRepository customerRepository;
     private final MembershipsRepository membershipsRepository;
+    private final PaymentMapper paymentMapper;
 
     @Autowired
     public PaymentServiceImpl(PaymentsRepository paymentsRepository, 
                              CustomerRepository customerRepository,
-                             MembershipsRepository membershipsRepository) {
+                             MembershipsRepository membershipsRepository,
+                             PaymentMapper paymentMapper) {
         this.paymentsRepository = paymentsRepository;
         this.customerRepository = customerRepository;
         this.membershipsRepository = membershipsRepository;
+        this.paymentMapper = paymentMapper;
     }
 
     @Override
-    public List<Payments> getAllPayments() {
-        return paymentsRepository.findAll();
+    public List<PaymentResponseDTO> getAllPayments() {
+        return paymentsRepository.findAll().stream()
+                .map(paymentMapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Payments createPayment(Payments paymentRequest) {
-        // Fetch customer and membership based on the IDs
-        Optional<Customer> customerOptional = customerRepository.findById(
-            paymentRequest.getCustomer().getCustomerId()
-        );
-        Optional<Memberships> membershipOptional = membershipsRepository.findById(
-            paymentRequest.getMembership().getMembershipId()
-        );
-
-        if (customerOptional.isPresent() && membershipOptional.isPresent()) {
-            Customer customer = customerOptional.get();
-            Memberships membership = membershipOptional.get();
-
-            // Calculate expiration date based on the membership's duration
-            LocalDate paymentDate = LocalDate.now();
-            LocalDate expirationDate = paymentDate.plusMonths(membership.getDuration());
-
-            // Set payment amount based on the membership's price
-            BigDecimal paymentAmount = BigDecimal.valueOf(membership.getPrice());
-
-            // Create and save the payment
-            Payments payment = new Payments();
-            payment.setCustomer(customer);
-            payment.setMembership(membership);
-            payment.setPaymentDate(paymentDate);
-            payment.setExpirationDate(expirationDate);
-            payment.setAmount(paymentAmount);
-
-            return paymentsRepository.save(payment);
-        }
+    public PaymentResponseDTO createPayment(PaymentCreateDTO dto) {
+        Customer customer = customerRepository.findById(dto.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + dto.getCustomerId()));
         
-        throw new RuntimeException("Customer or Membership not found");
+        Memberships membership = membershipsRepository.findById(dto.getMembershipId())
+                .orElseThrow(() -> new ResourceNotFoundException("Membership not found with id: " + dto.getMembershipId()));
+
+        Payments payment = paymentMapper.toEntity(dto, customer, membership);
+        Payments savedPayment = paymentsRepository.save(payment);
+        return paymentMapper.toResponseDTO(savedPayment);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.GymCustomers.controller;
 
-import com.example.GymCustomers.model.Trainers;
+import com.example.GymCustomers.dto.TrainerCreateDTO;
+import com.example.GymCustomers.dto.TrainerResponseDTO;
 import com.example.GymCustomers.service.TrainerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,14 @@ public class TrainersController {
     }
 
     @GetMapping("/trainers")
-    public List<Trainers> getAllTrainers() {
-        return trainerService.getAllTrainers();
+    public ResponseEntity<List<TrainerResponseDTO>> getAllTrainers() {
+        List<TrainerResponseDTO> trainers = trainerService.getAllTrainers();
+        return ResponseEntity.ok(trainers);
     }
 
     @PostMapping("/trainers")
-    public ResponseEntity<Trainers> createTrainers(@Valid @RequestBody Trainers trainer) {
-        Trainers createdTrainer = trainerService.createTrainer(trainer);
+    public ResponseEntity<TrainerResponseDTO> createTrainer(@Valid @RequestBody TrainerCreateDTO trainerDTO) {
+        TrainerResponseDTO createdTrainer = trainerService.createTrainer(trainerDTO);
         return new ResponseEntity<>(createdTrainer, HttpStatus.CREATED);
     }
 

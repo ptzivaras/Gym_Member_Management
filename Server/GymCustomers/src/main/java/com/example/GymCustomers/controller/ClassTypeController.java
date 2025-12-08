@@ -1,15 +1,18 @@
 package com.example.GymCustomers.controller;
 
-import com.example.GymCustomers.model.ClassType;
+import com.example.GymCustomers.dto.ClassTypeCreateDTO;
+import com.example.GymCustomers.dto.ClassTypeResponseDTO;
 import com.example.GymCustomers.service.ClassTypeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:3000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1")
 public class ClassTypeController {
@@ -22,19 +25,21 @@ public class ClassTypeController {
     }
 
     @GetMapping("/classtype")
-    public List<ClassType> getAllClassType() {
-        return classTypeService.getAllClassTypes();
+    public ResponseEntity<List<ClassTypeResponseDTO>> getAllClassType() {
+        List<ClassTypeResponseDTO> classTypes = classTypeService.getAllClassTypes();
+        return ResponseEntity.ok(classTypes);
     }
 
     @PostMapping("/classtype")
-    public ClassType createClassType(@RequestBody ClassType classType) {
-        return classTypeService.createClassType(classType);
+    public ResponseEntity<ClassTypeResponseDTO> createClassType(@Valid @RequestBody ClassTypeCreateDTO dto) {
+        ClassTypeResponseDTO created = classTypeService.createClassType(dto);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @PutMapping("/classtype/{id}")
-    public ResponseEntity<ClassType> updateClassType(@PathVariable Long id, @RequestBody ClassType classTypeDetails) {
-        Optional<ClassType> updatedClassType = classTypeService.updateClassType(id, classTypeDetails);
-        return updatedClassType.map(ResponseEntity::ok)
+    public ResponseEntity<ClassTypeResponseDTO> updateClassType(@PathVariable Long id, @Valid @RequestBody ClassTypeCreateDTO dto) {
+        Optional<ClassTypeResponseDTO> updated = classTypeService.updateClassType(id, dto);
+        return updated.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 

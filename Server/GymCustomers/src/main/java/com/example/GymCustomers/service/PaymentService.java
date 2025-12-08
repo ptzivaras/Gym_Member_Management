@@ -1,12 +1,13 @@
 package com.example.GymCustomers.service;
 
-import com.example.GymCustomers.model.Payments;
+import com.example.GymCustomers.dto.PaymentCreateDTO;
+import com.example.GymCustomers.dto.PaymentResponseDTO;
 
 import java.util.List;
 
 public interface PaymentService {
     
-    List<Payments> getAllPayments();
+    List<PaymentResponseDTO> getAllPayments();
     
-    Payments createPayment(Payments payment);
+    PaymentResponseDTO createPayment(PaymentCreateDTO dto);
 }

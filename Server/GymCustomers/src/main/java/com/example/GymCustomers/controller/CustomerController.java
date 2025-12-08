@@ -1,6 +1,8 @@
 package com.example.GymCustomers.controller;
 
-import com.example.GymCustomers.model.Customer;
+import com.example.GymCustomers.dto.CustomerCreateDTO;
+import com.example.GymCustomers.dto.CustomerResponseDTO;
+import com.example.GymCustomers.dto.CustomerUpdateDTO;
 import com.example.GymCustomers.service.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,26 +26,29 @@ public class CustomerController {
     }
 
     @GetMapping("/customers")
-    public List<Customer> getAllCustomers(){
-        return customerService.getAllCustomers();
+    public ResponseEntity<List<CustomerResponseDTO>> getAllCustomers(){
+        List<CustomerResponseDTO> customers = customerService.getAllCustomers();
+        return ResponseEntity.ok(customers);
     }
 
     @PostMapping("/customers")
-    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer customer) {
-        Customer createdCustomer = customerService.createCustomer(customer);
+    public ResponseEntity<CustomerResponseDTO> createCustomer(@Valid @RequestBody CustomerCreateDTO customerDTO) {
+        CustomerResponseDTO createdCustomer = customerService.createCustomer(customerDTO);
         return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
     }
 
     @GetMapping("/customers/{customerId}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long customerId) {
-        Optional<Customer> customer = customerService.getCustomerById(customerId);
+    public ResponseEntity<CustomerResponseDTO> getCustomerById(@PathVariable Long customerId) {
+        Optional<CustomerResponseDTO> customer = customerService.getCustomerById(customerId);
         return customer.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/customers/{customerId}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long customerId, @Valid @RequestBody Customer updatedCustomerData) {
-        Optional<Customer> updatedCustomer = customerService.updateCustomer(customerId, updatedCustomerData);
+    public ResponseEntity<CustomerResponseDTO> updateCustomer(
+            @PathVariable Long customerId, 
+            @Valid @RequestBody CustomerUpdateDTO customerDTO) {
+        Optional<CustomerResponseDTO> updatedCustomer = customerService.updateCustomer(customerId, customerDTO);
         return updatedCustomer.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

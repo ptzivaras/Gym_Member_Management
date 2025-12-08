@@ -190,4 +190,23 @@ This isn't just a CRUD app—it demonstrates understanding of:
 ---
 
 **Built with attention to user experience and scalability in mind.**
+🧑‍💻 Client (Postman / UI)
+ ↓
+🌐 Embedded Server (Tomcat)
+ ↓
+⚙️ DispatcherServlet
+ ↓
+🗺️ HandlerMapping finds the correct @GetMapping/@PostMapping
+ ↓
+🎯 Controller method gets executed
+ ↓
+🧠 Service → 🗄️ Repository → 🛢️ Database
+ ↓
+📦 Backend returns a Java Object
+ ↓
+🔄 Jackson converts Java Object → JSON
+ ↓
+📤 DispatcherServlet sends response
+ ↓
+📱 Client receives JSON output
 

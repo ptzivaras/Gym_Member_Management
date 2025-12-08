@@ -1,8 +1,11 @@
 package com.example.GymCustomers.controller;
 
-import com.example.GymCustomers.model.Payments;
+import com.example.GymCustomers.dto.PaymentCreateDTO;
+import com.example.GymCustomers.dto.PaymentResponseDTO;
 import com.example.GymCustomers.service.PaymentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,17 +24,14 @@ public class PaymentsController {
     }
 
     @GetMapping("/payments")
-    public List<Payments> getAllPayments() {
-        return paymentService.getAllPayments();
+    public ResponseEntity<List<PaymentResponseDTO>> getAllPayments() {
+        List<PaymentResponseDTO> payments = paymentService.getAllPayments();
+        return ResponseEntity.ok(payments);
     }
 
     @PostMapping("/payments")
-    public ResponseEntity<?> createPayment(@RequestBody Payments paymentRequest) {
-        try {
-            Payments savedPayment = paymentService.createPayment(paymentRequest);
-            return ResponseEntity.ok(savedPayment);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<PaymentResponseDTO> createPayment(@Valid @RequestBody PaymentCreateDTO dto) {
+        PaymentResponseDTO created = paymentService.createPayment(dto);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 }

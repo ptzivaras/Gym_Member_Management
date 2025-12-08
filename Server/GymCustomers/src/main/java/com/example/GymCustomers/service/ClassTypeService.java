@@ -1,19 +1,20 @@
 package com.example.GymCustomers.service;
 
-import com.example.GymCustomers.model.ClassType;
+import com.example.GymCustomers.dto.ClassTypeCreateDTO;
+import com.example.GymCustomers.dto.ClassTypeResponseDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ClassTypeService {
     
-    List<ClassType> getAllClassTypes();
+    List<ClassTypeResponseDTO> getAllClassTypes();
     
-    ClassType createClassType(ClassType classType);
+    ClassTypeResponseDTO createClassType(ClassTypeCreateDTO dto);
     
-    Optional<ClassType> getClassTypeById(Long id);
+    Optional<ClassTypeResponseDTO> getClassTypeById(Long id);
     
-    Optional<ClassType> updateClassType(Long id, ClassType classTypeDetails);
+    Optional<ClassTypeResponseDTO> updateClassType(Long id, ClassTypeCreateDTO dto);
     
     boolean deleteClassType(Long id);
 }
