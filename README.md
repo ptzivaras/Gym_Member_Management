@@ -55,15 +55,21 @@ Managing a gym involves juggling multiple responsibilities: tracking member info
 
 ### Backend
 - **Spring Boot 3.3.6** - RESTful API framework
-- **Java 17 LTS** - Programming language with long-term support
+- **Java 21 LTS** - Programming language with long-term support (upgraded from Java 17)
 - **Spring Data JPA** - ORM for database operations
+- **Jakarta Persistence & Validation** - Bean validation and JPA 3.1
 - **PostgreSQL** - Relational database
 - **Maven** - Dependency management and build tool
+- **SpringDoc OpenAPI 2.3.0** - Swagger UI integration for API documentation
 
 ### Architecture Patterns
 - **MVC Pattern**: Clear separation between models, views, and controllers
-- **Repository Pattern**: Data access abstraction layer
-- **REST Architecture**: Stateless API with standard HTTP methods
+- **DTO Pattern**: Data Transfer Objects for API contracts (14 DTOs total)
+- **Mapper Pattern**: Centralized entity-DTO conversion logic (7 mappers)
+- **Service Layer**: @Transactional business logic with interface-implementation separation
+- **Repository Pattern**: Spring Data JPA abstraction for data access
+- **Exception Handling**: GlobalExceptionHandler with structured ErrorResponse
+- **REST Architecture**: Stateless API with standard HTTP methods and proper status codes
 - **Normalized Database**: Relational integrity with proper foreign keys
 
 ## React Concepts & Techniques Used
@@ -137,6 +143,20 @@ cd Server/GymCustomers
 # .\mvnw.cmd spring-boot:run
 ```
 
+The backend runs on `http://localhost:8080`
+
+### API Documentation (Swagger)
+Once the backend is running, access the interactive API documentation at:
+- **Swagger UI**: `http://localhost:8080/swagger-ui.html`
+- **OpenAPI JSON**: `http://localhost:8080/v3/api-docs`
+
+The Swagger UI provides:
+- 🔍 **Interactive Testing**: Test all API endpoints directly from the browser
+- 📖 **Complete Documentation**: Request/response schemas with examples
+- 🎯 **Organized by Tags**: Endpoints grouped by Customer, Trainer, Membership, etc.
+- ✅ **Validation Examples**: See all required fields and validation rules
+- 🚀 **Portfolio-Ready**: Professional API documentation for showcasing your work
+
 ### Frontend Setup
 ```bash
 cd Clients/gym-customer
@@ -146,7 +166,8 @@ npm start
 
 The application runs on:
 - Frontend: `http://localhost:3000`
-- Backend: `http://localhost:8080`
+- Backend API: `http://localhost:8080`
+- Swagger UI: `http://localhost:8080/swagger-ui.html`
 
 ## Known Issues & Improvement Opportunities
 
