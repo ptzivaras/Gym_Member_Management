@@ -2,7 +2,9 @@ package com.example.GymCustomers.controller;
 
 import com.example.GymCustomers.model.Trainers;
 import com.example.GymCustomers.service.TrainerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +28,9 @@ public class TrainersController {
     }
 
     @PostMapping("/trainers")
-    public Trainers createTrainers(@RequestBody Trainers trainer) {
-        return trainerService.createTrainer(trainer);
+    public ResponseEntity<Trainers> createTrainers(@Valid @RequestBody Trainers trainer) {
+        Trainers createdTrainer = trainerService.createTrainer(trainer);
+        return new ResponseEntity<>(createdTrainer, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/trainers/{id}")

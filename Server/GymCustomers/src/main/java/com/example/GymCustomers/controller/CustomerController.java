@@ -2,7 +2,9 @@ package com.example.GymCustomers.controller;
 
 import com.example.GymCustomers.model.Customer;
 import com.example.GymCustomers.service.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +29,9 @@ public class CustomerController {
     }
 
     @PostMapping("/customers")
-    public Customer createCustomer(@RequestBody Customer customer) {
-        return customerService.createCustomer(customer);
+    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer customer) {
+        Customer createdCustomer = customerService.createCustomer(customer);
+        return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
     }
 
     @GetMapping("/customers/{customerId}")
@@ -39,7 +42,7 @@ public class CustomerController {
     }
 
     @PutMapping("/customers/{customerId}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long customerId, @RequestBody Customer updatedCustomerData) {
+    public ResponseEntity<Customer> updateCustomer(@PathVariable Long customerId, @Valid @RequestBody Customer updatedCustomerData) {
         Optional<Customer> updatedCustomer = customerService.updateCustomer(customerId, updatedCustomerData);
         return updatedCustomer.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
