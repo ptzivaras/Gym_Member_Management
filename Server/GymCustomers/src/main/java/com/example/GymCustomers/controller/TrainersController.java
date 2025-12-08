@@ -1,9 +1,9 @@
 package com.example.GymCustomers.controller;
 
-import com.example.GymCustomers.model.Customer;
 import com.example.GymCustomers.model.Trainers;
-import com.example.GymCustomers.repository.TrainersRepository;
+import com.example.GymCustomers.service.TrainerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,21 +12,31 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/")
 public class TrainersController {
+    
+    private final TrainerService trainerService;
+
     @Autowired
-    private TrainersRepository trainerRepository;
+    public TrainersController(TrainerService trainerService) {
+        this.trainerService = trainerService;
+    }
+
     @GetMapping("/trainers")
     public List<Trainers> getAllTrainers() {
-        return trainerRepository.findAll();
+        return trainerService.getAllTrainers();
     }
 
     @PostMapping("/trainers")
     public Trainers createTrainers(@RequestBody Trainers trainer) {
-        return trainerRepository.save(trainer);
+        return trainerService.createTrainer(trainer);
     }
 
     @DeleteMapping("/trainers/{id}")
-    public void deleteTrainer(@PathVariable Long id) {
-        trainerRepository.deleteById(id);
+    public ResponseEntity<Void> deleteTrainer(@PathVariable Long id) {
+        boolean deleted = trainerService.deleteTrainer(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
-
 }

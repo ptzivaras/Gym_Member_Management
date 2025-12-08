@@ -1,7 +1,7 @@
 package com.example.GymCustomers.controller;
 
 import com.example.GymCustomers.model.ClassType;
-import com.example.GymCustomers.repository.ClassTypeRepository;
+import com.example.GymCustomers.service.ClassTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,49 +14,37 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class ClassTypeController {
 
-    @Autowired
-    private ClassTypeRepository classTypeRepository;
+    private final ClassTypeService classTypeService;
 
-    // Get all ClassTypes
+    @Autowired
+    public ClassTypeController(ClassTypeService classTypeService) {
+        this.classTypeService = classTypeService;
+    }
+
     @GetMapping("/classtype")
     public List<ClassType> getAllClassType() {
-        return classTypeRepository.findAll();
+        return classTypeService.getAllClassTypes();
     }
 
-    // Create a new ClassType
     @PostMapping("/classtype")
     public ClassType createClassType(@RequestBody ClassType classType) {
-        return classTypeRepository.save(classType);
+        return classTypeService.createClassType(classType);
     }
 
-
-
-    // Update an existing ClassType
     @PutMapping("/classtype/{id}")
     public ResponseEntity<ClassType> updateClassType(@PathVariable Long id, @RequestBody ClassType classTypeDetails) {
-        Optional<ClassType> classTypeOptional = classTypeRepository.findById(id);
-
-        if (!classTypeOptional.isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        ClassType classType = classTypeOptional.get();
-        classType.setTypeName(classTypeDetails.getTypeName()); // Assuming the field is typeName
-
-        ClassType updatedClassType = classTypeRepository.save(classType);
-        return ResponseEntity.ok(updatedClassType);
+        Optional<ClassType> updatedClassType = classTypeService.updateClassType(id, classTypeDetails);
+        return updatedClassType.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Delete a ClassType
     @DeleteMapping("/classtype/{id}")
     public ResponseEntity<Void> deleteClassType(@PathVariable Long id) {
-        Optional<ClassType> classTypeOptional = classTypeRepository.findById(id);
-
-        if (!classTypeOptional.isPresent()) {
+        boolean deleted = classTypeService.deleteClassType(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
             return ResponseEntity.notFound().build();
         }
-
-        classTypeRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 }

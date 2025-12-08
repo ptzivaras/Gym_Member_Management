@@ -1,38 +1,35 @@
 package com.example.GymCustomers.controller;
 
 import com.example.GymCustomers.model.Memberships;
-import com.example.GymCustomers.repository.MembershipsRepository;
+import com.example.GymCustomers.service.MembershipService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/")
 public class MembershipsController {
+    
+    private final MembershipService membershipService;
+
     @Autowired
-    private MembershipsRepository membershipRepository;
+    public MembershipsController(MembershipService membershipService) {
+        this.membershipService = membershipService;
+    }
 
     @GetMapping("/memberships")
     public List<Memberships> getAllMemberships() {
-        return membershipRepository.findAll();
-        //return membershipRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return membershipService.getAllMemberships();
     }
 
     @PutMapping("/memberships/{id}")
-    public Memberships updateMembership(@PathVariable Long id, @RequestBody Memberships updatedMembership) {
-        return membershipRepository.findById(id)
-                .map(membership -> {
-                    // Update the fields of the membership
-                    membership.setPrice(updatedMembership.getPrice());
-                    //membership.setPlanType(updatedMembership.getPlanType());
-                    //membership.setDuration(updatedMembership.getDuration());
-                    // Add other fields to update as needed
-
-                    // Save the updated membership
-                    return membershipRepository.save(membership);
-                })
-                .orElseThrow(() -> new RuntimeException("Membership not found with id " + id));
+    public ResponseEntity<Memberships> updateMembership(@PathVariable Long id, @RequestBody Memberships updatedMembership) {
+        Optional<Memberships> membership = membershipService.updateMembership(id, updatedMembership);
+        return membership.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
