@@ -1,10 +1,18 @@
 /* Container to center the table and leave space at the bottom */
 .container {
+  font-family: sans-serif;
+  width: 90vw;
+  min-height: 600px;
+  max-height: 85vh;
+  color: black;
+  padding: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
 .loading-container-customers {
@@ -25,14 +33,11 @@
 
 /* Header container for the create button */
 .header-container {
-  width: 90%;
-
-  margin-left: auto;
-  margin-right: auto;
-
+  width: 100%;
   display: flex;
   justify-content: flex-start;
-  padding: 10px;
+  padding: 10px 0;
+  margin-bottom: 10px;
 }
 
 /* Button to create a new customer */
@@ -58,14 +63,14 @@
 
 /* Wrapper to control the width of the table */
 .table-wrapper {
-  width: 90%; height: auto;
-  background-color: white; /* White background only for the table wrapper */ 
+  width: 100%;
+  background-color: white;
   border-radius: 12px;
-  margin-left: auto; /* Center the table wrapper */
-  margin-right: auto; /* Center the table wrapper */
- background: white; /* edw einai to aspro*/
-  height: auto; /* Ensure the table wrapper does not stretch vertically */
-  padding-bottom: 14px; /* Add some padding to the bottom */
+  padding-bottom: 14px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Table that stretches to fit the full width of its wrapper */

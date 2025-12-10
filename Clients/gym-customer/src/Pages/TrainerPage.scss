@@ -1,13 +1,16 @@
 .trainer-container {
   font-family: sans-serif;
   width: 50vw;
-  height: auto;
+  min-height: 600px;
+  max-height: 85vh;
   color: black;
   padding: 20px;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
 }
 
 .trainer-header {
@@ -41,7 +44,7 @@
 }
 
 .trainer-table-scroll {
-  max-height: 70vh;
+  flex: 1;
   overflow-y: auto;
 }
 

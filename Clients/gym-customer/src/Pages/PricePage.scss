@@ -1,21 +1,29 @@
 .price-page-container {
+  font-family: sans-serif;
+  width: 70vw;
+  min-height: 600px;
+  max-height: 85vh;
+  color: black;
+  padding: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh; /* Fill the entire height of the screen */
-  box-sizing: border-box;
   flex-direction: column;
 }
 
 .price-page-table-wrapper {
-  width: 100%; /* Maintain width with space on the sides */
-  max-width: 92%; /* Optional: set a max width */
-  background-color: white; /* White background only for the table wrapper */
+  width: 100%;
+  background-color: white;
   border-radius: 12px;
-  margin-left: auto; /* Center the table wrapper */
-  margin-right: auto; /* Center the table wrapper */
-  height: auto; /* Ensure the table wrapper does not stretch vertically */
-  padding-bottom: 14px; /* Add some padding to the bottom */
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 14px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .price-page-table {
