@@ -3,31 +3,63 @@ import TrainerService from '../Services/TrainerService';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import Modal from '../Components/ModalPopUp/Modal'; // Import the Modal component
+import { toast } from 'react-toastify';
+import { Oval } from 'react-loader-spinner';
+import Modal from '../Components/ModalPopUp/Modal';
 import './TrainerPage.scss';
 
 const TrainerPage = () => {
     const [trainers, setTrainers] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isDeleting, setIsDeleting] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [trainerToDelete, setTrainerToDelete] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
+        setIsLoading(true);
         TrainerService.getTrainers()
-          .then(response => setTrainers(response.data))
-          .catch(error => console.error('Error fetching trainers:', error));
+          .then(response => {
+            setTrainers(response.data);
+            setIsLoading(false);
+          })
+          .catch(error => {
+            console.error('Error fetching trainers:', error);
+            toast.error('Failed to load trainers');
+            setIsLoading(false);
+          });
     }, []);
 
     const handleCreateTrainer = () => {
         navigate('/create-trainer');
     };
 
-    const handleDeleteTrainer = (trainerId) => {
-        if(window.confirm("Are you sure you want to delete this trainer?")) {
-            TrainerService.deleteTrainer(trainerId)
-                .then(() => {
-                    setTrainers(trainers.filter(trainer => trainer.trainerId !== trainerId));
-                })
-                .catch(error => console.error('Error deleting trainer:', error));
+    const handleDeleteClick = (trainerId) => {
+        setTrainerToDelete(trainerId);
+        setIsModalOpen(true);
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (!trainerToDelete) return;
+        
+        setIsDeleting(trainerToDelete);
+        try {
+            await TrainerService.deleteTrainer(trainerToDelete);
+            setTrainers(trainers.filter(trainer => trainer.trainerId !== trainerToDelete));
+            toast.success('Trainer deleted successfully!');
+        } catch (error) {
+            console.error('Error deleting trainer:', error);
+            toast.error('Failed to delete trainer');
+        } finally {
+            setIsDeleting(null);
+            setIsModalOpen(false);
+            setTrainerToDelete(null);
         }
+    };
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+        setTrainerToDelete(null);
     };
 
     const generateRandomHours = () => Math.floor(Math.random() * 40) + 1;
@@ -39,6 +71,19 @@ const TrainerPage = () => {
                     <FontAwesomeIcon icon={faPlus} className="icon" />Trainer
                 </button>
             </div>
+            {isLoading ? (
+                <div className="loading-container">
+                    <Oval
+                        height={80}
+                        width={80}
+                        color="#9693fb"
+                        secondaryColor="#ccc"
+                        strokeWidth={4}
+                        strokeWidthSecondary={4}
+                    />
+                    <p>Loading trainers...</p>
+                </div>
+            ) : (
             <div className="trainer-table-scroll">
                 <table className="trainer-table">
                     <thead>
@@ -60,8 +105,13 @@ const TrainerPage = () => {
             <td>
                 <button 
                     className="delete-button" 
-                    onClick={() => handleDeleteTrainer(trainer.trainerId)}>
-                    <FontAwesomeIcon icon={faTrashAlt} className="icon"  />
+                    onClick={() => handleDeleteClick(trainer.trainerId)}
+                    disabled={isDeleting === trainer.trainerId}>
+                    {isDeleting === trainer.trainerId ? (
+                        <Oval height={16} width={16} color="#fff" strokeWidth={6} />
+                    ) : (
+                        <FontAwesomeIcon icon={faTrashAlt} className="icon" />
+                    )}
                 </button>
             </td>
         </tr>
@@ -70,6 +120,14 @@ const TrainerPage = () => {
 
                 </table>
             </div>
+            )}
+            
+            <Modal
+                isOpen={isModalOpen}
+                onClose={handleModalClose}
+                onConfirm={handleDeleteConfirm}
+                message="Are you sure you want to delete this trainer?"
+            />
         </div>
     );
 };

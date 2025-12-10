@@ -45,6 +45,21 @@
   overflow-y: auto;
 }
 
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  
+  p {
+    margin-top: 20px;
+    color: #40385a;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
 .trainer-table {
   width: 100%;
   border-collapse: collapse;
@@ -86,10 +101,18 @@
   border: none;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   color: #40385a;
   cursor: pointer;
+  min-width: 30px;
+  min-height: 30px;
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: #EB5757;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
   }
 }
