@@ -140,21 +140,21 @@ const CustomerList = () => {
       <div className='table-wrapper'>
         <table {...getTableProps()} className='customer-table'>
           <thead>
-            {headerGroups.map(headerGroup => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
-                  <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+            {headerGroups.map((headerGroup, i) => (
+              <tr {...headerGroup.getHeaderGroupProps()} key={i}>
+                {headerGroup.headers.map((column, j) => (
+                  <th {...column.getHeaderProps()} key={j}>{column.render('Header')}</th>
                 ))}
               </tr>
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map(row => {
+            {page.map((row, i) => {
               prepareRow(row);
               return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map(cell => (
-                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                <tr {...row.getRowProps()} key={row.original.id || i}>
+                  {row.cells.map((cell, j) => (
+                    <td {...cell.getCellProps()} key={j}>{cell.render('Cell')}</td>
                   ))}
                 </tr>
               );

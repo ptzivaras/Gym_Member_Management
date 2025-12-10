@@ -5,15 +5,11 @@ import './NavBar.css';
 export default function Navigation() {
   return (
     <div className="navbar">
-      {/* 
-       Warning: React does not recognize the `activeClassName` prop on a DOM element.
-       If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `activeclassname` instead.
-       If you accidentally passed it from a parent component, remove it from the DOM element. */}
-      <NavLink to="/" exact className='nav-link' activeClassName='active'>Customers</NavLink>
-      <NavLink to="/classes" className='nav-link' activeClassName='active'>Classes</NavLink>
-      <NavLink to="/trainers" className='nav-link' activeClassName='active'>Trainers</NavLink>
-      <NavLink to="/price" className='nav-link' activeClassName='active'>Price</NavLink>
-      <NavLink to="/about" className='nav-link' activeClassName='active'>Dashboard</NavLink>
+      <NavLink to="/" end className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Customers</NavLink>
+      <NavLink to="/classes" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Classes</NavLink>
+      <NavLink to="/trainers" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Trainers</NavLink>
+      <NavLink to="/price" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Price</NavLink>
+      <NavLink to="/about" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Dashboard</NavLink>
     </div>
   );
 }
