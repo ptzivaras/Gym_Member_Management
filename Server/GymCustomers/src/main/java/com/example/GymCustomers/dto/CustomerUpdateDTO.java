@@ -26,6 +26,10 @@ public class CustomerUpdateDTO {
     @Size(max = 200, message = "Address must not exceed 200 characters")
     private String address;
 
+    private Long newMembership;
+    
+    private String paymentMethod;
+
     // Constructors
     public CustomerUpdateDTO() {}
 
@@ -76,5 +80,21 @@ public class CustomerUpdateDTO {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Long getNewMembership() {
+        return newMembership;
+    }
+
+    public void setNewMembership(Long newMembership) {
+        this.newMembership = newMembership;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

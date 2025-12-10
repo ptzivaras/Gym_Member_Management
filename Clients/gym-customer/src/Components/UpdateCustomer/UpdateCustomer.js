@@ -48,23 +48,11 @@ const UpdateCustomer = () => {
       CustomerService.updateCustomer(customerId, editedCustomer)
         .then(response => {
           console.log('Customer updated successfully:', response.data);
-
-          if (editedCustomer.membership) {
-            CustomerService.processPayment(customerId, editedCustomer.membership)
-              .then(paymentResponse => {
-                console.log('Payment processed successfully:', paymentResponse.data);
-                navigate(-1);
-              })
-              .catch(error => {
-                console.error('Error processing payment:', error);
-                setPaymentError('Error: Could not process payment. Please try again.');
-              });
-          } else {
-            navigate(-1);
-          }
+          navigate(-1);
         })
         .catch(error => {
           console.error('Error updating customer:', error);
+          setPaymentError('Error: Could not update customer. Please try again.');
         });
     });
     setIsModalOpen(true);
@@ -80,7 +68,14 @@ const UpdateCustomer = () => {
   const handleMembershipChange = e => {
     setEditedCustomer({
       ...editedCustomer,
-      membership: e.target.value,
+      newMembership: e.target.value,
+    });
+  };
+
+  const handlePaymentMethodChange = e => {
+    setEditedCustomer({
+      ...editedCustomer,
+      paymentMethod: e.target.value,
     });
   };
 
@@ -163,8 +158,8 @@ const UpdateCustomer = () => {
         <select
           id="newMembership"
           className='form-input'
-          name="membership"
-          value={editedCustomer.membership || ''}
+          name="newMembership"
+          value={editedCustomer.newMembership || ''}
           onChange={handleMembershipChange}
         >
           <option value="">None</option>
@@ -179,6 +174,23 @@ const UpdateCustomer = () => {
           )}
         </select>
       </div>
+
+      {editedCustomer.newMembership && (
+        <div className='form-group'>
+          <label htmlFor="paymentMethod">Payment Method</label>
+          <select
+            id="paymentMethod"
+            className='form-input'
+            name="paymentMethod"
+            value={editedCustomer.paymentMethod || 'CASH'}
+            onChange={handlePaymentMethodChange}
+          >
+            <option value="CASH">Cash</option>
+            <option value="CARD">Card</option>
+            <option value="BANK_TRANSFER">Bank Transfer</option>
+          </select>
+        </div>
+      )}
 
       <div className='update-customer-button-container'>
         {paymentError && <p className="payment-error-message">{paymentError}</p>}

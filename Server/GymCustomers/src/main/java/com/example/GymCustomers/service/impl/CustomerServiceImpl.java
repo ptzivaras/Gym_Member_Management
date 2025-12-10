@@ -6,7 +6,11 @@ import com.example.GymCustomers.dto.CustomerUpdateDTO;
 import com.example.GymCustomers.dto.PagedResponseDTO;
 import com.example.GymCustomers.mapper.CustomerMapper;
 import com.example.GymCustomers.model.Customer;
+import com.example.GymCustomers.model.Memberships;
+import com.example.GymCustomers.model.Payments;
 import com.example.GymCustomers.repository.CustomerRepository;
+import com.example.GymCustomers.repository.MembershipsRepository;
+import com.example.GymCustomers.repository.PaymentsRepository;
 import com.example.GymCustomers.service.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,11 +34,18 @@ public class CustomerServiceImpl implements CustomerService {
     
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
+    private final MembershipsRepository membershipsRepository;
+    private final PaymentsRepository paymentsRepository;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, 
+                              CustomerMapper customerMapper,
+                              MembershipsRepository membershipsRepository,
+                              PaymentsRepository paymentsRepository) {
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
+        this.membershipsRepository = membershipsRepository;
+        this.paymentsRepository = paymentsRepository;
     }
 
     @Override
@@ -97,6 +110,29 @@ public class CustomerServiceImpl implements CustomerService {
         if (customerOptional.isPresent()) {
             Customer existingCustomer = customerOptional.get();
             customerMapper.updateEntity(existingCustomer, dto);
+            
+            // Handle new membership assignment
+            if (dto.getNewMembership() != null) {
+                Optional<Memberships> membershipOptional = membershipsRepository.findById(dto.getNewMembership());
+                
+                if (membershipOptional.isPresent()) {
+                    Memberships membership = membershipOptional.get();
+                    
+                    // Create payment record
+                    Payments payment = new Payments();
+                    payment.setCustomer(existingCustomer);
+                    payment.setAmount(membership.getPrice());
+                    payment.setPaymentDate(LocalDate.now());
+                    payment.setPaymentMethod(dto.getPaymentMethod() != null ? dto.getPaymentMethod() : "CASH");
+                    paymentsRepository.save(payment);
+                    
+                    logger.info("Payment recorded for customer ID: {} - Membership: {} - Amount: {}", 
+                               customerId, membership.getPlanType(), membership.getPrice());
+                } else {
+                    logger.warn("Membership not found with ID: {}", dto.getNewMembership());
+                }
+            }
+            
             Customer updatedCustomer = customerRepository.save(existingCustomer);
             logger.info("Customer updated successfully with ID: {}", customerId);
             return Optional.of(customerMapper.toResponseDTO(updatedCustomer));
