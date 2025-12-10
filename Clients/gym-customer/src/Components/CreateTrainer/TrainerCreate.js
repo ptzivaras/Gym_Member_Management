@@ -1,43 +1,66 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { toast } from 'react-toastify';
 import TrainerService from '../../Services/TrainerService';
-import Modal from '../ModalPopUp/Modal'; // Import the Modal component
-import './TrainerCreate.css'; // Import CSS file
+import Modal from '../ModalPopUp/Modal';
+import './TrainerCreate.css';
 import BackButton from '../BackButton/BackButton';
 
-const TrainerCreate = () => {
-  const [trainer, setTrainer] = useState({
-    firstName: '',
-    lastName: '',
-    specialty: '',
-  });
+// Yup validation schema
+const schema = yup.object().shape({
+  firstName: yup
+    .string()
+    .required('First name is required')
+    .min(2, 'First name must be at least 2 characters')
+    .max(50, 'First name must not exceed 50 characters'),
+  lastName: yup
+    .string()
+    .required('Last name is required')
+    .min(2, 'Last name must be at least 2 characters')
+    .max(50, 'Last name must not exceed 50 characters'),
+  specialty: yup
+    .string()
+    .required('Specialty is required')
+    .min(2, 'Specialty must be at least 2 characters')
+    .max(100, 'Specialty must not exceed 100 characters')
+});
 
+const TrainerCreate = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [modalAction, setModalAction] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate();
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setTrainer(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onChange'
+  });
 
-  const handleSubmit = e => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     setModalMessage('Are you sure you want to create this trainer with the provided data?');
-    setModalAction(() => () => {
-      TrainerService.createTrainer(trainer)
-        .then(response => {
-          console.log('Trainer created successfully:', response.data);
-          navigate(-1); // Navigate back to the previous page
-        })
-        .catch(error => {
-          console.error('Error creating trainer:', error);
-        });
+    setModalAction(() => async () => {
+      setIsSubmitting(true);
+      try {
+        const response = await TrainerService.createTrainer(data);
+        console.log('Trainer created successfully:', response.data);
+        toast.success('Trainer created successfully!');
+        setTimeout(() => navigate(-1), 1500);
+      } catch (error) {
+        console.error('Error creating trainer:', error);
+        const errorMessage = error.response?.data?.message || 'Failed to create trainer.';
+        toast.error(errorMessage);
+      } finally {
+        setIsSubmitting(false);
+      }
     });
     setIsModalOpen(true);
   };
@@ -45,7 +68,8 @@ const TrainerCreate = () => {
   const handleCancel = () => {
     setModalMessage('Are you sure you want to cancel the creation of this trainer? All data will be lost.');
     setModalAction(() => () => {
-      navigate(-1); // Go back to the previous page
+      toast.info('Trainer creation cancelled');
+      navigate(-1);
     });
     setIsModalOpen(true);
   };
@@ -63,43 +87,42 @@ const TrainerCreate = () => {
         <div className='vertical-line'></div>
         <h2>Create Trainer</h2>
       </div>
-      <form className='trainer-create-form' onSubmit={handleSubmit}>
+      <form className='trainer-create-form' onSubmit={handleSubmit(onSubmit)}>
         <div className='form-group'>
           <label htmlFor='firstName'>First Name *</label>
           <input
             type='text'
             id='firstName'
-            name='firstName'
-            value={trainer.firstName}
-            onChange={handleChange}
-            required
+            {...register('firstName')}
+            className={errors.firstName ? 'error' : ''}
           />
+          {errors.firstName && <span className='error-message'>{errors.firstName.message}</span>}
         </div>
         <div className='form-group'>
           <label htmlFor='lastName'>Last Name *</label>
           <input
             type='text'
             id='lastName'
-            name='lastName'
-            value={trainer.lastName}
-            onChange={handleChange}
-            required
+            {...register('lastName')}
+            className={errors.lastName ? 'error' : ''}
           />
+          {errors.lastName && <span className='error-message'>{errors.lastName.message}</span>}
         </div>
         <div className='form-group'>
           <label htmlFor='specialty'>Experienced In *</label>
           <input
             type='text'
             id='specialty'
-            name='specialty'
-            value={trainer.specialty}
-            onChange={handleChange}
-            required
+            {...register('specialty')}
+            className={errors.specialty ? 'error' : ''}
           />
+          {errors.specialty && <span className='error-message'>{errors.specialty.message}</span>}
         </div>
         <div className='createtrainer-button-container'>
-          <button type='submit' className='createtrainer-submit-button'>Create</button>
-          <button type='button' className='createtrainer-cancel-button' onClick={handleCancel}>
+          <button type='submit' className='createtrainer-submit-button' disabled={isSubmitting}>
+            {isSubmitting ? 'Creating...' : 'Create'}
+          </button>
+          <button type='button' className='createtrainer-cancel-button' onClick={handleCancel} disabled={isSubmitting}>
             Cancel
           </button>
         </div>

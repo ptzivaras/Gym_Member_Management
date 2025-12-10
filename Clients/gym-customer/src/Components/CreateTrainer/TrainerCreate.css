@@ -53,6 +53,28 @@ input[type='text'] {
   width: 100%;
   box-sizing: border-box;
   font-family: 'Roboto', sans-serif;
+  color: #000;
+}
+
+input[type='text']:focus {
+  outline: none;
+  border-color: #9693fb;
+}
+
+input.error {
+  border-color: red;
+  color: #000;
+}
+
+input.error::placeholder {
+  color: #ff6b6b;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
 }
 
 .createtrainer-button-container {
@@ -71,8 +93,13 @@ input[type='text'] {
   border: none;
 }
 
-.createtrainer-submit-button:hover {
+.createtrainer-submit-button:hover:not(:disabled) {
   background-color: #6c63ff;
+}
+
+.createtrainer-submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .createtrainer-cancel-button {
@@ -85,6 +112,11 @@ input[type='text'] {
   border: none;
 }
 
-.createtrainer-cancel-button:hover {
+.createtrainer-cancel-button:hover:not(:disabled) {
   background-color: #d32f2f;
+}
+
+.createtrainer-cancel-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
