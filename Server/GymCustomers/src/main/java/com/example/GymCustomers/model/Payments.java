@@ -1,7 +1,6 @@
 package com.example.GymCustomers.model;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -33,7 +32,7 @@ public class Payments {
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
     @Column(name = "amount")
-    private BigDecimal amount;
+    private Integer amount;
 
     public Long getPaymentId() {
         return paymentId;
@@ -67,11 +66,11 @@ public class Payments {
         this.paymentDate = paymentDate;
     }
 
-    public BigDecimal getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 }

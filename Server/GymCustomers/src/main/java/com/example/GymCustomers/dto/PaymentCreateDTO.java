@@ -2,7 +2,6 @@ package com.example.GymCustomers.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class PaymentCreateDTO {
@@ -21,7 +20,7 @@ public class PaymentCreateDTO {
 
     @NotNull(message = "Amount is required")
     @Positive(message = "Amount must be positive")
-    private BigDecimal amount;
+    private Integer amount;
 
     // Getters and Setters
     public Long getCustomerId() {
@@ -56,11 +55,11 @@ public class PaymentCreateDTO {
         this.expirationDate = expirationDate;
     }
 
-    public BigDecimal getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.GymCustomers.mapper;
 
 import com.example.GymCustomers.dto.TrainerCreateDTO;
+import com.example.GymCustomers.dto.TrainerUpdateDTO;
 import com.example.GymCustomers.dto.TrainerResponseDTO;
 import com.example.GymCustomers.model.Trainers;
 import org.springframework.stereotype.Component;
@@ -41,5 +42,24 @@ public class TrainerMapper {
             trainer.getLastName(),
             trainer.getSpecialty()
         );
+    }
+
+    /**
+     * Update existing Trainers entity with data from TrainerUpdateDTO
+     */
+    public void updateEntity(Trainers trainer, TrainerUpdateDTO dto) {
+        if (trainer == null || dto == null) {
+            return;
+        }
+        
+        if (dto.getFirstName() != null) {
+            trainer.setFirstName(dto.getFirstName());
+        }
+        if (dto.getLastName() != null) {
+            trainer.setLastName(dto.getLastName());
+        }
+        if (dto.getSpecialty() != null) {
+            trainer.setSpecialty(dto.getSpecialty());
+        }
     }
 }

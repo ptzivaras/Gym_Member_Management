@@ -121,13 +121,15 @@ public class CustomerServiceImpl implements CustomerService {
                     // Create payment record
                     Payments payment = new Payments();
                     payment.setCustomer(existingCustomer);
+                    payment.setMembership(membership);
                     payment.setAmount(membership.getPrice());
                     payment.setPaymentDate(LocalDate.now());
-                    payment.setPaymentMethod(dto.getPaymentMethod() != null ? dto.getPaymentMethod() : "CASH");
+                    payment.setExpirationDate(LocalDate.now().plusMonths(membership.getDuration()));
                     paymentsRepository.save(payment);
                     
-                    logger.info("Payment recorded for customer ID: {} - Membership: {} - Amount: {}", 
-                               customerId, membership.getPlanType(), membership.getPrice());
+                    logger.info("Payment recorded for customer ID: {} - Membership: {} - Amount: {} - Expires: {}", 
+                               customerId, membership.getPlanType(), membership.getPrice(), 
+                               payment.getExpirationDate());
                 } else {
                     logger.warn("Membership not found with ID: {}", dto.getNewMembership());
                 }

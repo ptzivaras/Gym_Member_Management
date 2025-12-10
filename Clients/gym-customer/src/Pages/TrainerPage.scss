@@ -99,7 +99,8 @@
   }
 }
 
-.delete-button {
+.delete-button,
+.edit-button {
   background: none;
   border: none;
   display: inline-flex;
@@ -109,13 +110,18 @@
   cursor: pointer;
   min-width: 30px;
   min-height: 30px;
+  margin: 0 5px;
 
   &:hover:not(:disabled) {
-    color: #EB5757;
+    color: #6c63ff;
   }
 
   &:disabled {
     cursor: not-allowed;
     opacity: 0.6;
   }
+}
+
+.delete-button:hover:not(:disabled) {
+  color: #EB5757;
 }

@@ -72,13 +72,6 @@ const UpdateCustomer = () => {
     });
   };
 
-  const handlePaymentMethodChange = e => {
-    setEditedCustomer({
-      ...editedCustomer,
-      paymentMethod: e.target.value,
-    });
-  };
-
   const closeModal = () => {
     setIsModalOpen(false);
     setModalMessage('');
@@ -177,18 +170,15 @@ const UpdateCustomer = () => {
 
       {editedCustomer.newMembership && (
         <div className='form-group'>
-          <label htmlFor="paymentMethod">Payment Method</label>
-          <select
-            id="paymentMethod"
+          <label htmlFor="membershipInfo">Selected Membership</label>
+          <input
+            id="membershipInfo"
             className='form-input'
-            name="paymentMethod"
-            value={editedCustomer.paymentMethod || 'CASH'}
-            onChange={handlePaymentMethodChange}
-          >
-            <option value="CASH">Cash</option>
-            <option value="CARD">Card</option>
-            <option value="BANK_TRANSFER">Bank Transfer</option>
-          </select>
+            type="text"
+            value={memberships.find(m => m.membershipId === parseInt(editedCustomer.newMembership))?.planType || ''}
+            disabled
+            style={{ backgroundColor: '#f0f0f0' }}
+          />
         </div>
       )}
 

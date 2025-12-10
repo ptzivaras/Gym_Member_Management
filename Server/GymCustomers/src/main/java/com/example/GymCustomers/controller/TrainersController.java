@@ -2,6 +2,7 @@ package com.example.GymCustomers.controller;
 
 import com.example.GymCustomers.dto.PagedResponseDTO;
 import com.example.GymCustomers.dto.TrainerCreateDTO;
+import com.example.GymCustomers.dto.TrainerUpdateDTO;
 import com.example.GymCustomers.dto.TrainerResponseDTO;
 import com.example.GymCustomers.service.TrainerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -78,6 +79,36 @@ public class TrainersController {
     public ResponseEntity<TrainerResponseDTO> createTrainer(@Valid @RequestBody TrainerCreateDTO trainerDTO) {
         TrainerResponseDTO createdTrainer = trainerService.createTrainer(trainerDTO);
         return new ResponseEntity<>(createdTrainer, HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Get trainer by ID", description = "Retrieve a specific trainer by their ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Trainer found",
+                    content = @Content(schema = @Schema(implementation = TrainerResponseDTO.class))),
+        @ApiResponse(responseCode = "404", description = "Trainer not found")
+    })
+    @GetMapping("/trainers/{id}")
+    public ResponseEntity<TrainerResponseDTO> getTrainerById(
+            @Parameter(description = "Trainer ID", required = true) @PathVariable Long id) {
+        return trainerService.getTrainerById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "Update trainer", description = "Update an existing trainer's information")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Trainer successfully updated",
+                    content = @Content(schema = @Schema(implementation = TrainerResponseDTO.class))),
+        @ApiResponse(responseCode = "404", description = "Trainer not found"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content)
+    })
+    @PutMapping("/trainers/{id}")
+    public ResponseEntity<TrainerResponseDTO> updateTrainer(
+            @Parameter(description = "Trainer ID", required = true) @PathVariable Long id,
+            @Valid @RequestBody TrainerUpdateDTO trainerDTO) {
+        return trainerService.updateTrainer(id, trainerDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Delete trainer", description = "Remove a trainer from the system")

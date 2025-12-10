@@ -2,6 +2,7 @@ package com.example.GymCustomers.service.impl;
 
 import com.example.GymCustomers.dto.PagedResponseDTO;
 import com.example.GymCustomers.dto.TrainerCreateDTO;
+import com.example.GymCustomers.dto.TrainerUpdateDTO;
 import com.example.GymCustomers.dto.TrainerResponseDTO;
 import com.example.GymCustomers.mapper.TrainerMapper;
 import com.example.GymCustomers.model.Trainers;
@@ -86,6 +87,23 @@ public class TrainerServiceImpl implements TrainerService {
         }
         
         return trainer;
+    }
+
+    @Override
+    public Optional<TrainerResponseDTO> updateTrainer(Long id, TrainerUpdateDTO dto) {
+        logger.info("Updating trainer with ID: {}", id);
+        Optional<Trainers> trainerOptional = trainersRepository.findById(id);
+        
+        if (trainerOptional.isPresent()) {
+            Trainers existingTrainer = trainerOptional.get();
+            trainerMapper.updateEntity(existingTrainer, dto);
+            Trainers updatedTrainer = trainersRepository.save(existingTrainer);
+            logger.info("Trainer updated successfully with ID: {}", id);
+            return Optional.of(trainerMapper.toResponseDTO(updatedTrainer));
+        }
+        
+        logger.warn("Cannot update - Trainer not found with ID: {}", id);
+        return Optional.empty();
     }
 
     @Override

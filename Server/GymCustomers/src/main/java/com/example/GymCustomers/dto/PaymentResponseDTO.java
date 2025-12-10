@@ -1,6 +1,5 @@
 package com.example.GymCustomers.dto;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class PaymentResponseDTO {
@@ -12,7 +11,7 @@ public class PaymentResponseDTO {
     private String membershipPlanType;
     private LocalDate paymentDate;
     private LocalDate expirationDate;
-    private BigDecimal amount;
+    private Integer amount;
 
     // Getters and Setters
     public Long getPaymentId() {
@@ -71,11 +70,11 @@ public class PaymentResponseDTO {
         this.expirationDate = expirationDate;
     }
 
-    public BigDecimal getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 }

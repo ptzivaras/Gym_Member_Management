@@ -52,26 +52,6 @@ const PaymentHistoryPage = () => {
         });
     };
 
-    const getPaymentMethodBadge = (method) => {
-        const colors = {
-            'CASH': '#4caf50',
-            'CARD': '#2196f3',
-            'BANK_TRANSFER': '#ff9800'
-        };
-        return (
-            <span style={{
-                padding: '4px 12px',
-                borderRadius: '12px',
-                backgroundColor: colors[method] || '#9e9e9e',
-                color: 'white',
-                fontSize: '12px',
-                fontWeight: '600'
-            }}>
-                {method.replace('_', ' ')}
-            </span>
-        );
-    };
-
     return (
         <div className="payment-history-container">
             <div className="payment-history-header">
@@ -106,7 +86,6 @@ const PaymentHistoryPage = () => {
                                     <th>Customer Name</th>
                                     <th>Amount</th>
                                     <th>Payment Date</th>
-                                    <th>Payment Method</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -118,9 +97,8 @@ const PaymentHistoryPage = () => {
                                                 `${payment.customer.firstName} ${payment.customer.lastName}` 
                                                 : 'N/A'}
                                         </td>
-                                        <td className="amount-cell">€ {payment.amount.toFixed(2)}</td>
+                                        <td className="amount-cell">€ {payment.amount}</td>
                                         <td>{formatDate(payment.paymentDate)}</td>
-                                        <td>{getPaymentMethodBadge(payment.paymentMethod)}</td>
                                     </tr>
                                 ))}
                             </tbody>
