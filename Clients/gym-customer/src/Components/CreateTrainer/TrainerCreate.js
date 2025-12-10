@@ -130,12 +130,13 @@ const TrainerCreate = () => {
 
       <Modal
         isOpen={isModalOpen}
-        onClose={closeModal}
+        onClose={isSubmitting ? null : closeModal}
         onConfirm={() => {
           modalAction();
           closeModal();
         }}
         message={modalMessage}
+        isLoading={isSubmitting}
       />
     </div>
   );

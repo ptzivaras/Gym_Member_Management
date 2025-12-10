@@ -4,6 +4,8 @@ import { useTable, usePagination } from 'react-table';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCustomers, deleteCustomer } from '../ReduxFiles/slices/CustomerSlice';
+import { toast } from 'react-toastify';
+import { Oval } from 'react-loader-spinner';
 import Modal from '../Components/ModalPopUp/Modal';
 import './CustomerPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,6 +15,7 @@ const CustomerList = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [customerToDelete, setCustomerToDelete] = useState(null);
   const [pageSize, setPageSize] = useState(12);
+  const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -116,9 +119,19 @@ const CustomerList = () => {
     setShowDeleteModal(true);
   };
 
-  const confirmDelete = () => {
-    dispatch(deleteCustomer(customerToDelete.customerId));
-    setShowDeleteModal(false);
+  const confirmDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await dispatch(deleteCustomer(customerToDelete.customerId)).unwrap();
+      toast.success('Customer deleted successfully!');
+      setShowDeleteModal(false);
+      setCustomerToDelete(null);
+    } catch (error) {
+      console.error('Error deleting customer:', error);
+      toast.error('Failed to delete customer');
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const closeModal = () => {
@@ -127,7 +140,19 @@ const CustomerList = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='loading-container-customers'>
+        <Oval
+          height={80}
+          width={80}
+          color="#9693fb"
+          secondaryColor="#ccc"
+          strokeWidth={4}
+          strokeWidthSecondary={4}
+        />
+        <p>Loading customers...</p>
+      </div>
+    );
   }
 
   return (
@@ -194,9 +219,10 @@ const CustomerList = () => {
       {showDeleteModal && (
         <Modal
           isOpen={showDeleteModal}
-          onClose={closeModal}
+          onClose={isDeleting ? null : closeModal}
           onConfirm={confirmDelete}
-          message={`Are you sure you want to delete ${customerToDelete.firstName} ${customerToDelete.lastName}?`}
+          message={isDeleting ? 'Deleting customer...' : `Are you sure you want to delete ${customerToDelete.firstName} ${customerToDelete.lastName}?`}
+          isLoading={isDeleting}
         />
       )}
     </div>

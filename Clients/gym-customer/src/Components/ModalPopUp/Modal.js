@@ -1,7 +1,7 @@
 import React from 'react';
-import './Modal.css'; // Assuming you have some basic styles for the modal
+import './Modal.css';
 
-const Modal = ({ isOpen, onClose, onConfirm, message }) => {
+const Modal = ({ isOpen, onClose, onConfirm, message, isLoading = false }) => {
     if (!isOpen) return null;
 
     return (
@@ -9,8 +9,20 @@ const Modal = ({ isOpen, onClose, onConfirm, message }) => {
             <div className="modal-container">
                 <p className="modal-message">{message}</p>
                 <div className="modal-buttons">
-                    <button onClick={onConfirm} className="modal-button confirm">Yes</button>
-                    <button onClick={onClose} className="modal-button cancel">No</button>
+                    <button 
+                        onClick={onConfirm} 
+                        className="modal-button confirm"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Please wait...' : 'Yes'}
+                    </button>
+                    <button 
+                        onClick={onClose} 
+                        className="modal-button cancel"
+                        disabled={isLoading}
+                    >
+                        No
+                    </button>
                 </div>
             </div>
         </div>

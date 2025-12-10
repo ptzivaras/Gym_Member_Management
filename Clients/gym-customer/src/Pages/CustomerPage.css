@@ -7,6 +7,22 @@
   flex-direction: column;
 }
 
+.loading-container-customers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  width: 100%;
+}
+
+.loading-container-customers p {
+  margin-top: 20px;
+  color: #40385a;
+  font-size: 16px;
+  font-weight: 500;
+}
+
 /* Header container for the create button */
 .header-container {
   width: 90%;
