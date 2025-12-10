@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
+import { Oval } from 'react-loader-spinner';
 import CustomerService from '../../Services/CustomerService';
 import Modal from '../ModalPopUp/Modal';
 import './CustomerCreate.css';
@@ -37,30 +38,32 @@ const CustomerCreate = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [modalAction, setModalAction] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const onSubmit = async (data) => {
-    setModalMessage('Are you sure you want to create this customer with the provided data?');
-    setModalAction(() => async () => {
-      try {
-        const response = await CustomerService.createCustomer(data);
-        toast.success(`Customer ${response.data.firstName} ${response.data.lastName} created successfully!`);
+    setIsSubmitting(true);
+    try {
+      const response = await CustomerService.createCustomer(data);
+      toast.success(`Customer ${response.data.firstName} ${response.data.lastName} created successfully!`);
+      // Keep button disabled while navigating
+      setTimeout(() => {
         navigate(-1);
-      } catch (error) {
-        console.error('Error creating customer:', error);
-        const errorMessage = error.response?.data?.message || 'Failed to create customer. Please try again.';
-        toast.error(errorMessage);
-      }
-    });
-    setIsModalOpen(true);
+      }, 1500);
+    } catch (error) {
+      console.error('Error creating customer:', error);
+      const errorMessage = error.response?.data?.message || 'Failed to create customer. Please try again.';
+      toast.error(errorMessage);
+      setIsSubmitting(false); // Only re-enable on error
+    }
   };
 
   const handleCancel = () => {
@@ -135,7 +138,12 @@ const CustomerCreate = () => {
         </div>
         <div className='button-container'>
           <button type='submit' className='create-submit-button' disabled={isSubmitting}>
-            {isSubmitting ? 'Creating...' : 'Create'}
+            {isSubmitting ? (
+              <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Oval height={20} width={20} color="#fff" strokeWidth={4} />
+                Creating...
+              </span>
+            ) : 'Create'}
           </button>
           <button type='button' className='create-cancel-button' onClick={handleCancel}>
             Cancel

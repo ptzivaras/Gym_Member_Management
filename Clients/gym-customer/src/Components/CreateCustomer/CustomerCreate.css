@@ -77,6 +77,10 @@ input.error::placeholder {
   background-color: #9693fb; /* Purple color */
   font-weight: bold;
   border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
 }
 
 .create-submit-button:hover {

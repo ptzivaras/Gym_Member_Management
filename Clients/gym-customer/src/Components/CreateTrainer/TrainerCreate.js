@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
+import { Oval } from 'react-loader-spinner';
 import TrainerService from '../../Services/TrainerService';
 import Modal from '../ModalPopUp/Modal';
 import './TrainerCreate.css';
@@ -46,23 +47,21 @@ const TrainerCreate = () => {
   });
 
   const onSubmit = async (data) => {
-    setModalMessage('Are you sure you want to create this trainer with the provided data?');
-    setModalAction(() => async () => {
-      setIsSubmitting(true);
-      try {
-        const response = await TrainerService.createTrainer(data);
-        console.log('Trainer created successfully:', response.data);
-        toast.success('Trainer created successfully!');
-        setTimeout(() => navigate(-1), 1500);
-      } catch (error) {
-        console.error('Error creating trainer:', error);
-        const errorMessage = error.response?.data?.message || 'Failed to create trainer.';
-        toast.error(errorMessage);
-      } finally {
-        setIsSubmitting(false);
-      }
-    });
-    setIsModalOpen(true);
+    setIsSubmitting(true);
+    try {
+      const response = await TrainerService.createTrainer(data);
+      console.log('Trainer created successfully:', response.data);
+      toast.success('Trainer created successfully!');
+      // Keep button disabled while navigating
+      setTimeout(() => {
+        navigate(-1);
+      }, 1500);
+    } catch (error) {
+      console.error('Error creating trainer:', error);
+      const errorMessage = error.response?.data?.message || 'Failed to create trainer.';
+      toast.error(errorMessage);
+      setIsSubmitting(false); // Only re-enable on error
+    }
   };
 
   const handleCancel = () => {
@@ -120,7 +119,12 @@ const TrainerCreate = () => {
         </div>
         <div className='createtrainer-button-container'>
           <button type='submit' className='createtrainer-submit-button' disabled={isSubmitting}>
-            {isSubmitting ? 'Creating...' : 'Create'}
+            {isSubmitting ? (
+              <span style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                <Oval height={20} width={20} color="#fff" strokeWidth={4} />
+                Creating...
+              </span>
+            ) : 'Create'}
           </button>
           <button type='button' className='createtrainer-cancel-button' onClick={handleCancel} disabled={isSubmitting}>
             Cancel
@@ -130,13 +134,12 @@ const TrainerCreate = () => {
 
       <Modal
         isOpen={isModalOpen}
-        onClose={isSubmitting ? null : closeModal}
+        onClose={closeModal}
         onConfirm={() => {
           modalAction();
           closeModal();
         }}
         message={modalMessage}
-        isLoading={isSubmitting}
       />
     </div>
   );

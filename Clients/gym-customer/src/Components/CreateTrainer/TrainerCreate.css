@@ -91,6 +91,10 @@ input.error::placeholder {
   background-color: #9693fb;
   font-weight: bold;
   border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
 }
 
 .createtrainer-submit-button:hover:not(:disabled) {

@@ -124,9 +124,10 @@ const TrainerPage = () => {
             
             <Modal
                 isOpen={isModalOpen}
-                onClose={handleModalClose}
+                onClose={isDeleting ? null : handleModalClose}
                 onConfirm={handleDeleteConfirm}
-                message="Are you sure you want to delete this trainer?"
+                message={isDeleting ? 'Deleting trainer...' : 'Are you sure you want to delete this trainer?'}
+                isLoading={!!isDeleting}
             />
         </div>
     );
