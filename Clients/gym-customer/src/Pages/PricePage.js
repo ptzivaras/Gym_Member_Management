@@ -293,12 +293,13 @@ import { fetchMemberships, updateMembership } from '../ReduxFiles/slices/members
 import './PricePage.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faSave, faArrowUp, faArrowDown, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { toast } from 'react-toastify';
 
 function PricePage() {
   const dispatch = useDispatch();
   const memberships = useSelector((state) => state.memberships.memberships);
   const [editRowIndex, setEditRowIndex] = useState(null);
-  const [updatedPrice, setUpdatedPrice] = useState('');
+  const [editForm, setEditForm] = useState({ planType: '', price: '', duration: '' });
   const [filter, setFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 10;
@@ -307,14 +308,30 @@ function PricePage() {
     dispatch(fetchMemberships());
   }, [dispatch]);
 
-  const handleEditClick = (index, price) => {
+  const handleEditClick = (index, membership) => {
     setEditRowIndex(index);
-    setUpdatedPrice(price);
+    setEditForm({
+      planType: membership.planType,
+      price: membership.price,
+      duration: membership.duration
+    });
   };
 
-  const handleSaveClick = (id) => {
-    dispatch(updateMembership({ id, data: { price: updatedPrice } }));
-    setEditRowIndex(null);
+  const handleSaveClick = async (membership) => {
+    try {
+      const updatedData = {
+        planType: editForm.planType,
+        price: parseFloat(editForm.price),
+        duration: parseInt(editForm.duration)
+      };
+      
+      await dispatch(updateMembership({ id: membership.membershipId, data: updatedData })).unwrap();
+      toast.success(`Membership "${editForm.planType}" updated successfully!`);
+      setEditRowIndex(null);
+    } catch (error) {
+      console.error('Error updating membership:', error);
+      toast.error('Failed to update membership. Please try again.');
+    }
   };
 
   // Function to determine popularity level and color
@@ -390,7 +407,18 @@ function PricePage() {
             {paginatedData.map((membership, index) => (
               <tr key={membership.membershipId}>
                 <td>{index + 1}</td>
-                <td>{membership.planType}</td>
+                <td>
+                  {editRowIndex === index ? (
+                    <input
+                      type="text"
+                      value={editForm.planType}
+                      onChange={(e) => setEditForm({ ...editForm, planType: e.target.value })}
+                      style={{ width: '100%', padding: '5px' }}
+                    />
+                  ) : (
+                    membership.planType
+                  )}
+                </td>
                 <td>
                   {(() => {
                     const { level, color } = getPopularityLevel(membership.popularityScore || Math.floor(Math.random() * 101));
@@ -415,9 +443,10 @@ function PricePage() {
                   {editRowIndex === index ? (
                     <input
                       type="number"
-                      value={updatedPrice}
-                      onChange={(e) => setUpdatedPrice(e.target.value)}
-                      autoFocus
+                      step="0.01"
+                      value={editForm.price}
+                      onChange={(e) => setEditForm({ ...editForm, price: e.target.value })}
+                      style={{ width: '80px', padding: '5px' }}
                     />
                   ) : (
                     `€ ${membership.price}`
@@ -425,11 +454,11 @@ function PricePage() {
                 </td>
                 <td>
                   {editRowIndex === index ? (
-                    <button onClick={() => handleSaveClick(membership.membershipId)}>
+                    <button onClick={() => handleSaveClick(membership)}>
                       <FontAwesomeIcon icon={faSave} /> Save
                     </button>
                   ) : (
-                    <button onClick={() => handleEditClick(index, membership.price)}>
+                    <button onClick={() => handleEditClick(index, membership)}>
                       <FontAwesomeIcon icon={faEdit} /> Edit
                     </button>
                   )}
