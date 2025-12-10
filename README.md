@@ -171,31 +171,43 @@ The application runs on:
 
 ## Known Issues & Improvement Opportunities
 
-### Current Problems
-1. **Authentication**: Login is session-based without proper JWT authentication
-2. **Mock Data**: Dashboard uses hardcoded data instead of real API calls
-3. **Limited Validation**: Form validation could be more comprehensive
-4. **Error Handling**: Generic error messages without user-friendly feedback
-
 ### Todo Improvements
-1. **Add Real Authentication**: Implement JWT-based auth with Spring Security
-2. **Connect Dashboard**: Wire up dashboard charts to actual database queries
-3. **Add Search & Filters**: Global search across customers, advanced filtering
-4. **Export Functionality**: PDF/CSV export for reports and customer lists
-5. **Email Notifications**: Automated reminders for membership expiration
-6. **Mobile Responsiveness**: Optimize layouts for tablet/mobile devices
-7. **Dark Mode**: Theme toggle for better UX
-8. **Role-Based Access**: Different permissions for admins vs. staff
-9. **Audit Logs**: Track who made what changes and when
-10. **Payment Integration**: Connect to Stripe/PayPal for online payments if safe
 
-### Todo Refactor
+**Feature Enhancements:**
+- Search/Filter functionality for customers and trainers
+- Active Membership Badge (visual indicator for membership status)
+- Dashboard Stats with real-time data (revenue, active memberships, popular classes)
+- Responsive design for mobile phones and tablets
+- Email notifications for membership expiration
+- QR Code check-in system for gym entry
+- Customer portal (login and view their own data)
+- Booking system for classes with capacity limits
+- Attendance tracking and reports
+- Multi-language support (i18n for Greek/English)
+- Dark mode theme toggle
+- Export functionality (PDF/CSV reports)
+- Progressive Web App (PWA) capabilities
+- Payment integration (Stripe/PayPal)
+
+**Authentication & Security:**
+- JWT-based authentication with Spring Security
+- Role-based access control (Admin vs. Staff vs. Customer)
+- OAuth2 integration for microservices architecture
+- Audit logs for tracking changes
+
+**Code Quality:**
+- TypeScript migration for type safety
+- Comprehensive unit and integration tests
+- Error boundaries throughout the application
+- Loading skeleton screens
+- Standardize API error responses
 - Extract magic numbers to constants
-- Add PropTypes or TypeScript for type safety
-- Implement comprehensive error boundaries
-- Add unit and integration tests
-- Standardize API error responses for enterprise API
-- Implement loading skeletons instead of generic loaders
+
+**Architecture:**
+- Microservices separation
+- Caching layer (Redis)
+- API rate limiting
+- WebSocket for real-time updates
 
 ## How can i impress you?
 
