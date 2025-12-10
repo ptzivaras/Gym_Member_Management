@@ -9,6 +9,7 @@ export default function Navigation() {
       <NavLink to="/classes" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Classes</NavLink>
       <NavLink to="/trainers" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Trainers</NavLink>
       <NavLink to="/price" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Price</NavLink>
+      <NavLink to="/payment-history" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Payments</NavLink>
       <NavLink to="/about" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>Dashboard</NavLink>
     </div>
   );

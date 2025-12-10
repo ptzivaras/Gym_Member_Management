@@ -1,8 +1,9 @@
 import axios from 'axios';
 
-const CUSTOMER_API_BASE_URL = "http://localhost:8080/api/v1/customers";
-const MEMBERSHIP_API_BASE_URL="http://localhost:8080/api/v1/memberships";
-const PAYMENT_API_BASE_URL= "http://localhost:8080/api/v1/payments";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080/api/v1";
+const CUSTOMER_API_BASE_URL = `${API_BASE_URL}/customers`;
+const MEMBERSHIP_API_BASE_URL = `${API_BASE_URL}/memberships`;
+const PAYMENT_API_BASE_URL = `${API_BASE_URL}/payments`;
 
 
 class CustomerService {

@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ErrorBoundary from './Components/ErrorBoundary/ErrorBoundary';
 import Login from './Pages/Login';
 import NavBar from './Components/NavBar/NavBar';
 import CustomerPage from './Pages/CustomerPage';
@@ -15,30 +16,34 @@ import UpdateCustomer from './Components/UpdateCustomer/UpdateCustomer';
 import DeleteCustomer from './Components/DeleteCustomer/DeleteCustomer';
 import CustomerCreate from './Components/CreateCustomer/CustomerCreate';
 import TrainerCreate from './Components/CreateTrainer/TrainerCreate';
+import UpdateTrainer from './Components/UpdateTrainer/UpdateTrainer';
 import CreateClassType from './Components/CreateClassType/CreateClassType';
+import PaymentHistoryPage from './Pages/PaymentHistoryPage';
 
 const App = () => {
   return (
-    <div className="app-container">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/*" element={<ProtectedRoutes />} />
-        </Routes>
-      </BrowserRouter>
-      <ToastContainer 
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    </div>
+    <ErrorBoundary>
+      <div className="app-container">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/*" element={<ProtectedRoutes />} />
+          </Routes>
+        </BrowserRouter>
+        <ToastContainer 
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+      </div>
+    </ErrorBoundary>
   );
 };
 
@@ -63,6 +68,8 @@ const ProtectedRoutes = () => {
         <Route path="/delete-customer/:customerId" element={<DeleteCustomer />} /> {/* Add route for deleting */}
         <Route path="/create-customer/" element={<CustomerCreate />} />
         <Route path="/create-trainer/" element={<TrainerCreate />} />
+        <Route path="/update-trainer/:trainerId" element={<UpdateTrainer />} />
+        <Route path="/payment-history" element={<PaymentHistoryPage />} />
         <Route path="/classtype/" element={<CreateClassType />} />
       </Routes>
     </main>

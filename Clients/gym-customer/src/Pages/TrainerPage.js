@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TrainerService from '../Services/TrainerService';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import { Oval } from 'react-loader-spinner';
 import Modal from '../Components/ModalPopUp/Modal';
@@ -103,6 +103,11 @@ const TrainerPage = () => {
             <td>{trainer.specialty}</td>
             <td>{generateRandomHours()}</td>
             <td>
+                <button 
+                    className="edit-button" 
+                    onClick={() => navigate(`/update-trainer/${trainer.trainerId}`)}>
+                    <FontAwesomeIcon icon={faEdit} className="icon" />
+                </button>
                 <button 
                     className="delete-button" 
                     onClick={() => handleDeleteClick(trainer.trainerId)}

@@ -29,7 +29,8 @@
 
 import axios from 'axios';
 
-const CLASS_API_BASE_URL = "http://localhost:8080/api/v1/classprograms"; // to new oxi to allo me to normalization
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080/api/v1";
+const CLASS_API_BASE_URL = `${API_BASE_URL}/classprograms`; // to new oxi to allo me to normalization
 
 class ClassService {
     // Fetch all class programs
