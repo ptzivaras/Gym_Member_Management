@@ -3,9 +3,9 @@ import CustomerService from '../../Services/CustomerService';
 
 export const fetchCustomers = createAsyncThunk('customers/fetchCustomers', async () => {
   const response = await CustomerService.getCustomers();
-  return response.data.map((customer, index) => ({
+  return response.data.map(customer => ({
     ...customer,
-    id: index + 1,
+    id: customer.customerId, // Use customerId from backend as id
     status: Math.random() > 0.5 ? 'Active' : 'Inactive',
   }));
 });

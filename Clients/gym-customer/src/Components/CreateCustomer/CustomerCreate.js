@@ -39,7 +39,7 @@ const CustomerCreate = () => {
     if (!customer.email) newErrors.email = 'Email is required';
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email)) newErrors.email = 'Email is invalid';
     if (!customer.phone) newErrors.phone = 'Phone is required';
-    else if (!/^\d+$/.test(customer.phone)) newErrors.phone = 'Phone must be numeric';
+    else if (!/^[+]?[0-9]{10,15}$/.test(customer.phone)) newErrors.phone = 'Phone must be 10-15 digits (optional + prefix)';
     return newErrors;
   };
 
