@@ -40,6 +40,8 @@ input[type='email'] {
   width: 100%;
   font-family: 'Roboto', sans-serif; /* Font family */
   box-sizing: border-box; /* Ensures padding is included in width */
+  color: #000; /* Ensure text is always black */
+  background-color: #fff; /* Ensure background is white */
 }
 
 input[type='text']::placeholder,
@@ -54,6 +56,11 @@ input.required::placeholder {
 
 input.error {
   border-color: red;
+  color: #000; /* Keep text black even with error */
+}
+
+input.error::placeholder {
+  color: #ff6b6b; /* Light red for placeholder when error */
 }
 
 .button-container {

@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Login from './Pages/Login';
 import NavBar from './Components/NavBar/NavBar';
 import CustomerPage from './Pages/CustomerPage';
@@ -24,6 +26,18 @@ const App = () => {
           <Route path="/*" element={<ProtectedRoutes />} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

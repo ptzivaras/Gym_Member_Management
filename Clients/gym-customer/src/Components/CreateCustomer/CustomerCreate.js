@@ -1,72 +1,74 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { toast } from 'react-toastify';
 import CustomerService from '../../Services/CustomerService';
-import Modal from '../ModalPopUp/Modal'; // Import the Modal component
-import './CustomerCreate.css'; // Import CSS file
+import Modal from '../ModalPopUp/Modal';
+import './CustomerCreate.css';
+
+// Validation schema with yup
+const schema = yup.object().shape({
+  firstName: yup
+    .string()
+    .required('First Name is required')
+    .min(2, 'First name must be at least 2 characters')
+    .max(50, 'First name must not exceed 50 characters'),
+  lastName: yup
+    .string()
+    .required('Last Name is required')
+    .min(2, 'Last name must be at least 2 characters')
+    .max(50, 'Last name must not exceed 50 characters'),
+  email: yup
+    .string()
+    .required('Email is required')
+    .email('Email must be valid'),
+  phone: yup
+    .string()
+    .required('Phone is required')
+    .matches(/^[+]?[0-9]{10,15}$/, 'Phone must be 10-15 digits (optional + prefix)'),
+  address: yup
+    .string()
+    .max(200, 'Address must not exceed 200 characters'),
+});
 
 const CustomerCreate = () => {
-  const [customer, setCustomer] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    address: '',
-  });
-
-  const [errors, setErrors] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [modalAction, setModalAction] = useState(null);
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); // Initialize the navigate function
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setCustomer(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-    setErrors(prevState => ({
-      ...prevState,
-      [name]: ''
-    }));
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-    if (!customer.firstName) newErrors.firstName = 'First Name is required';
-    if (!customer.lastName) newErrors.lastName = 'Last Name is required';
-    if (!customer.email) newErrors.email = 'Email is required';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email)) newErrors.email = 'Email is invalid';
-    if (!customer.phone) newErrors.phone = 'Phone is required';
-    else if (!/^[+]?[0-9]{10,15}$/.test(customer.phone)) newErrors.phone = 'Phone must be 10-15 digits (optional + prefix)';
-    return newErrors;
-  };
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    const formErrors = validateForm();
-    if (Object.keys(formErrors).length > 0) {
-      setErrors(formErrors);
-      return;
-    }
+  const onSubmit = async (data) => {
     setModalMessage('Are you sure you want to create this customer with the provided data?');
-    setModalAction(() => () => {
-      CustomerService.createCustomer(customer)
-        .then(response => {
-          console.log('Customer created successfully:', response.data);
-          navigate(-1); // Navigate back to the previous page
-        })
-        .catch(error => {
-          console.error('Error creating customer:', error);
-        });
+    setModalAction(() => async () => {
+      try {
+        const response = await CustomerService.createCustomer(data);
+        toast.success(`Customer ${response.data.firstName} ${response.data.lastName} created successfully!`);
+        navigate(-1);
+      } catch (error) {
+        console.error('Error creating customer:', error);
+        const errorMessage = error.response?.data?.message || 'Failed to create customer. Please try again.';
+        toast.error(errorMessage);
+      }
     });
     setIsModalOpen(true);
   };
 
   const handleCancel = () => {
-    setModalMessage('Are you sure you want to cancel the creation of this customer? All data will be lost.');
-    setModalAction(() => () => navigate(-1));
+    setModalMessage('Are you sure you want to cancel? All data will be lost.');
+    setModalAction(() => () => {
+      toast.info('Customer creation cancelled');
+      navigate(-1);
+    });
     setIsModalOpen(true);
   };
 
@@ -81,71 +83,60 @@ const CustomerCreate = () => {
       <div className='header'>
         <h2>Create Customer</h2>
       </div>
-      <form className='customer-create-form' onSubmit={handleSubmit}>
+      <form className='customer-create-form' onSubmit={handleSubmit(onSubmit)}>
         <div className='form-group'>
           <input
             type='text'
             id='firstName'
-            name='firstName'
-            value={customer.firstName}
-            onChange={handleChange}
+            {...register('firstName')}
             placeholder='* First Name'
-            required
             className={errors.firstName ? 'error required' : 'required'}
           />
-          {errors.firstName && <div className='error-message'>{errors.firstName}</div>}
+          {errors.firstName && <div className='error-message'>{errors.firstName.message}</div>}
         </div>
         <div className='form-group'>
           <input
             type='text'
             id='lastName'
-            name='lastName'
-            value={customer.lastName}
-            onChange={handleChange}
+            {...register('lastName')}
             placeholder='* Last Name'
-            required
             className={errors.lastName ? 'error required' : 'required'}
           />
-          {errors.lastName && <div className='error-message'>{errors.lastName}</div>}
+          {errors.lastName && <div className='error-message'>{errors.lastName.message}</div>}
         </div>
         <div className='form-group'>
           <input
             type='email'
             id='email'
-            name='email'
-            value={customer.email}
-            onChange={handleChange}
+            {...register('email')}
             placeholder='* Email'
-            required
             className={errors.email ? 'error required' : 'required'}
           />
-          {errors.email && <div className='error-message'>{errors.email}</div>}
+          {errors.email && <div className='error-message'>{errors.email.message}</div>}
         </div>
         <div className='form-group'>
           <input
             type='text'
             id='phone'
-            name='phone'
-            value={customer.phone}
-            onChange={handleChange}
-            placeholder='* Phone'
-            required
+            {...register('phone')}
+            placeholder='* Phone (10-15 digits)'
             className={errors.phone ? 'error required' : 'required'}
           />
-          {errors.phone && <div className='error-message'>{errors.phone}</div>}
+          {errors.phone && <div className='error-message'>{errors.phone.message}</div>}
         </div>
         <div className='form-group'>
           <input
             type='text'
             id='address'
-            name='address'
-            value={customer.address}
-            onChange={handleChange}
-            placeholder='Address'
+            {...register('address')}
+            placeholder='Address (Optional)'
           />
+          {errors.address && <div className='error-message'>{errors.address.message}</div>}
         </div>
         <div className='button-container'>
-          <button type='submit' className='create-submit-button'>Create</button>
+          <button type='submit' className='create-submit-button' disabled={isSubmitting}>
+            {isSubmitting ? 'Creating...' : 'Create'}
+          </button>
           <button type='button' className='create-cancel-button' onClick={handleCancel}>
             Cancel
           </button>
