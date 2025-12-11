@@ -1,27 +1,49 @@
 package com.example.GymCustomers.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
 
 /**
  * Global CORS configuration for the application.
  * Allows frontend (React) to communicate with the backend API.
+ * Supports both production and preview deployments on Vercel.
  */
 @Configuration
-public class CorsConfig implements WebMvcConfigurer {
+public class CorsConfig {
 
-    @Value("${cors.allowed.origins:http://localhost:3000}")
-    private String allowedOrigins;
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins(allowedOrigins.split(","))
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true)
-                .maxAge(3600); // Cache preflight response for 1 hour
+    @Bean
+    public OncePerRequestFilter corsFilter() {
+        return new OncePerRequestFilter() {
+            @Override
+            protected void doFilterInternal(HttpServletRequest request, 
+                                          HttpServletResponse response, 
+                                          FilterChain filterChain) throws ServletException, IOException {
+                String origin = request.getHeader("Origin");
+                
+                // Allow localhost and all vercel.app domains
+                if (origin != null && (origin.equals("http://localhost:3000") 
+                        || origin.contains(".vercel.app"))) {
+                    response.setHeader("Access-Control-Allow-Origin", origin);
+                    response.setHeader("Access-Control-Allow-Credentials", "true");
+                    response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                    response.setHeader("Access-Control-Allow-Headers", "*");
+                    response.setHeader("Access-Control-Max-Age", "3600");
+                }
+                
+                // Handle preflight requests
+                if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    return;
+                }
+                
+                filterChain.doFilter(request, response);
+            }
+        };
     }
 }
