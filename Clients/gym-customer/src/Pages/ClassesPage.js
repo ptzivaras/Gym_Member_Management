@@ -16,16 +16,25 @@ const ClassList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const abortController = new AbortController();
+    
     // Fetch classes from the backend
-    ClassService.getClasses()
+    ClassService.getClasses(abortController.signal)
       .then((response) => {
         const sortedSchedule = response.data.sort((a, b) => a.startTime.localeCompare(b.startTime));
         setSchedule(sortedSchedule);
         setEditedSchedule(sortedSchedule);
       })
       .catch((error) => {
-        console.error('Error fetching classes:', error);
+        if (error.name !== 'CanceledError') {
+          console.error('Error fetching classes:', error);
+        }
       });
+    
+    // Cleanup: cancel request on component unmount
+    return () => {
+      abortController.abort();
+    };
   }, []);
 
   const formatTime = (timeStr) => {

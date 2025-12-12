@@ -10,17 +10,21 @@ const ViewCustomer = () => {
   const [currentMembership, setCurrentMembership] = useState(null);
 
   useEffect(() => {
+    const abortController = new AbortController();
+    
     // Fetch customer details
-    CustomerService.getCustomerById(customerId)
+    CustomerService.getCustomerById(customerId, abortController.signal)
       .then(response => {
         setCustomer(response.data);
       })
       .catch(error => {
-        console.error('Error fetching customer details:', error);
+        if (error.name !== 'CanceledError') {
+          console.error('Error fetching customer details:', error);
+        }
       });
 
     // Fetch all payments and find this customer's latest active membership
-    CustomerService.getPayments()
+    CustomerService.getPayments(abortController.signal)
       .then(response => {
         const customerPayments = response.data.filter(
           payment => payment.customerId === parseInt(customerId)
@@ -47,9 +51,16 @@ const ViewCustomer = () => {
         }
       })
       .catch(error => {
-        console.error('Error fetching payments:', error);
+        if (error.name !== 'CanceledError') {
+          console.error('Error fetching payments:', error);
+        }
         setCurrentMembership({ hasMembership: false });
       });
+    
+    // Cleanup: cancel requests on component unmount
+    return () => {
+      abortController.abort();
+    };
   }, [customerId]);
 
   const renderMembershipInfo = () => {
